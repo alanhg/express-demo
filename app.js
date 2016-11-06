@@ -16,18 +16,13 @@ app.use(session({
     saveUninitialized: true,
     resave: false
 }));
+var routes = require('./routes/router');
+// mount the router on the app
+app.use('/', routes);
 // var log = require('./conf/log');
 // log.use(app);
 // respond with "hello world" when a GET request is made to the homepage
-app.use(function (req, res, next) {
-    if (!req.session) {
-        return next(new Error('oh no')) // handle error
-    }
-    next(); // otherwise continue
-});
-app.get('/', function (req, res) {
-    res.send(req.sessionID);
-});
+
 app.listen(3000, function () {
     console.log('Example app listening on port 3000!');
 });
