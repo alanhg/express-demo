@@ -3,7 +3,6 @@
  */
 var express = require('express');
 var router = express.Router();
-var db = require('../db/schema');
 
 router.use(function (req, res, next) {
     if (!req.session) {
@@ -16,10 +15,8 @@ router.get('/', function (req, res) {
     var ua = parser(req.headers['user-agent']);
     res.render('index', {ua: ua});
 });
-router.get('/db', function (req, res) {
-    db.test(function (err, data) {
-        res.send(data);
-    });
-});
+
+const testRouter = require('./test');
+router.use('/test', testRouter);
 
 module.exports = router;

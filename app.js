@@ -3,11 +3,14 @@
  * 后端入口文件
  */
 
-var express = require('express');
-var app = express();
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
-var redisClient = require('./conf/redisClient');
+const express = require('express');
+const app = express();
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const redisClient = require('./conf/redisClient');
+const path = require('path');
+const routes = require('./routes/index');
+
 app.set('trust proxy', 1); // trust first proxy
 app.use(cookieParser());
 app.use(session({
@@ -18,9 +21,10 @@ app.use(session({
 }));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
-var routes = require('./routes/index');
 // mount the router on the app
 app.use('/', routes);
+app.use('/', express.static(path.join(__dirname, '/static')));
+
 // var log = require('./conf/log');
 // log.use(app);
 // respond with "hello world" when a GET request is made to the homepage
