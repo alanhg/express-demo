@@ -11,12 +11,14 @@ var redisClient = require('./conf/redisClient');
 app.set('trust proxy', 1); // trust first proxy
 app.use(cookieParser());
 app.use(session({
-    store: redisClient,
+    // store: redisClient,
     secret: 'express-demo',
     saveUninitialized: true,
     resave: false
 }));
-var routes = require('./routes/router');
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+var routes = require('./routes/index');
 // mount the router on the app
 app.use('/', routes);
 // var log = require('./conf/log');

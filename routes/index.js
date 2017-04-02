@@ -12,7 +12,9 @@ router.use(function (req, res, next) {
     next(); // otherwise continue
 });
 router.get('/', function (req, res) {
-    res.send(req.sessionID);
+    var parser = require('ua-parser-js');
+    var ua = parser(req.headers['user-agent']);
+    res.render('index', {ua: ua});
 });
 router.get('/db', function (req, res) {
     db.test(function (err, data) {
