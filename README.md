@@ -11,7 +11,15 @@
 - mysql,数据库组件
 - log4js,日志组件
 - nodemon,热启
+- ejs，视图系统，server-render方案
+- bootstrap,css起步框架
 
+### 知识点
+
+- session-redis化
+- db-crud
+- 日志文件化
+- 路由系统结构化
 
 ### redis服务端安装
 redis需要安装服务端,express中创建客户端建立连接,从而使用redis进行session会话存储
