@@ -13,6 +13,7 @@
 - nodemon,热启
 - ejs，视图系统，server-render方案
 - bootstrap,css起步框架
+- js-base64
 
 ### 知识点
 
