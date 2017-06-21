@@ -1,0 +1,15 @@
+<h1>清单</h1>
+<ul>
+    <% for( group in data) { %>
+    <li>
+        <div><%= group %></div>
+        <ol>
+            <% for( item of data[group]) { %>
+            <li>
+                <%= Base64.decode(item['TEXT']) %>
+            </li>
+            <% } %>
+        </ol>
+    </li>
+    <% } %>
+</ul>
