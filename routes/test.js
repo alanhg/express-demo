@@ -1,5 +1,6 @@
 /**
  * Created by He on 4/2/17.
+ * 测试路由模块
  */
 const express = require('express');
 const router = express.Router();
@@ -7,6 +8,7 @@ const db = require('../db/schema');
 const fs = require('fs');
 const path = require('path');
 const Base64 = require('js-base64').Base64;
+let conf = require('../conf');
 
 router.get('/css', function (req, res, next) {
     res.render('css');
@@ -38,4 +40,15 @@ router.get('/read', function (req, res) {
 
 });
 
+router.get('/a', function (req, res) {
+    res.send({value: conf.a});
+});
+router.get('/b', function (req, res) {
+    res.send({value: conf.a});
+});
+router.get('/c', function (req, res) {
+    let conf2 = require('../conf');
+    return res.send({value: conf2.a});
+    console.log('hello');
+});
 module.exports = router;

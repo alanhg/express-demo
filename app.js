@@ -5,11 +5,14 @@
 
 const express = require('express');
 const app = express();
+const conf = require('./conf');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const redisClient = require('./conf/redisClient');
 const path = require('path');
 const routes = require('./routes/index');
+
+require('./conf').a = 1111;
 
 app.set('trust proxy', 1); // trust first proxy
 app.use(cookieParser());
@@ -29,6 +32,6 @@ app.use('/', express.static(path.join(__dirname, '/static')));
 // log.use(app);
 // respond with "hello world" when a GET request is made to the homepage
 
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
+app.listen(conf.server.port, function () {
+    console.log(`Example app listening on port ${conf.server.port}!`);
 });
