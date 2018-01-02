@@ -15,6 +15,8 @@
     "js-base64": "^2.1.9",
     "log4js": "^1.0.0",
     "mysql": "^2.12.0",
+    "passport": "^0.4.0",
+    "superagent": "^3.8.2",
     "ua-parser-js": "^0.7.14"
   },
   "devDependencies": {
