@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+    <ShortName>搜索测试</ShortName>
+    <Description>文章检索</Description>
+    <InputEncoding>UTF-8</InputEncoding>
+    <Image height="32" width="32" type="image/x-icon">http://localhost:3001/favicon.ico</Image>
+    <Url type="text/html" template="http://localhost:3001/search?q={searchTerms}"/>
+</OpenSearchDescription>

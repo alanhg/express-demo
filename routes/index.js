@@ -13,4 +13,10 @@ router.use('/api', apiRouter);
 const authRouter = require('./auth');
 router.use('/auth', authRouter);
 
+router.get('/search', (req, res) => {
+    res.render('search', {keyword: req.query.q});
+});
+router.get('/', (req, res) => {
+    res.render('index');
+});
 module.exports = router;
