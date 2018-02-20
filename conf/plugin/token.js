@@ -2,8 +2,12 @@
  * Created by He on 12/02/2018.
  * 令牌
  */
-const SECRET=require('./conf').secret;
+const SECRET=require('../').secret;
+const redis = require('./redis');
 const jwt = require('jsonwebtoken');
+const express_jwt = require('express-jwt');
+const unless = require('express-unless');
+
 const token = {
   SECRET,
   sign: (user) => {
@@ -28,7 +32,7 @@ const token = {
     }
     next()
   },
-  //token在redis中存在，更新有效期，不存在说明已退出登录
+  // token在redis中存在，更新有效期，不存在说明已退出登录
   checkRedis: (req, res, next) => {
     const tok = token.getToken(req);
     redis.get(tok, (data) => {

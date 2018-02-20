@@ -8,7 +8,7 @@ const config = require('../conf');
 const Base64 = require('js-base64').Base64;
 const jwt = require('jsonwebtoken');
 const redisClient = require('../conf/plugin/redis');
-
+const token = require('../conf/plugin/token');
 router.get('/a', function (req, res) {
     res.send({value: 1});
 });
@@ -72,9 +72,10 @@ router.get('/tips',
  */
 router.post('/login',
     function (req, res) {
-        console.log(req.body);
+        console.log(req.headers);
         let rememberMe = req.body['rememberMe'];
         const authToken = rememberMe ? jwt.sign({username: req.body.username}, config.server.secret, {expiresIn: config.ttl.rememberMe}) : jwt.sign({username: req.body.username}, config.server.secret);
+        token.add(authToken);
         return res.json({token: authToken});
     }
 );
@@ -83,8 +84,9 @@ router.post('/login',
  * 退出
  */
 router.get('/logout', function (req, res) {
-
-
+    const tok = token.getToken(req);
+    token.remove(req);
+    res.json('successful');
 });
 
 module.exports = router;
