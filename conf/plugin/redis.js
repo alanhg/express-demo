@@ -12,9 +12,26 @@ const options = {
 };
 
 const redisClient = redis.createClient(options);
+const expire = config.redis.expire;
 
 redisClient.on('error', function (err) {
     console.log('Redis error: ' + err);
 });
 
-module.exports = redisClient;
+module.exports = {
+    add(key, value) {
+        redisClient.set(key, value);
+        redisClient.expire(key, expire)
+    },
+    updateExpire(key) {
+        redisClient.expire(key, expire)
+    },
+    get(key, callback) {
+        redisClient.get(key, (err, data) => {
+            callback(data)
+        })
+    },
+    remove(key) {
+        redisClient.del(key)
+    }
+};
