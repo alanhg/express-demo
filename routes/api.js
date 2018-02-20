@@ -65,7 +65,7 @@ router.get('/encodeURI',
 
 router.get('/tips',
     function (req, res) {
-        res.json(["1", "2", "3", "4"]);
+        res.json([req.query.q, ["firefox", "first choice", "mozilla firefox"]]);
     }
 );
 
