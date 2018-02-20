@@ -4,11 +4,10 @@
  */
 const express = require('express');
 const router = express.Router();
-const conf = require('../conf');
-const jwt = require('express-jwt');
-const JWT_SECERT = 'alan-secret';
+const config = require('../conf');
 const Base64 = require('js-base64').Base64;
-
+const jwt = require('jsonwebtoken');
+const redisClient = require('../conf/plugin/redis');
 
 router.get('/a', function (req, res) {
     res.send({value: 1});
@@ -17,7 +16,6 @@ router.get('/b', function (req, res) {
     res.send({value: 2});
 });
 router.get('/protected',
-    jwt({secret: conf.secret}),
     function (req, res) {
         if (!req.user.admin) return res.sendStatus(401);
         res.sendStatus(200);
@@ -68,5 +66,25 @@ router.get('/tips',
         res.json([req.query.q, ["firefox", "first choice", "mozilla firefox"]]);
     }
 );
+
+/**
+ * 登录
+ */
+router.post('/login',
+    function (req, res) {
+        console.log(req.body);
+        let rememberMe = req.body['rememberMe'];
+        const authToken = rememberMe ? jwt.sign({username: req.body.username}, config.server.secret, {expiresIn: config.ttl.rememberMe}) : jwt.sign({username: req.body.username}, config.server.secret);
+        return res.json({token: authToken});
+    }
+);
+
+/**
+ * 退出
+ */
+router.get('/logout', function (req, res) {
+
+
+});
 
 module.exports = router;

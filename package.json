@@ -6,6 +6,7 @@
     "hotstart": "nodemon app.js"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "connect-redis": "^3.1.0",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.6",

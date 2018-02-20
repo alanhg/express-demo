@@ -3,7 +3,7 @@
  * DB操作相关函数
  */
 var mysql = require('mysql');
-var dbConfig = require('../conf/db');
+var dbConfig = require('../conf/plugin/db');
 var db = {};
 
 db.connect = function () {
