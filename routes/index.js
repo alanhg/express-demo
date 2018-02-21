@@ -20,14 +20,5 @@ router.get('/', (req, res) => {
     res.render('index');
 });
 
-const token = require('../conf/plugin/token');
-const unlessPath = [{url: '/api/login', methods: ['POST']}];
-
-router.use(
-    token.validToken.unless(unlessPath),
-    token.noAuthorization,
-    token.checkRedis.unless(unlessPath)
-);
-
 
 module.exports = router;

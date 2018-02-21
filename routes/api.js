@@ -9,6 +9,14 @@ const Base64 = require('js-base64').Base64;
 const jwt = require('jsonwebtoken');
 const redisClient = require('../conf/plugin/redis');
 const token = require('../conf/plugin/token');
+const unlessPath = [{url: '/api/login', methods: ['POST']}];
+
+router.use(
+    token.validToken.unless(unlessPath),
+    token.noAuthorization,
+    token.checkRedis.unless(unlessPath)
+);
+
 router.get('/a', function (req, res) {
     res.send({value: 1});
 });

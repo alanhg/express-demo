@@ -19,8 +19,8 @@ redisClient.on('error', function (err) {
 });
 
 module.exports = {
-    add(key) {
-        redisClient.set(key, true);
+    add(key, value) {
+        redisClient.set(key, value);
         redisClient.expire(key, expire)
     },
     updateExpire(key) {
