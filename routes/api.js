@@ -11,11 +11,11 @@ const redisClient = require('../config/plugin/redis');
 const token = require('../config/plugin/token');
 const unlessPath = [{url: '/api/login', methods: ['POST']}];
 
-router.use(
-    token.validToken.unless(unlessPath),
-    token.noAuthorization,
-    token.checkRedis.unless(unlessPath)
-);
+// router.use(
+//     token.validToken.unless(unlessPath),
+//     token.noAuthorization,
+//     token.checkRedis.unless(unlessPath)
+// );
 
 router.get('/a', function (req, res) {
     res.send({value: 1});
@@ -96,5 +96,19 @@ router.get('/logout', function (req, res) {
     token.remove(req);
     res.json('successful');
 });
+
+router.get("/hello", function (req, res, next) {
+    if (req.query.name) {
+        return res.json("hello");
+    }
+    else {
+        next(new Error("没有name"));
+    }
+});
+
+
+// router.get("/hello", function (req, res) {
+//     res.json(" world");
+// });
 
 module.exports = router;

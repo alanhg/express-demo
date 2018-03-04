@@ -24,18 +24,18 @@ app.set('views', __dirname + '/views');
 app.use(bodyParser.json()); // for parsing application/json
 
 
-app.use('/api', jwt({
-    secret: '1111',
-    getToken: function fromHeaderOrQuerystring(req) {
-        console.log('执行');
-        if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-            return req.headers.authorization.split(' ')[1];
-        } else if (req.query && req.query.token) {
-            return req.query.token;
-        }
-        return null;
-    }
-}));
+// app.use('/api', jwt({
+//     secret: '1111',
+//     getToken: function fromHeaderOrQuerystring(req) {
+//         console.log('执行');
+//         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+//             return req.headers.authorization.split(' ')[1];
+//         } else if (req.query && req.query.token) {
+//             return req.query.token;
+//         }
+//         return null;
+//     }
+// }));
 
 // mount the router on the app
 app.use('/', routes);
