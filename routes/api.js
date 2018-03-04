@@ -4,11 +4,11 @@
  */
 const express = require('express');
 const router = express.Router();
-const config = require('../conf');
+const config = require('../config');
 const Base64 = require('js-base64').Base64;
 const jwt = require('jsonwebtoken');
-const redisClient = require('../conf/plugin/redis');
-const token = require('../conf/plugin/token');
+const redisClient = require('../config/plugin/redis');
+const token = require('../config/plugin/token');
 const unlessPath = [{url: '/api/login', methods: ['POST']}];
 
 router.use(

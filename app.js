@@ -4,14 +4,13 @@
  */
 const express = require('express');
 const app = express();
-const conf = require('./conf');
+const conf = require('./config');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const routes = require('./routes/index');
 const bodyParser = require('body-parser');
 const jwt = require('express-jwt');
-require('./conf').a = 1111;
 
 app.set('trust proxy', 1); // trust first proxy
 app.use(cookieParser());
@@ -42,7 +41,7 @@ app.use('/api', jwt({
 app.use('/', routes);
 app.use('/', express.static(path.join(__dirname, '/static')));
 
-// var log = require('./conf/log');
+// var log = require('./config/log');
 // log.use(app);
 // respond with "hello world" when a GET request is made to the homepage
 

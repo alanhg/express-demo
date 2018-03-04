@@ -8,7 +8,7 @@ const db = require('../db/schema');
 const fs = require('fs');
 const path = require('path');
 const Base64 = require('js-base64').Base64;
-let conf = require('../conf');
+let conf = require('../config');
 
 router.get('/css', function (req, res, next) {
     res.render('css');
@@ -134,5 +134,21 @@ router.get('/superagent', (req, res) => {
         // console.log(body);
     })
 });
+router.param('id', function (req, res, next, id) {
+    console.log('CALLED ONLY ONCE');
+    next();
+});
 
+router.get('/user/:id', function (req, res, next) {
+    console.log('although this matches');
+    res.json('hello');
+    console.log('不执行');
+    next();
+});
+
+router.get('/user/:id', function (req, res) {
+    console.log('and this matches too');
+    res.json('world');
+    // res.end();
+});
 module.exports = router;
