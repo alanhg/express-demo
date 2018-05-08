@@ -7,18 +7,18 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
-    "connect-redis": "^3.1.0",
+    "connect-redis": "^3.3.3",
     "cookie-parser": "^1.4.3",
-    "ejs": "^2.5.6",
-    "express": "^4.14.0",
-    "express-jwt": "^5.3.0",
-    "express-session": "^1.14.2",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-jwt": "^5.3.1",
+    "express-session": "^1.15.6",
     "js-base64": "^2.1.9",
     "log4js": "^1.0.0",
     "mysql": "^2.12.0",
     "passport": "^0.4.0",
-    "superagent": "^3.8.2",
-    "ua-parser-js": "^0.7.14"
+    "superagent": "^3.8.3",
+    "ua-parser-js": "^0.7.18"
   },
   "devDependencies": {
     "bootstrap": "^3.3.7"
