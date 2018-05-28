@@ -151,4 +151,36 @@ router.get('/user/:id', function (req, res) {
     res.json('world');
     // res.end();
 });
+// promiseChain
+router.get('/promiseChain', function (req, res) {
+    var firstMethod = function () {
+        return new Promise(function (resolve, reject) {
+            console.log('first method completed');
+            reject({data: 'firstMethod-ERROR'});
+        });
+    };
+
+
+    var secondMethod = function (someStuff) {
+        return new Promise(function (resolve, reject) {
+            console.log('second method completed');
+            resolve({data: "secondMethod-ERROR"});
+        });
+    };
+
+    var thirdMethod = function (someStuff) {
+        return new Promise(function (resolve, reject) {
+            console.log('third method completed');
+            resolve({data: "thirdMethod-ERROR"});
+        });
+    };
+
+    firstMethod()
+        .then(secondMethod).then(thirdMethod).catch((res) => {
+        console.log("catch");
+        console.log(res);
+    });
+    res.json("helo");
+});
+
 module.exports = router;
