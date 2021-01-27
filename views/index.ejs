@@ -6,11 +6,12 @@
     <link type="application/opensearchdescription+xml"
           href="content-search.xml" title="检索测试" rel="search"/>
     <base href="/"/>
-    <script type="text/javascript">
-        const target = {a: 1, b: 2};
-        const source = {b: 4, c: 5};
-        const returnedTarget = Object.assign(target, source);
-        console.log(target);
+    <script>
+        function handleCallback(res) {
+            console.log(res);
+        }
+    </script>
+    <script src="/api/a?callback=handleCallback">
     </script>
 </head>
 <body>

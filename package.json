@@ -9,17 +9,19 @@
     "body-parser": "^1.18.2",
     "connect-redis": "^3.3.3",
     "cookie-parser": "^1.4.3",
+    "csv-parser": "^2.3.3",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
+    "finalhandler": "^1.1.2",
     "js-base64": "^2.1.9",
     "log4js": "^1.0.0",
     "mysql": "^2.12.0",
     "passport": "^0.4.0",
+    "query-string": "^6.10.1",
     "superagent": "^3.8.3",
-    "ua-parser-js": "^0.7.18",
-    "query-string": "^6.10.1"
+    "ua-parser-js": "^0.7.18"
   },
   "devDependencies": {
     "bootstrap": "^3.3.7"

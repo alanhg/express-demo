@@ -23,7 +23,7 @@ router.get('/search', (req, res) => {
     res.render('search', {keyword: req.query.q});
 });
 router.get('/', (req, res) => {
-    res.cookie('name', 'tobi', {domain: 'localhost'})
+    res.cookie('name', Math.random(), {domain: 'localhost'})
     res.render('index');
 });
 

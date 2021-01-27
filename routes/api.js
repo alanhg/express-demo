@@ -17,7 +17,7 @@ const unlessPath = [{url: '/api/login', methods: ['POST']}];
 // );
 
 router.get('/a', function (req, res) {
-    res.send({value: 1});
+    res.send(`${req.query.callback}(${JSON.stringify({value: 1})})`);
 });
 router.get('/b', function (req, res) {
     res.send({value: 2});
@@ -99,8 +99,7 @@ router.get('/logout', function (req, res) {
 router.get("/hello", function (req, res, next) {
     if (req.query.name) {
         return res.json("hello");
-    }
-    else {
+    } else {
         next(new Error("没有name"));
     }
 });
