@@ -1,6 +1,6 @@
 const conf = {
     server: {
-        port: 80,
+        port: 8000,
         secret: 'hello world'
     },
     redis: {

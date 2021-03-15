@@ -151,6 +151,11 @@ router.get('/user/:id', function (req, res) {
     res.json('world');
     // res.end();
 });
+
+router.head('/file', function (req, res) {
+    res.json('world');
+});
+
 // promiseChain
 router.get('/promiseChain', function (req, res) {
     var firstMethod = function () {
