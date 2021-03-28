@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const routes = require('./routes/index');
 const bodyParser = require('body-parser');
+var cors = require('cors');
 
 app.set('trust proxy', 1); // trust first proxy
 // app.use(cookieParser());
@@ -16,7 +17,7 @@ app.set('trust proxy', 1); // trust first proxy
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(bodyParser.json()); // for parsing application/json
-
+app.use(cors());
 // mount the router on the app
 app.use('/', routes);
 app.use('/', express.static(path.join(__dirname, '/static')));

@@ -6,8 +6,8 @@ const express = require('express');
 const router = express.Router();
 const config = require('../config');
 const Base64 = require('js-base64').Base64;
-const jwt = require('jsonwebtoken');
-const token = require('../config/plugin/token');
+// const jwt = require('jsonwebtoken');
+// const token = require('../config/plugin/token');
 const unlessPath = [{url: '/api/login', methods: ['POST']}];
 
 // router.use(
@@ -17,8 +17,17 @@ const unlessPath = [{url: '/api/login', methods: ['POST']}];
 // );
 
 router.get('/a', function (req, res) {
-    res.send(`${req.query.callback}(${JSON.stringify({value: 1})})`);
+    res.json({
+        value: 1
+    });
 });
+
+router.post('/a', function (req, res) {
+    res.json({
+        value: 'ok'
+    });
+});
+
 router.get('/b', function (req, res) {
     res.send({value: 2});
 });
