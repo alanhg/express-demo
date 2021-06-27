@@ -14,7 +14,6 @@ const superagent = require('superagent');
 const {utils} = require("@stacker/alfred-utils");
 
 router.get('/css', function (req, res, next) {
-
     const items = utils.filterItemsBy([{
         title: 'hello',
         subtitle: ''
