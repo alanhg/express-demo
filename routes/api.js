@@ -15,7 +15,12 @@ const unlessPath = [{url: '/api/login', methods: ['POST']}];
 //     token.noAuthorization,
 //     token.checkRedis.unless(unlessPath)
 // );
-
+router.put('/a', function (req, res) {
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.status(405).json({
+        value: 'forbid'
+    });
+})
 router.get('/a', function (req, res) {
     res.json({
         value: 1
@@ -27,6 +32,13 @@ router.post('/a', function (req, res) {
         value: 'ok'
     });
 });
+
+router.delete('/a', function (req, res) {
+    res.json({
+        value: 'ok'
+    });
+});
+
 
 router.get('/b', function (req, res) {
     res.send({value: 2});

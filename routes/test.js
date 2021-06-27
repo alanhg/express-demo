@@ -10,8 +10,17 @@ const path = require('path');
 const Base64 = require('js-base64').Base64;
 let conf = require('../config');
 
+const superagent = require('superagent');
+const {utils} = require("@stacker/alfred-utils");
+
 router.get('/css', function (req, res, next) {
-    res.render('css');
+
+    const items = utils.filterItemsBy([{
+        title: 'hello',
+        subtitle: ''
+    }], 'hel', 'title');
+    utils.outputScriptFilter({items, rerun: 1});
+    res.json({items});
 });
 
 router.get('/db', function (req, res) {
@@ -100,7 +109,6 @@ router.get('/promise', function (req, res) {
     return res.send({value: 'hello world'});
 });
 
-const superagent = require('superagent');
 
 router.get('/superagent', (req, res) => {
     const getBaidu = () => {

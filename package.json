@@ -6,6 +6,7 @@
     "hotstart": "nodemon app.js"
   },
   "dependencies": {
+    "@stacker/alfred-utils": "^0.1.1",
     "body-parser": "^1.18.2",
     "connect-redis": "^3.3.3",
     "cookie-parser": "^1.4.3",
@@ -22,6 +23,7 @@
     "nodemon": "^2.0.7",
     "passport": "^0.4.0",
     "query-string": "^6.10.1",
+    "rimraf": "^3.0.2",
     "superagent": "^3.8.3",
     "ua-parser-js": "^0.7.18"
   },
