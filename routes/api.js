@@ -129,10 +129,9 @@ router.get("/hello", function (req, res, next) {
 
 
 router.post("/upload-file", function (req, res) {
-    console.log(req.body.file);
-    const buff = new Buffer(Base64.encode(req.body.file));
-    fs.writeFileSync('./test.zip', buff);
-    res.json(" world");
+    const buff = new Buffer(req.body.file, 'base64');
+    fs.writeFileSync(`./test.${req.body.fileType === 'zip' ? 'zip' : 'sol'}`, buff);
+    res.json("success");
 });
 
 module.exports = router;

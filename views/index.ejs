@@ -10,14 +10,23 @@
 
 <script>
     let fileContent;
+    let filename;
+
+    function isZip() {
+        return filename.match(/\.zip$/);
+    }
 
     function onFileChange() {
         const file = document.getElementById('myFile').files[0];
+        filename = file.name;
         const reader = new FileReader();
-        reader.readAsText(file);
+        reader.readAsDataURL(file);
         reader.onload = (evt) => {
-            fileContent = Base64.encode(evt.target.result);
-            console.log(fileContent);
+            if (isZip()) {
+                fileContent = evt.target.result.replace('data:application/zip;base64,', '');
+            } else {
+                fileContent = evt.target.result.replace('data:application/octet-stream;base64,', '');
+            }
         }
     }
 
@@ -30,13 +39,14 @@
         xhr.open('post', '/api/upload-file');
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.send(JSON.stringify({
-            file: fileContent
+            file: fileContent,
+            fileType: isZip() ? 'zip' : 'sol'
         }))
     }
 </script>
 
 <div>
-    <input id="myFile" type="file" accept="application/zip" onchange="onFileChange()">
+    <input id="myFile" type="file" accept=".zip,.sol" onchange="onFileChange()">
     <button type="button" onclick="onSubmit()">上传</button>
 </div>
 
