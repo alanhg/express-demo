@@ -10,13 +10,15 @@ const Base64 = require('js-base64').Base64;
 // const token = require('../config/plugin/token');
 const unlessPath = [{url: '/api/login', methods: ['POST']}];
 
+const fs = require('fs');
+
 // router.use(
 //     token.validToken.unless(unlessPath),
 //     token.noAuthorization,
 //     token.checkRedis.unless(unlessPath)
 // );
 router.put('/a', function (req, res) {
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
     res.status(405).json({
         value: 'forbid'
     });
@@ -126,8 +128,11 @@ router.get("/hello", function (req, res, next) {
 });
 
 
-// router.get("/hello", function (req, res) {
-//     res.json(" world");
-// });
+router.post("/upload-file", function (req, res) {
+    console.log(req.body.file);
+    const buff = new Buffer(Base64.encode(req.body.file));
+    fs.writeFileSync('./test.zip', buff);
+    res.json(" world");
+});
 
 module.exports = router;
