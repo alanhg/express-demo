@@ -22,7 +22,8 @@
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (evt) => {
-            fileContent = evt.target.result.replace(/^(data:application\/[a-z-]+;base64,)/, '');
+            console.log(evt.target.result);
+            fileContent = evt.target.result.replace(/^(data:[a-z-\/]+;base64,)/, '');
         }
     }
 
