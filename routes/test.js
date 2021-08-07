@@ -197,10 +197,11 @@ router.get('/promiseChain', function (req, res) {
 
 router.get('/download', function (req, res) {
     const currentPath = process.cwd();
-    const content = fs.readFileSync(`${currentPath}/static/file/test_download.zip`, {
-        encoding: 'utf8'
-    });
+    const content = fs.readFileSync(`${currentPath}/static/file/test_download.zip`, 'utf8');
+    res.header('Content-Disposition', 'attachment;filename=test.zip');
     res.type('application/octet-stream');
+    res.header('Accept-Length', content.length);
+    res.header('Access-Control-Allow-Headers', 'Content-Disposition');
     res.send(content);
 });
 
