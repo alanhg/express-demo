@@ -197,12 +197,18 @@ router.get('/promiseChain', function (req, res) {
 
 router.get('/download', function (req, res) {
     const currentPath = process.cwd();
-    const content = fs.readFileSync(`${currentPath}/static/file/test_download.zip`, 'utf8');
+    const content = fs.readFileSync(`${currentPath}/static/file/test_download.zip`, 'binary');
     res.header('Content-Disposition', 'attachment;filename=test.zip');
     res.type('application/octet-stream');
-    res.header('Accept-Length', content.length);
+    res.header('Content-Length', content.length);
     res.header('Access-Control-Allow-Headers', 'Content-Disposition');
     res.send(content);
+});
+
+router.get('/download-base64', function (req, res) {
+    const currentPath = process.cwd();
+    const content = fs.readFileSync(`${currentPath}/static/file/test_download.zip`, 'base64');
+    res.json({content});
 });
 
 module.exports = router;

@@ -53,11 +53,29 @@
         xhr.send();
     }
 
+    function downloadFileBase64Click() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/test/download-base64');
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                saveBase64File(JSON.parse(xhr.response).content);
+            }
+        }
+        xhr.send();
+    }
 
     function saveFile(content) {
         const a = document.createElement("a");
         const file = new Blob([content], {type: 'application/octet-stream'});
         a.href = URL.createObjectURL(file);
+        a.download = 'test.zip';
+        a.click();
+    }
+
+    function saveBase64File(content) {
+        const a = document.createElement("a");
+        a.href = 'data:application/zip;base64,' + content;
         a.download = 'test.zip';
         a.click();
     }
@@ -68,6 +86,7 @@
     <input id="myFile" type="file" accept=".zip,.sol" onchange="onFileChange()">
     <button type="button" onclick="onSubmit()">上传</button>
     <button onclick="downloadFileClick()">下载文件</button>
+    <button onclick="downloadFileBase64Click()">下载文件-Base64</button>
 </div>
 
 </body>
