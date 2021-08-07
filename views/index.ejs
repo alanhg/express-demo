@@ -40,11 +40,34 @@
             fileType: isZip() ? 'zip' : 'sol'
         }))
     }
+
+    function downloadFileClick() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/test/download');
+        xhr.setRequestHeader("Content-Type", "application/octet-stream");
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                saveFile(xhr.response);
+            }
+        }
+        xhr.send();
+    }
+
+
+    function saveFile(content) {
+        const a = document.createElement("a");
+        const file = new Blob([content], {type: 'application/octet-stream'});
+        a.href = URL.createObjectURL(file);
+        a.download = 'test.zip';
+        a.click();
+    }
+
 </script>
 
 <div>
     <input id="myFile" type="file" accept=".zip,.sol" onchange="onFileChange()">
     <button type="button" onclick="onSubmit()">上传</button>
+    <button onclick="downloadFileClick()">下载文件</button>
 </div>
 
 </body>

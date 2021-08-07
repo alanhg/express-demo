@@ -200,9 +200,8 @@ router.get('/download', function (req, res) {
     const content = fs.readFileSync(`${currentPath}/static/file/test_download.zip`, {
         encoding: 'utf8'
     });
-    res.json({
-        content
-    })
+    res.type('application/octet-stream');
+    res.send(content);
 });
 
 module.exports = router;
