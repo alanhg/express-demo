@@ -195,4 +195,9 @@ router.get('/promiseChain', function (req, res) {
     res.json("helo");
 });
 
+router.get('/download', function (req, res) {
+    const currentPath = process.cwd();
+    res.sendFile(`${currentPath}/static/file/test_download.zip`);
+});
+
 module.exports = router;
