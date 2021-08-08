@@ -200,10 +200,27 @@ router.get('/download', function (req, res) {
     res.download(`${currentPath}/static/file/test.zip`, 'test.zip');
 });
 
+
+// 等价res.download
+router.get('/download-binary', function (req, res) {
+    const currentPath = process.cwd();
+    const file = fs.readFileSync(`${currentPath}/static/file/test.zip`, 'binary');
+    res.setHeader('Content-Length', file.length);
+    res.write(file, 'binary');
+});
+
 router.get('/download-base64', function (req, res) {
     const currentPath = process.cwd();
     const content = fs.readFileSync(`${currentPath}/static/file/test.zip`, 'base64');
     res.json({content});
+});
+
+//
+router.get('/download-str', function (req, res) {
+    const currentPath = process.cwd();
+    const file = fs.readFileSync(`${currentPath}/static/file/test.zip`, 'binary');
+    res.setHeader('Content-Length', file.length);
+    res.send(file);
 });
 
 module.exports = router;

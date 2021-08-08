@@ -44,10 +44,16 @@
 
     function downloadFileClick(addResponseType = false) {
         const xhr = new XMLHttpRequest();
-        xhr.open('get', '/test/download');
+
+        /**
+         *  可以正常下载的接口：/test/download,  /test/download-binary
+         *  下载无法正常解压接口: /test/download-str
+         */
+        xhr.open('get', '/test/download-binary');
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onload = () => {
             if (xhr.status === 200) {
+                debugger;
                 saveFile(xhr.response);
             }
         }
