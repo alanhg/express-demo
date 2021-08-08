@@ -2,9 +2,10 @@
 <html lang="zh-CN">
 <head>
     <title>express -demo</title>
+    <base href="/"/>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.1/base64.min.js"></script>
-    <base href="/"/>
+    <script src="/js/download.js"></script>
 </head>
 <body>
 
@@ -41,14 +42,17 @@
         }))
     }
 
-    function downloadFileClick() {
+    function downloadFileClick(addResponseType = false) {
         const xhr = new XMLHttpRequest();
         xhr.open('get', '/test/download');
-        xhr.setRequestHeader("Content-Type", "application/octet-stream");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onload = () => {
             if (xhr.status === 200) {
                 saveFile(xhr.response);
             }
+        }
+        if (addResponseType) {
+            xhr.responseType = 'blob';
         }
         xhr.send();
     }
@@ -67,7 +71,7 @@
 
     function saveFile(content) {
         const a = document.createElement("a");
-        const file = new Blob([content], {type: 'application/octet-stream'});
+        const file = new Blob([content], {type: 'application/zip'});
         a.href = URL.createObjectURL(file);
         a.download = 'test.zip';
         a.click();
@@ -85,9 +89,14 @@
 <div>
     <input id="myFile" type="file" accept=".zip,.sol" onchange="onFileChange()">
     <button type="button" onclick="onSubmit()">上传</button>
-    <button onclick="downloadFileClick()">下载文件</button>
-    <button onclick="downloadFileBase64Click()">下载文件-Base64</button>
+    <h3>
+        下载文件测试
+    </h3>
+    <div>
+        <button onclick="downloadFileClick()">下载文件-Binary</button>
+        <button onclick="downloadFileBase64Click()">下载文件-DataURL</button>
+        <button onclick="downloadFileClick(true)">下载文件-Binary-前端指定responseType</button>
+    </div>
 </div>
-
 </body>
 </html>
