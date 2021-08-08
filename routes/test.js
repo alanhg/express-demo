@@ -206,6 +206,7 @@ router.get('/download-binary', function (req, res) {
     const currentPath = process.cwd();
     const file = fs.readFileSync(`${currentPath}/static/file/test.zip`, 'binary');
     res.setHeader('Content-Length', file.length);
+    res.setHeader('Content-Type', 'application/zip');
     res.write(file, 'binary');
 });
 
