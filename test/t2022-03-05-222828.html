@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style></style>
+  </head>
+  <body>
+    <label>
+      私钥文件
+      <input type="file" onchange="exportPublicKey(event)" />
+    </label>
+    <script>
+      function exportPublicKey(e) {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(e.target.files[0]);
+        reader.onload = async function (e) {
+          if (reader.result) {
+            const ckObj = await crypto.subtle.importKey(
+              'pkcs8',
+              reader.result,
+              {
+                name: 'ECDSA',
+                hash: 'SHA-256'
+              },
+              true,
+              []
+            );
+            const result = ckObj.exportPublicKey('spki', ckObj);
+            console.log(result);
+          }
+        };
+      }
+    </script>
+  </body>
+</html>
