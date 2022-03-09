@@ -8,6 +8,7 @@
   "dependencies": {
     "@stacker/alfred-utils": "^0.1.10",
     "body-parser": "^1.18.2",
+    "bs58": "^5.0.0",
     "connect-redis": "^3.3.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
@@ -28,6 +29,7 @@
     "passport": "^0.4.0",
     "query-string": "^6.10.1",
     "rimraf": "^3.0.2",
+    "sm-crypto": "^0.3.7",
     "superagent": "^3.8.3",
     "ua-parser-js": "^0.7.18"
   },
