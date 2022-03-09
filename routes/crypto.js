@@ -34,11 +34,11 @@ const privateKeyPem = fs.readFileSync(`${__dirname}/client1.key`, {
 //   console.log(pubstr);
 // })();
 
-//
-// (function () {
-//   console.log('by openssl')
-//   execSync(`openssl pkey -in ${__dirname}/client1.key -pubout`, {stdio: 'inherit'})
-// })()
+
+(function createPublickKeyByPri() {
+  console.log('by openssl')
+  execSync(`openssl pkey -in ${__dirname}/client1.key -pubout > ${__dirname}/client2.pem`, {stdio: 'inherit'})
+})();
 
 
 // const hashData = sm3(.decode(()));
