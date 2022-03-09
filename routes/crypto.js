@@ -8,7 +8,6 @@ const {execSync} = require('child_process');
 const sm3 = require('sm-crypto').sm3
 const {Base64} = require('js-base64');
 const {KEYUTIL, KJUR} = require("jsrsasign");
-const bs58 = require('bs58');
 
 // var pubHex = rs.KEYUTIL.getHexFro∂mPEM(pubPEM);
 // var pubHex = rs..getHexFromPEM(a.asn1.x509.X509Util.getPKCS8PubKeyPEMfromRSAKey(prvKey));
