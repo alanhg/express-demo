@@ -33,14 +33,14 @@ const getPemBody = (pem) => {
 })();
 
 //
-// (function () {
-//   const pub = crypto.createPublicKey(privateKeyPem);
-//   const pubstr = pub.export({
-//     format: 'pem', type: 'spki'
-//   })
-//   console.log('by nodejs')
-//   console.log(pubstr);
-// })();
+(function () {
+  const pub = crypto.createPublicKey(privateKeyPem);
+  const pubstr = pub.export({
+    format: 'pem', type: 'spki'
+  })
+  console.log('by nodejs')
+  console.log(pubstr);
+})();
 
 /**
  * OpenSSL等工具生成的PEM body会多一段，具体内容如下
@@ -48,7 +48,7 @@ const getPemBody = (pem) => {
  */
 (function createPublickKeyByPri() {
   console.log('by openssl')
-  execSync(`openssl pkey -in ${__dirname}/client1.key -outform pem -pubout > ${__dirname}/client2.pem`, {stdio: 'inherit'})
+  execSync(`openssl pkey -in ${__dirname}/client1.key -outform pem`, {stdio: 'inherit'})
   // execSync(`openssl pkey -in ${__dirname}/client1.key -outform pem –out > ${__dirname}/client1.pem`, {stdio: 'inherit'})
 })();
 
