@@ -46,8 +46,8 @@ const getPemBody = (pem) => {
  */
 (function createPublickKeyByPri() {
   console.log('by openssl')
-  execSync(`openssl pkey -in ${__dirname}/client1.key -pubout > ${__dirname}/client2.pem`, {stdio: 'inherit'})
-  execSync(`openssl pkey -in ${__dirname}/client1.key -outform der –out > ${__dirname}/client1.der`, {stdio: 'inherit'})
+  execSync(`openssl pkey -in ${__dirname}/client1.key -outform pem -pubout > ${__dirname}/client2.pem`, {stdio: 'inherit'})
+  // execSync(`openssl pkey -in ${__dirname}/client1.key -outform pem –out > ${__dirname}/client1.pem`, {stdio: 'inherit'})
 })();
 
 
