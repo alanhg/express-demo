@@ -241,6 +241,7 @@ router.get('/ssh2-sftp-client', async function (req, res) {
   });
   await client.init();
   const directoryList = await client.list('/root');
+  await client.downloadFile('/root/ticket.gif')
   res.json({directoryList});
 });
 
