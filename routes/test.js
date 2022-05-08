@@ -12,11 +12,11 @@ let conf = require('../config');
 
 const superagent = require('superagent');
 const {utils} = require("@stacker/alfred-utils");
+const SshFtpClient = require("./ssh-ftp");
 
 router.get('/css', function (req, res, next) {
   const items = utils.filterItemsBy([{
-    title: 'hello',
-    subtitle: ''
+    title: 'hello', subtitle: ''
   }], 'hel', 'title');
   fs.unlinkSync(__dirname + '/aaa.txt');
   utils.outputScriptFilter({items, rerun: 1});
@@ -229,6 +229,19 @@ router.get('/download-base64', function (req, res) {
 router.post('/upload', function (req, res) {
   debugger;
   res.json({status: 'ok'});
+});
+
+
+router.get('/ssh2-sftp-client', async function (req, res) {
+  const client = new SshFtpClient({
+    host: req.query.host,
+    port: req.query.port ? +req.query.port : 22,
+    username: req.query.username || 'root',
+    password: req.query.password
+  });
+  await client.init();
+  const directoryList = await client.list('/root');
+  res.json({directoryList});
 });
 
 module.exports = router;
