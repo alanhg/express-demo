@@ -32,6 +32,15 @@ const getPemBody = (pem) => {
   console.log(publicKeyPem);
 })();
 
+
+(function loadPublicKeyFromPri() {
+  const forgePriKey = forge.pki.privateKeyFromPem(privateKeyPem);
+  const forgePubKey = forge.pki.setRsaPublicKey(forgePriKey.n, forgePriKey.e);
+  const publicKeyPem = forge.pki.publicKeyToPem(forgePubKey);
+  console.log('by node-forge-ec private key');
+  console.log(publicKeyPem);
+})();
+
 //
 (function () {
   const pub = crypto.createPublicKey(privateKeyPem);
