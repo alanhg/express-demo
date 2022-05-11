@@ -9,7 +9,9 @@ class SshFtpClient {
   }
 
   init() {
-    return this.sftpClient.connect(this.config);
+    return this.sftpClient.connect(this.config).catch(err => {
+      console.log(`Error: ${err.message}`); // error message will include 'example-client'
+    });
   }
 
   list(path) {

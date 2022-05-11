@@ -34,7 +34,8 @@
     "sm-crypto": "^0.3.7",
     "ssh2-sftp-client": "^8.0.0",
     "superagent": "^3.8.3",
-    "ua-parser-js": "^0.7.18"
+    "ua-parser-js": "^0.7.18",
+    "xterm": "^3.14.5"
   },
   "devDependencies": {
     "bootstrap": "^3.3.7"

@@ -28,5 +28,7 @@ redis需要安装服务端,express中创建客户端建立连接,从而使用red
 (mac环境下安装:)[http://www.jianshu.com/p/6b5eca8d908b]
 (Linux&windows)[http://www.runoob.com/redis/redis-install.html]
 
+http://localhost:8000/test/ssh2-sftp-client?host=43.138.60.150&password=DYXjc7QK
+
 ### 最喜欢的一句话
 技术和工具永远只是实现想法的手段,工具可能会被更好的工具替代,但思考本身却需要自己不断地更新完善
