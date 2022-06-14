@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@stacker/alfred-utils": "^0.1.10",
+    "axios": "^0.27.2",
     "base-58": "0.0.1",
     "body-parser": "^1.18.2",
     "bs58": "^5.0.0",
@@ -35,6 +36,7 @@
     "ssh2-sftp-client": "^8.0.0",
     "superagent": "^3.8.3",
     "ua-parser-js": "^0.7.18",
+    "ws": "^8.8.0",
     "xterm": "^3.14.5"
   },
   "devDependencies": {
