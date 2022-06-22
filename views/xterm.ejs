@@ -1,0 +1,23 @@
+<head>
+    <title>xterm测试</title>
+    <link href="/js/xterm.css" rel="stylesheet">
+    <script src="/js/xterm.js"></script>
+    <script src="/js/xterm-addon-web-links.js"></script>
+</head>
+<body>
+<div id="terminal"></div>
+<script>
+  var term = new Terminal({
+    rendererType: 'dom'
+  });
+  term.open(document.getElementById('terminal'));
+  term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
+  term.writeln('https://1991421.cn');
+  term.loadAddon(new WebLinksAddon.WebLinksAddon(
+    (event, uri) => {
+      if (event.metaKey) {
+        window.open(uri);
+      }
+    }));
+</script>
+</body>

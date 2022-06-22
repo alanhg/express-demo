@@ -2,7 +2,7 @@
  * Created by He on 11/5/16.
  */
 var express = require('express');
-var {WebSocket} = require('ws');
+var WebSocket = require('ws');
 var router = express.Router();
 
 const testRouter = require('./test');
@@ -49,4 +49,8 @@ router.get('/ws', (req, res) => {
     res.render('index');
 });
 
+
+router.get('/xterm', (req, res) => {
+    res.render('xterm');
+});
 module.exports = router;
