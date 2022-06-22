@@ -3,6 +3,7 @@
     <link href="/js/xterm.css" rel="stylesheet">
     <script src="/js/xterm.js"></script>
     <script src="/js/xterm-addon-web-links.js"></script>
+    <script src="/js/xterm-addon-search.js"></script>
 </head>
 <body>
 <div id="terminal"></div>
@@ -19,5 +20,8 @@
         window.open(uri);
       }
     }));
+  let searchAddon = new SearchAddon.SearchAddon();
+  term.loadAddon(searchAddon);
+  searchAddon.findNext('Hello');
 </script>
 </body>
