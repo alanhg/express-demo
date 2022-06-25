@@ -4,14 +4,20 @@
     <script src="/js/xterm.js"></script>
     <script src="/js/xterm-addon-web-links.js"></script>
     <script src="/js/xterm-addon-search.js"></script>
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <div id="terminal"></div>
-<label for="search-terminal">
+<label class="search-addon hide" for="search-terminal">
     搜索
-    <input id="search-terminal" value="hello"/>
-    <button onclick="onFindPre()">pre</button>
-    <button onclick="onFindNext()">next</button>
+    <input id="search-terminal" onkeydown="onEnter(event)" autofocus/>
+    <button onclick="onFindPre(event)">pre</button>
+    <button onclick="onFindNext(event)">next</button>
+    <button onclick="onHide(event)">x</button>
 </label>
 <script>
   var term = new Terminal({
@@ -32,8 +38,20 @@
     }));
   let searchAddon = new SearchAddon.SearchAddon();
   term.loadAddon(searchAddon);
-  function onFindPre() {
-    let value = document.getElementById('search-terminal').value;
+  term.attachCustomKeyEventHandler((event) => {
+    if (event.key === 'f' && event.metaKey) {
+      let elementsByClassNameElement = document.getElementsByClassName('search-addon')[0];
+      console.log(elementsByClassNameElement.children[0]);
+      elementsByClassNameElement.classList.remove('hide');
+      elementsByClassNameElement.children[0].focus();
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  });
+
+  function onFindPre(event) {
+    let value = event.target.parentElement.children[0].value;
     if (!value || !value.trim()) {
       return;
     }
@@ -44,16 +62,34 @@
     });
   }
 
-  function onFindNext() {
-    let value = document.getElementById('search-terminal').value;
+  function onFindNext(event) {
+    let value = event.target.parentElement.children[0].value;
     if (!value || !value.trim()) {
       return;
     }
     searchAddon.findNext(value, {
       decorations: {
-        activeMatchBackground: '#fffd54'
+        activeMatchBackground: '#fffd54',
+        activeMatchColorOverviewRuler: '#ff0000'
       }
     });
+  }
+
+  function onEnter(event) {
+    let value = event.target.parentElement.children[0].value;
+    if (!value.trim()) {
+      return;
+    }
+    if (event.key === 'Enter') {
+      onFindNext(event);
+    }
+  }
+
+  function onHide(event) {
+    const inputEl = event.target.parentElement;
+    inputEl.classList.add('hide');
+    inputEl.value = '';
+    term.focus();
   }
 </script>
 </body>
