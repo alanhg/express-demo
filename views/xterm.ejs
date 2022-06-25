@@ -45,8 +45,8 @@
     <button onclick="onFindNext(event)">next</button>
     <button onclick="onHide(event)">x</button>
 </label>`;
-      searcherEl.children[0].focus();
       document.body.appendChild(searcherEl);
+      searcherEl.children[0].focus();
       event.preventDefault();
       return false;
     }
