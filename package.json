@@ -38,7 +38,7 @@
     "ua-parser-js": "^0.7.18",
     "ws": "^8.8.0",
     "xterm": "4.18.0",
-    "xterm-addon-search": "^0.8.2",
+    "xterm-addon-search": "^0.9.0-beta.39",
     "xterm-addon-web-links": "^0.5.1"
   },
   "devDependencies": {
