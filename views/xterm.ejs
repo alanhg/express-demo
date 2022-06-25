@@ -12,13 +12,7 @@
 </head>
 <body>
 <div id="terminal"></div>
-<label class="search-addon hide" for="search-terminal">
-    搜索
-    <input id="search-terminal" onkeydown="onEnter(event)" autofocus/>
-    <button onclick="onFindPre(event)">pre</button>
-    <button onclick="onFindNext(event)">next</button>
-    <button onclick="onHide(event)">x</button>
-</label>
+
 <script>
   var term = new Terminal({
     rendererType: 'dom'
@@ -40,10 +34,19 @@
   term.loadAddon(searchAddon);
   term.attachCustomKeyEventHandler((event) => {
     if (event.key === 'f' && event.metaKey) {
-      let elementsByClassNameElement = document.getElementsByClassName('search-addon')[0];
-      console.log(elementsByClassNameElement.children[0]);
-      elementsByClassNameElement.classList.remove('hide');
-      elementsByClassNameElement.children[0].focus();
+      if (document.getElementsByClassName('search-terminal').length) {
+        return;
+      }
+      const searcherEl = document.createElement('div');
+      searcherEl.innerHTML = `<label class="search-terminal" for="search-terminal">
+    搜索
+    <input id="search-terminal" onkeydown="onEnter(event)" autofocus/>
+    <button onclick="onFindPre(event)">pre</button>
+    <button onclick="onFindNext(event)">next</button>
+    <button onclick="onHide(event)">x</button>
+</label>`;
+      searcherEl.children[0].focus();
+      document.body.appendChild(searcherEl);
       event.preventDefault();
       return false;
     }
@@ -87,8 +90,7 @@
 
   function onHide(event) {
     const inputEl = event.target.parentElement;
-    inputEl.classList.add('hide');
-    inputEl.value = '';
+    inputEl.remove();
     term.focus();
   }
 </script>
