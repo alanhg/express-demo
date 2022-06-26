@@ -36,61 +36,67 @@
     }));
   let searchAddon = new SearchAddon.SearchAddon();
   term.loadAddon(searchAddon);
-  term.attachCustomKeyEventHandler((event) => {
+  term.attachCustomKeyEventHandler(function (event) {
+    function onFindPre(event) {
+      let value = event.target.parentElement.children[0].value;
+      if (!value || !value.trim()) {
+        return;
+      }
+      searchAddon.findPrevious(value, {
+        caseSensitive: false
+      });
+    }
+
+    function onFindNext(event) {
+      let value = event.target.parentElement.children[0].value;
+      if (!value || !value.trim()) {
+        return;
+      }
+      searchAddon.findNext(value, {
+        caseSensitive: false,
+      });
+    }
+
+    function onEnter(event) {
+      let value = event.target.parentElement.children[0].value;
+      if (!value.trim()) {
+        return;
+      }
+      if (event.key === 'Enter') {
+        onFindNext(event);
+      }
+    }
+
+    function onHide() {
+      const searchEl = term.element.parentElement.querySelector('.search-terminal');
+      searchEl.remove();
+      term.focus();
+    }
+
     if (event.key === 'f' && event.metaKey) {
-      if (document.getElementsByClassName('search-terminal').length) {
+      event.preventDefault();
+      if (this.element.parentElement.getElementsByClassName('search-terminal').length) {
         return;
       }
       const searcherEl = document.createElement('div');
-      searcherEl.innerHTML = `<label class="search-terminal" for="search-terminal">
-    搜索
-    <input id="search-terminal" onkeydown="onEnter(event)" autofocus/>
-    <button onclick="onFindPre(event)">pre</button>
-    <button onclick="onFindNext(event)">next</button>
-    <button onclick="onHide(event)">x</button>
-</label>`;
-      document.body.appendChild(searcherEl);
+      searcherEl.className = 'search-terminal';
+      searcherEl.innerHTML = `<label>
+    <input focus/>
+    <button>pre</button>
+    <button>next</button>
+    <button>x</button></label>`;
+      this.element.parentElement.appendChild(searcherEl);
       searcherEl.children[0].focus();
-      event.preventDefault();
+      const buttonEls = searcherEl.querySelectorAll('button');
+      const clickElement = searcherEl.querySelector('input');
+      clickElement.addEventListener('keydown', onEnter);
+      buttonEls[0].addEventListener('click', onFindPre);
+      buttonEls[1].addEventListener('click', onFindNext);
+      buttonEls[2].addEventListener('click', onHide);
       return false;
     }
     return true;
   });
 
-  function onFindPre(event) {
-    let value = event.target.parentElement.children[0].value;
-    if (!value || !value.trim()) {
-      return;
-    }
-    searchAddon.findPrevious(value, {
-      caseSensitive: false
-    });
-  }
-
-  function onFindNext(event) {
-    let value = event.target.parentElement.children[0].value;
-    if (!value || !value.trim()) {
-      return;
-    }
-    searchAddon.findNext(value, {
-      caseSensitive: false,
-    });
-  }
-
-  function onEnter(event) {
-    let value = event.target.parentElement.children[0].value;
-    if (!value.trim()) {
-      return;
-    }
-    if (event.key === 'Enter') {
-      onFindNext(event);
-    }
-  }
-
-  function onHide(event) {
-    const inputEl = event.target.parentElement;
-    inputEl.remove();
-    term.focus();
-  }
 </script>
 </body>
