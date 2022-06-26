@@ -5,8 +5,50 @@
     <script src="/js/xterm-addon-web-links.js"></script>
     <script src="/js/xterm-addon-search.js"></script>
     <style>
-        .hide {
-            display: none;
+        .search-terminal {
+            position: absolute;
+            width: 215px;
+            color: #000;
+            padding: 5px 10px;
+            box-shadow: 0 2px 8px #000;
+            background: #252526;
+            z-index: 999;
+            display: flex;
+        }
+
+        .search-terminal input {
+            background-color: #3c3c3c;
+            color: #ccc;
+            border: 0;
+            padding: 2px;
+            height: 20px;
+            width: 227px;
+        }
+
+        .search-terminal button {
+            min-width: 20px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            flex: initial;
+            background-position: 50%;
+            margin-left: 3px;
+            background-repeat: no-repeat;
+            background-color: #252526;
+            border: 0;
+            cursor: pointer;
+        }
+
+        .search-terminal button.pre {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTUuNCA4YS42LjYgMCAwMS4xNzYtLjQyNGw0LTRhLjU5OC41OTggMCAwMS44NDggMCAuNTk4LjU5OCAwIDAxMCAuODQ4TDYuODQ5IDhsMy41NzUgMy41NzZhLjU5OC41OTggMCAwMTAgLjg0OC41OTguNTk4IDAgMDEtLjg0OCAwbC00LTRBLjYuNiAwIDAxNS40IDgiLz48L3N2Zz4=");
+        }
+
+        .search-terminal button.next {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEwLjYgOGEuNi42IDAgMDEtLjE3Ni40MjRsLTQgNGEuNTk4LjU5OCAwIDAxLS44NDggMCAuNTk4LjU5OCAwIDAxMC0uODQ4TDkuMTUxIDggNS41NzYgNC40MjRhLjU5OC41OTggMCAwMTAtLjg0OC41OTguNTk4IDAgMDEuODQ4IDBsNCA0QS42LjYgMCAwMTEwLjYgOCIvPjwvc3ZnPg==");
+        }
+
+        .search-terminal button.close {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
         }
     </style>
 </head>
@@ -49,6 +91,7 @@
     constructor(term, searchAddon) {
       this.term = term;
       this.searchAddon = searchAddon;
+      this.parentContainerEl = this.term.element.parentElement;
       this.render();
     }
 
@@ -58,12 +101,17 @@
       }
       const searcherEl = document.createElement('div');
       searcherEl.className = 'search-terminal';
-      searcherEl.innerHTML = `<label>
+
+      this.parentContainerEl.style.position = 'relative';
+      searcherEl.style.top = '10px';
+      searcherEl.style.left = (this.parentContainerEl.querySelector('.xterm-viewport').clientWidth - 235) + 'px';
+
+      searcherEl.innerHTML = `
     <input focus/>
-    <button>pre</button>
-    <button>next</button>
-    <button>x</button></label>`;
-      this.term.element.parentElement.appendChild(searcherEl);
+    <button class="pre"></button>
+    <button class="next"></button>
+    <button class="close"></button>`;
+      this.parentContainerEl.appendChild(searcherEl);
       searcherEl.children[0].focus();
       const buttonEls = searcherEl.querySelectorAll('button');
       const clickElement = searcherEl.querySelector('input');
@@ -104,7 +152,7 @@
     }
 
     onHide() {
-      const searchEl = this.term.element.parentElement.querySelector('.search-terminal');
+      const searchEl = this.parentContainerEl.querySelector('.search-terminal');
       searchEl.remove();
       this.term.focus();
     }
