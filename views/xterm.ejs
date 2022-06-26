@@ -104,11 +104,11 @@
       searcherEl.className = 'search-terminal';
 
       this.parentContainerEl.style.position = 'relative';
-      searcherEl.style.top = '10px';
+      searcherEl.style.top = '0';
       searcherEl.style.left = (this.parentContainerEl.querySelector('.xterm-viewport').clientWidth - 235) + 'px';
 
       searcherEl.innerHTML = `
-    <input focus/>
+    <input/>
     <button class="pre"></button>
     <button class="next"></button>
     <button class="close"></button>`;
