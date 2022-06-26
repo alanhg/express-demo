@@ -15,7 +15,11 @@
 
 <script>
   var term = new Terminal({
-    rendererType: 'dom'
+    rendererType: 'dom',
+    minimumContrastRatio: 1,
+    theme: {
+      selection: '#ff9632',
+    }
   });
   term.open(document.getElementById('terminal'));
   term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
@@ -59,10 +63,7 @@
       return;
     }
     searchAddon.findPrevious(value, {
-      caseSensitive: false,
-      decorations: {
-        activeMatchBackground: '#fffd54'
-      }
+      caseSensitive: false
     });
   }
 
@@ -73,10 +74,6 @@
     }
     searchAddon.findNext(value, {
       caseSensitive: false,
-      decorations: {
-        activeMatchBackground: '#fffd54',
-        activeMatchColorOverviewRuler: '#ff0000'
-      }
     });
   }
 
