@@ -27,5 +27,5 @@ app.use('/', express.static(path.join(__dirname, '/static')));
 // respond with "hello world" when a GET request is made to the homepage
 
 app.listen(conf.server.port, function () {
-    console.log(`Example app listening on port ${conf.server.port}!`);
+    console.log(`Example app listening on port http://127.0.0.1:${conf.server.port}!`);
 });
