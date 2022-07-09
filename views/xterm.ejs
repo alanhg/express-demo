@@ -14,7 +14,7 @@
 
         .search-terminal {
             position: absolute;
-            width: 215px;
+            width: 250px;
             color: #000;
             padding: 5px 10px;
             box-shadow: 0 2px 8px #000;
@@ -58,6 +58,11 @@
         .search-terminal button.close {
             background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
         }
+
+        .search-terminal .search-result-count {
+            position: relative;
+            left: -10px;
+        }
     </style>
 </head>
 <body>
@@ -95,7 +100,7 @@
       brightWhite: '#f6f5fb'
     },
     rendererType: 'dom',
-    // minimumContrastRatio: 1,
+    minimumContrastRatio: 1,
     allowTransparency: true
   });
   term.open(document.getElementById('terminal'));
@@ -162,12 +167,15 @@
 
       this.parentContainerEl.style.position = 'relative';
       searcherEl.style.top = '0';
-      searcherEl.style.left = (this.parentContainerEl.querySelector('.xterm-viewport').clientWidth - 235) + 'px';
+      searcherEl.style.left = (this.parentContainerEl.querySelector('.xterm-viewport').clientWidth - 250) + 'px';
 
       searcherEl.innerHTML = `
     <input/>
+    <span class="search-result-count"></span>
     <button class="pre"></button>
     <button class="next"></button>
+    <button class="match-case">Aa</button>
+    <button class="match-word">W</button>
     <button class="close"></button>`;
       this.parentContainerEl.appendChild(searcherEl);
       searcherEl.children[0].focus();
@@ -176,7 +184,7 @@
       clickElement.addEventListener('keydown', this.onEnter.bind(this));
       buttonEls[0].addEventListener('click', this.onFindPre.bind(this));
       buttonEls[1].addEventListener('click', this.onFindNext.bind(this));
-      buttonEls[2].addEventListener('click', this.onHide.bind(this));
+      buttonEls[4].addEventListener('click', this.onHide.bind(this));
     }
 
     onFindPre(event) {
