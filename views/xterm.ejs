@@ -91,8 +91,17 @@
       this.term = term;
       this.searchAddon = searchAddon;
       this.searchOptions = {
+        /**
+         * 正则表达式
+         */
         regex: false,
+        /**
+         * 单词
+         */
         wholeWord: false,
+        /**
+         * 区分大小写
+         */
         caseSensitive: false,
         decorations: {
           matchBackground: '#ffff00',
