@@ -5,6 +5,8 @@
     <script src="/js/xterm/xterm-addon-web-links.js"></script>
     <script src="/js/xterm/xterm-addon-search.js"></script>
     <script src="/js/xterm/xterm-addon-attach.js"></script>
+    <script src="/js/xterm/zmodem.js"></script>
+    <script src="/js/xterm/zmodem-browser.js"></script>
     <style>
         #terminal {
             background-image: url("/img/halo.jpeg");
@@ -68,8 +70,9 @@
 </head>
 <body>
 <div id="terminal"></div>
-
+<input id="zm_files" type="file" multiple style="display: none">
 <script>
+  console.log(Zmodem);
   var term = new Terminal({
     theme: {
       foreground: '#f8dcc0',
@@ -128,11 +131,33 @@
     return true;
   });
 
+
   fetch('/xterm?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then(res => res.text()).then(function (res) {
     var socket = new WebSocket(`ws://127.0.0.1:8000/xterm/${res}`);
     const attachAddon = new AttachAddon.AttachAddon(socket);
     term.loadAddon(attachAddon);
-  });
+    term.zmodemAttach(socket, {
+      noTerminalWriteOutsideSession: true,
+    });
+    term.zmodemDetect = (detection) => {
+      function do_zmodem() {
+        let zsession = detection.confirm();
+
+        var promise;
+
+        if (zsession.type === "receive") {
+          promise = _handle_receive_session(zsession);
+        } else {
+          promise = _handle_send_session(zsession);
+        }
+        promise.catch(console.error.bind(console)).then(() => {
+
+        });
+      }
+
+      do_zmodem();
+    };
+  })
 
   class SearchAddonBar {
     constructor(term, searchAddon) {
@@ -225,6 +250,83 @@
       searchEl.remove();
       this.term.focus();
     }
+  }
+
+  //This is here to allow canceling of an in-progress ZMODEM transfer.
+  var current_receive_xfer;
+
+  function _save_to_disk(xfer, buffer) {
+    return Zmodem.Browser.save_to_disk(buffer, xfer.get_details().name);
+  }
+
+  /**
+   * SZ接受文件
+   */
+  function _handle_receive_session(zsession) {
+    zsession.on("offer", function (xfer) {
+      current_receive_xfer = xfer;
+
+      function on_form_submit() {
+        var FILE_BUFFER = [];
+        xfer.on("input", (payload) => {
+          FILE_BUFFER.push(new Uint8Array(payload));
+        });
+        xfer.accept().then(
+          () => {
+            _save_to_disk(xfer, FILE_BUFFER);
+          },
+          console.error.bind(console)
+        );
+        //END
+      }
+
+      on_form_submit();
+    });
+
+    var promise = new Promise((res) => {
+      zsession.on("session_end", () => {
+        res();
+      });
+    });
+    zsession.start();
+    return promise;
+  }
+
+  /**
+   * rz接收文件
+   */
+  function _handle_send_session(zsession) {
+
+    var file_el = document.getElementById("zm_files");
+
+    file_el.click();
+    var promise = new Promise((res) => {
+      file_el.onchange = function (e) {
+
+        var files_obj = file_el.files;
+
+        Zmodem.Browser.send_files(
+          zsession,
+          files_obj,
+          {
+            on_offer_response(obj, xfer) {
+            },
+            on_progress(obj, xfer) {
+            },
+            on_file_complete(obj) {
+              //console.log("COMPLETE", obj);
+            },
+          }
+        ).then().then(
+          zsession.close.bind(zsession),
+          console.error.bind(console)
+        ).then(() => {
+          res();
+        });
+      };
+    });
+
+    return promise;
   }
 
 </script>

@@ -4,6 +4,3 @@ node_modules
 
 _cache
 !_cache/.gitkeep
-
-static/js/xterm
-!static/js/xterm/.gitkeep
