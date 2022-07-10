@@ -290,8 +290,7 @@
         var FILE_BUFFER = [];
         xfer.on("input", (payload) => {
           FILE_BUFFER.push(new Uint8Array(payload));
-          let progress = current_receive_xfer.get_offset() * 100 / current_receive_xfer.get_details().size;
-          term.writeln(progress + '%');
+          term.writeln(getProgress(current_receive_xfer));
         });
         xfer.accept().then(
           () => {
@@ -332,12 +331,16 @@
           zsession,
           files_obj,
           {
-            on_offer_response(obj, xfer) {
+            on_offer_response(obj, xhr) {
+              if (!xhr) {
+                term.writeln(`\n* The file ${obj.name} exists *`);
+              }
             },
-            on_progress(obj, xfer) {
+            on_progress(obj, xhr) {
+              term.writeln(getProgress(xhr));
             },
             on_file_complete(obj) {
-              //console.log("COMPLETE", obj);
+              console.log("COMPLETE", obj);
             },
           }
         ).then().then(
@@ -350,6 +353,10 @@
     });
 
     return promise;
+  }
+
+  function getProgress(xhr) {
+    return (xhr.get_offset() * 100 / xhr.get_details().size).toFixed(2) + '100%';
   }
 
 </script>
