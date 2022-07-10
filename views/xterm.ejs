@@ -1,9 +1,10 @@
 <head>
     <title>xterm测试</title>
-    <link href="/js/xterm.css" rel="stylesheet">
-    <script src="/js/xterm.js"></script>
-    <script src="/js/xterm-addon-web-links.js"></script>
-    <script src="/js/xterm-addon-search.js"></script>
+    <link href="/js/xterm/xterm.css" rel="stylesheet">
+    <script src="/js/xterm/xterm.js"></script>
+    <script src="/js/xterm/xterm-addon-web-links.js"></script>
+    <script src="/js/xterm/xterm-addon-search.js"></script>
+    <script src="/js/xterm/xterm-addon-attach.js"></script>
     <style>
         #terminal {
             background-image: url("/img/halo.jpeg");
@@ -127,6 +128,11 @@
     return true;
   });
 
+  fetch('/xterm?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then(res => res.text()).then(function (res) {
+    var socket = new WebSocket(`ws://127.0.0.1:8000/xterm/${res}`);
+    const attachAddon = new AttachAddon.AttachAddon(socket);
+    term.loadAddon(attachAddon);
+  });
 
   class SearchAddonBar {
     constructor(term, searchAddon) {
