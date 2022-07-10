@@ -57,7 +57,12 @@ router.get('/xterm', (req, res) => {
 router.post('/xterm', (req, res) => {
   var cols = parseInt(req.query.cols), rows = parseInt(req.query.rows),
     term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
-      encoding: null, name: 'xterm-color', cols: cols || 80, rows: rows || 24, cwd: process.env.PWD, env: process.env
+      encoding: null,
+      name: 'xterm-color',
+      cols: cols || 80,
+      rows: rows || 24,
+      cwd: process.env.PWD + '/_cache',
+      env: process.env
     });
 
   console.log('Created terminal with PID: ' + term.pid);
@@ -68,9 +73,7 @@ router.post('/xterm', (req, res) => {
 
 
 router.post('/xterm/:pid/size', function (req, res) {
-  var pid = parseInt(req.params.pid),
-    cols = parseInt(req.query.cols),
-    rows = parseInt(req.query.rows),
+  var pid = parseInt(req.params.pid), cols = parseInt(req.query.cols), rows = parseInt(req.query.rows),
     term = terminals[pid];
 
   term.resize(cols, rows);
