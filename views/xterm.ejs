@@ -137,7 +137,10 @@
      * 如果在session会话中需要实现取消
      */
     if (event.key === 'c' && event.ctrlKey) {
-      zsession && zsession.abort();
+      if (zsession && !zsession._aborted) {
+        zsession.abort();
+        term.writeln('');
+      }
     }
     return true;
   });
@@ -282,9 +285,12 @@
         var FILE_BUFFER = [];
         xfer.on("input", (payload) => {
           FILE_BUFFER.push(new Uint8Array(payload));
+          let progress = current_receive_xfer.get_offset() * 100 / current_receive_xfer.get_details().size;
+          term.writeln(progress + '%');
         });
         xfer.accept().then(
           () => {
+            term.writeln('download complete');
             _save_to_disk(xfer, FILE_BUFFER);
           },
           console.error.bind(console)
