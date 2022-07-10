@@ -55,8 +55,9 @@ router.get('/xterm', (req, res) => {
 });
 
 router.post('/xterm', (req, res) => {
+  let shell = 'zsh';// zsh,bash
   var cols = parseInt(req.query.cols), rows = parseInt(req.query.rows),
-    term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
+    term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : shell, [], {
       encoding: null,
       name: 'xterm-color',
       cols: cols || 80,
