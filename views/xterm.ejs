@@ -107,6 +107,11 @@
     minimumContrastRatio: 1,
     allowTransparency: true
   });
+  /**
+   * 终端会话连接与zsession
+   */
+  var socket, zsession;
+
   term.open(document.getElementById('terminal'));
   term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
   term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
@@ -128,20 +133,27 @@
       new SearchAddonBar(this, searchAddon);
       return false;
     }
+    /**
+     * 如果在session会话中需要实现取消
+     */
+    if (event.key === 'c' && event.ctrlKey) {
+      zsession && zsession.abort();
+    }
     return true;
   });
 
 
   fetch('/xterm?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then(res => res.text()).then(function (res) {
-    var socket = new WebSocket(`ws://127.0.0.1:8000/xterm/${res}`);
+    socket = new WebSocket(`ws://127.0.0.1:8000/xterm/${res}`);
     const attachAddon = new AttachAddon.AttachAddon(socket);
     term.loadAddon(attachAddon);
     term.zmodemAttach(socket, {
       noTerminalWriteOutsideSession: true,
     });
     term.zmodemDetect = (detection) => {
+
       function do_zmodem() {
-        let zsession = detection.confirm();
+        zsession = detection.confirm();
 
         var promise;
 
@@ -151,7 +163,7 @@
           promise = _handle_send_session(zsession);
         }
         promise.catch(console.error.bind(console)).then(() => {
-
+          zsession = null;
         });
       }
 
