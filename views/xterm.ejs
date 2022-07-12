@@ -123,6 +123,17 @@
   term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
   term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
   term.writeln('https://1991421.cn');
+  term.writeln('');
+  let i = 1;
+  let intervalId = window.setInterval(() => {
+    if (i > 100) {
+      window.clearInterval(intervalId);
+      term.write('download completed');
+      return;
+    }
+    term.write(' ' + String(i++) + '%\r');
+  }, 100);
+
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
     (event, uri) => {
       if (event.metaKey) {
