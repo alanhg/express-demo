@@ -123,16 +123,16 @@
   term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
   term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
   term.writeln('https://1991421.cn');
-  term.writeln('');
-  let i = 1;
-  let intervalId = window.setInterval(() => {
-    if (i > 100) {
-      window.clearInterval(intervalId);
-      term.write('download completed');
-      return;
-    }
-    term.write(' ' + String(i++) + '%\r');
-  }, 100);
+  // term.writeln('');
+  // let i = 1;
+  // let intervalId = window.setInterval(() => {
+  //   if (i > 100) {
+  //     window.clearInterval(intervalId);
+  //     term.write('download completed');
+  //     return;
+  //   }
+  //   term.write(' ' + String(i++) + '%' + '\u000D');
+  // }, 100);
 
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
     (event, uri) => {
@@ -192,6 +192,10 @@
 
       do_zmodem();
     };
+
+    socket.addEventListener('open', () => {
+      term.write('');
+    });
   })
 
   class SearchAddonBar {
@@ -352,10 +356,12 @@
               }
             },
             on_progress(obj, xhr) {
-              term.writeln(getProgress(xhr));
+              let data = getProgress(xhr) + '\r';
+              console.log(data);
+              term.write(data);
             },
             on_file_complete(obj) {
-              console.log("COMPLETE", obj);
+              term.writeln(obj.name + ' uploaded.');
             },
           }
         ).then().then(
@@ -371,7 +377,7 @@
   }
 
   function getProgress(xhr) {
-    return (xhr.get_offset() * 100 / xhr.get_details().size).toFixed(2) + '100%';
+    return (xhr.get_offset() * 100 / xhr.get_details().size).toFixed(2) + '%';
   }
 
 </script>
