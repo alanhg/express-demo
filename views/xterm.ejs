@@ -72,7 +72,6 @@
 <div id="terminal"></div>
 <input id="zm_files" type="file" multiple style="display: none">
 <script>
-  console.log(Zmodem);
   var term = new Terminal({
     fontFamily: 'Hack Nerd Font',
     fontSize: 13,
@@ -194,7 +193,7 @@
     };
 
     socket.addEventListener('open', () => {
-      term.write('');
+      socket.send('cd ~/Desktop/\n\r');
     });
   })
 
@@ -304,16 +303,17 @@
   function _handle_receive_session(zsession) {
     zsession.on("offer", function (xfer) {
       current_receive_xfer = xfer;
+      // term.writeln('0%');
 
       function on_form_submit() {
-        var FILE_BUFFER = [];
+        const FILE_BUFFER = [];
         xfer.on("input", (payload) => {
           FILE_BUFFER.push(new Uint8Array(payload));
-          term.writeln(getProgress(current_receive_xfer));
+          // term.write(getProgress(current_receive_xfer) + '\r');
         });
         xfer.accept().then(
           () => {
-            term.writeln('download complete');
+            // term.writeln(`${xfer.get_details().name} download complete\r`);
             _save_to_disk(xfer, FILE_BUFFER);
           },
           console.error.bind(console)
@@ -354,14 +354,13 @@
               if (!xhr) {
                 term.writeln(`\n* The file ${obj.name} exists *`);
               }
-            },
-            on_progress(obj, xhr) {
-              let data = getProgress(xhr) + '\r';
-              console.log(data);
-              term.write(data);
+              // percent为字符串比如100.00
+              xhr.on('send_progress', (percent) => {
+
+              });
             },
             on_file_complete(obj) {
-              term.writeln(obj.name + ' uploaded.');
+              // term.writeln(obj.name + ' uploaded.');
             },
           }
         ).then().then(
