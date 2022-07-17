@@ -9,7 +9,7 @@
     <script src="/js/xterm/zmodem-browser.js"></script>
     <style>
         #terminal {
-            background-image: url("/img/halo.jpeg");
+            /*background-image: url("/img/halo.jpeg");*/
             background-repeat: no-repeat;
             background-color: black;
             /*background-size: cover;*/
@@ -77,6 +77,7 @@
     fontSize: 13,
     fontWeight: 'normal',
     letterSpacing: 0,
+    cursorBlink: true,
     theme: {
       foreground: '#f8dcc0',
       background: 'rgba(31,29,69,0.5)',
@@ -108,6 +109,7 @@
     },
     rendererType: 'dom',
     minimumContrastRatio: 1,
+    // 开启透明支持-支持CSS实现终端背景图设定
     allowTransparency: true
   });
   /**
@@ -162,7 +164,7 @@
     term.zmodemDetect = (detection) => {
 
       function do_zmodem() {
-        // attachAddon.dispose();
+        attachAddon.dispose(); // 开启zmodem会话时，临时销毁attachAddon
         zsession = detection.confirm();
 
         var promise;
@@ -174,7 +176,7 @@
         }
         promise.catch(console.error.bind(console)).then(() => {
           zsession = null;
-          // attachAddon.activate(term);
+          attachAddon.activate(term); // zmodem会话结束时，重新激活attachAddon
         });
       }
 
@@ -306,7 +308,7 @@
         });
         xfer.accept().then(
           () => {
-            term.write(`${xfer.get_details().name} download complete\r`);
+            term.write(`${xfer.get_details().name} download completed.\r`);
             term.focus();
             term.write(`\r\n`);
             _save_to_disk(xfer, FILE_BUFFER);
@@ -359,10 +361,9 @@
             on_progress(obj, xfer) {
             },
             on_file_complete(obj, xfer) {
-              term.write(`${xfer.get_details().name} upload complete\r`);
+              term.write(`${xfer.get_details().name} upload completed.\r`);
               term.focus();
               term.write(`\r\n`);
-              term.write('\x1b[2K\r');
             },
           }
         ).then().then(
@@ -393,6 +394,14 @@
       bufView[i] = str.charCodeAt(i);
     }
     return bufView;
+  }
+
+  /**
+   * 清除光标所在行内容
+   * @param term
+   */
+  function eraseActiveLine(term) {
+    term.write('\x1b[2K\r');
   }
 </script>
 </body>
