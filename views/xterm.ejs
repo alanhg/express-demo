@@ -237,6 +237,8 @@
       this.searchAddon.onDidChangeResults(({resultIndex, resultCount}) => {
         this.resultElement.innerHTML = `${resultIndex + 1}/${resultCount}`;
       });
+
+      this.onFindNextDebounce = debounce(this.onFindNext);
     }
 
     render() {
@@ -295,13 +297,17 @@
       this.searchAddon.findNext(value, this.searchOptions);
     }
 
+
     onEnter(event) {
       let value = this.inputElement.value;
       if (!value.trim()) {
+        this.searchAddon.clearDecorations();
         return;
       }
       if (event.key === 'Enter') {
         this.onFindNext();
+      } else {
+        return this.onFindNextDebounce();
       }
     }
 
@@ -458,6 +464,18 @@
    */
   function eraseActiveLine(term) {
     term.write('\x1b[2K\r');
+  }
+
+  function debounce(fn, wait = 300) {
+    let timeId;
+    return function () {
+      if (timeId) {
+        clearTimeout(timeId);
+      }
+      timeId = setTimeout(() => {
+        fn.apply(this, arguments);
+      }, wait);
+    };
   }
 </script>
 </body>
