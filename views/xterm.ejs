@@ -113,22 +113,11 @@
   /**
    * 终端会话连接与zsession
    */
-  var socket, zsession;
+  var socket, zsession, attachAddon;
 
   term.open(document.getElementById('terminal'));
-  term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
-  term.writeln('https://1991421.cn');
-  // term.writeln('');
-  // let i = 1;
-  // let intervalId = window.setInterval(() => {
-  //   if (i > 100) {
-  //     window.clearInterval(intervalId);
-  //     term.write('download completed');
-  //     return;
-  //   }
-  //   term.write(' ' + String(i++) + '%' + '\u000D');
-  // }, 100);
-
+  // 终端自定义打印内容
+  term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
     (event, uri) => {
       if (event.metaKey) {
@@ -150,9 +139,11 @@
     }
     /**
      * 如果在session会话中需要实现取消
+     * 由于开启zmodem会话时关闭了attach插件，因此这里WS直接发送取消命令
      */
     if (event.key === 'c' && event.ctrlKey) {
       if (zsession && !zsession._aborted) {
+        // attachAddon.activate(term);
         zsession.abort();
         term.writeln('');
       }
@@ -163,7 +154,7 @@
 
   fetch('/xterm?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then(res => res.text()).then(function (res) {
     socket = new WebSocket(`ws://127.0.0.1:8000/xterm/${res}`);
-    const attachAddon = new AttachAddon.AttachAddon(socket);
+    attachAddon = new AttachAddon.AttachAddon(socket);
     term.loadAddon(attachAddon);
     term.zmodemAttach(socket, {
       noTerminalWriteOutsideSession: true,
@@ -171,19 +162,19 @@
     term.zmodemDetect = (detection) => {
 
       function do_zmodem() {
-        attachAddon.dispose();
+        // attachAddon.dispose();
         zsession = detection.confirm();
 
         var promise;
 
         if (zsession.type === "receive") {
-          promise = _handle_receive_session(zsession);
+          promise = handleReceiveSession(zsession);
         } else {
-          promise = _handle_send_session(zsession);
+          promise = handleSendSession(zsession);
         }
         promise.catch(console.error.bind(console)).then(() => {
           zsession = null;
-          attachAddon.activate(term);
+          // attachAddon.activate(term);
         });
       }
 
@@ -191,14 +182,12 @@
     };
 
     socket.addEventListener('open', () => {
-      socket.send('cd ~/Desktop/\n\r');
+      socket.send('\r');
     });
 
     socket.addEventListener('message', (evt) => {
       if (!zsession) {
         term.write(evt.data);
-      } else {
-        console.log(ab2str(evt.data));
       }
     });
   })
@@ -296,9 +285,6 @@
     }
   }
 
-  //This is here to allow canceling of an in-progress ZMODEM transfer.
-  var current_receive_xfer;
-
   function _save_to_disk(xfer, buffer) {
     return Zmodem.Browser.save_to_disk(buffer, xfer.get_details().name);
   }
@@ -306,21 +292,23 @@
   /**
    * SZ接受文件
    */
-  function _handle_receive_session(zsession) {
+  function handleReceiveSession(zsession) {
     zsession.on("offer", function (xfer) {
-      current_receive_xfer = xfer;
-
-      // term.writeln('0%');
+      term.blur();
+      term.write('\x1b[2K\r');
+      term.write('0%\r');
 
       function on_form_submit() {
         const FILE_BUFFER = [];
         xfer.on("input", (payload) => {
           FILE_BUFFER.push(new Uint8Array(payload));
-          // term.write(getProgress(current_receive_xfer) + '\r');
+          term.write(getProgress(xfer) + '\r');
         });
         xfer.accept().then(
           () => {
-            // term.writeln(`${xfer.get_details().name} download complete\r`);
+            term.write(`${xfer.get_details().name} download complete\r`);
+            term.focus();
+            term.write(`\r\n`);
             _save_to_disk(xfer, FILE_BUFFER);
           },
           console.error.bind(console)
@@ -343,8 +331,7 @@
   /**
    * rz接收文件
    */
-  function _handle_send_session(zsession) {
-
+  function handleSendSession(zsession) {
     var file_el = document.getElementById("zm_files");
 
     file_el.click();
@@ -357,17 +344,25 @@
           zsession,
           files_obj,
           {
-            on_offer_response(obj, xhr) {
-              if (!xhr) {
-                term.writeln(`\n* The file ${obj.name} exists *`);
+            on_offer_response(obj, xfer) {
+              if (!xfer) {
+                term.write(`\n* The file ${obj.name} exists *\r`);
+              } else {
+                term.blur();
+                xfer.on('send_progress', percent => {
+                  console.log(percent + '%\r');
+                  // 上传中，发送进度给后台
+                  term.write(percent + '%\r');
+                });
               }
-              // percent为字符串比如100.00
-              xhr.on('send_progress', (percent) => {
-
-              });
             },
-            on_file_complete(obj) {
-              // term.writeln(obj.name + ' uploaded.');
+            on_progress(obj, xfer) {
+            },
+            on_file_complete(obj, xfer) {
+              term.write(`${xfer.get_details().name} upload complete\r`);
+              term.focus();
+              term.write(`\r\n`);
+              term.write('\x1b[2K\r');
             },
           }
         ).then().then(
@@ -383,11 +378,21 @@
   }
 
   function getProgress(xhr) {
+    console.log(xhr.get_offset());
     return (xhr.get_offset() * 100 / xhr.get_details().size).toFixed(2) + '%';
   }
 
   function ab2str(buf) {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
+  }
+
+  function str2ab(str) {
+    const buf = new ArrayBuffer(str.length);
+    const bufView = new Uint8Array(buf);
+    for (let i = 0, strLen = str.length; i < strLen; i++) {
+      bufView[i] = str.charCodeAt(i);
+    }
+    return bufView;
   }
 </script>
 </body>
