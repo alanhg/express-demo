@@ -62,7 +62,7 @@ router.post('/xterm', (req, res) => {
       name: 'xterm-color',
       cols: cols || 80,
       rows: rows || 24,
-      cwd: process.env.PWD + '/_cache',
+      cwd: process.env.PWD + '/_cache', // // 首次进入系统目录
       env: process.env
     });
 

@@ -42,9 +42,12 @@ Object.assign(Terminal.prototype, {
       // may be specific to xterm.js’s demo, ultimately we
       // should reject anything that isn’t binary.
       if (typeof evt.data === 'string') {
-        return;
+        if (_shouldWrite()) {
+          term.write(evt.data)
+        }
+      } else {
+        zsentry.consume(evt.data);
       }
-      zsentry.consume(evt.data);
     }
 
     ws.binaryType = 'arraybuffer';

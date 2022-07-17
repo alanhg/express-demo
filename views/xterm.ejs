@@ -117,10 +117,6 @@
 
   term.open(document.getElementById('terminal'));
   term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
-  term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
-  term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
-  term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
-  term.writeln('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
   term.writeln('https://1991421.cn');
   // term.writeln('');
   // let i = 1;
@@ -175,6 +171,7 @@
     term.zmodemDetect = (detection) => {
 
       function do_zmodem() {
+        attachAddon.dispose();
         zsession = detection.confirm();
 
         var promise;
@@ -186,6 +183,7 @@
         }
         promise.catch(console.error.bind(console)).then(() => {
           zsession = null;
+          attachAddon.activate(term);
         });
       }
 
@@ -194,6 +192,14 @@
 
     socket.addEventListener('open', () => {
       socket.send('cd ~/Desktop/\n\r');
+    });
+
+    socket.addEventListener('message', (evt) => {
+      if (!zsession) {
+        term.write(evt.data);
+      } else {
+        console.log(ab2str(evt.data));
+      }
     });
   })
 
@@ -303,6 +309,7 @@
   function _handle_receive_session(zsession) {
     zsession.on("offer", function (xfer) {
       current_receive_xfer = xfer;
+
       // term.writeln('0%');
 
       function on_form_submit() {
@@ -379,5 +386,8 @@
     return (xhr.get_offset() * 100 / xhr.get_details().size).toFixed(2) + '%';
   }
 
+  function ab2str(buf) {
+    return String.fromCharCode.apply(null, new Uint8Array(buf));
+  }
 </script>
 </body>
