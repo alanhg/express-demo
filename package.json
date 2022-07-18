@@ -2,8 +2,8 @@
   "name": "express-demo",
   "version": "0.0.1",
   "scripts": {
-    "start": "node app.js",
-    "hotstart": "nodemon app.js",
+    "start": "nvm use &&node app.js",
+    "hotstart": "nvm use && nodemon app.js",
     "build": "node build.js"
   },
   "dependencies": {

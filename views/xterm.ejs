@@ -7,14 +7,18 @@
     <script src="/js/xterm/xterm-addon-attach.js"></script>
     <script src="/js/xterm/zmodem.js"></script>
     <script src="/js/xterm/zmodem-browser.js"></script>
+
     <style>
         #terminal {
             /*background-image: url("/img/halo.jpeg");*/
             background-repeat: no-repeat;
-            background-color: black;
+            /*background-color: black;*/
             /*background-size: cover;*/
         }
 
+        /**
+          search-addon-bar样式
+         */
         .search-terminal {
             position: absolute;
             width: 285px;
@@ -85,46 +89,48 @@
 <body>
 <div id="terminal"></div>
 <input id="zm_files" type="file" multiple style="display: none">
-<script>
+<script type="module">
+  import {SearchAddonBar} from '/js/search-addon-bar.js';
+
   var term = new Terminal({
-    fontFamily: 'Hack Nerd Font',
+    // fontFamily: 'Hack Nerd Font',
     fontSize: 13,
     fontWeight: 'normal',
     letterSpacing: 0,
     cursorBlink: true,
     theme: {
-      foreground: '#f8dcc0',
-      background: 'rgba(31,29,69,0.5)',
-      cursor: '#efbf38',
+      foreground: '#a5a2a2',
+      background: '#090300',
+      cursor: '#a5a2a2',
 
-      black: '#050404',
-      brightBlack: '#4e7cbf',
+      black: '#090300',
+      brightBlack: '#5c5855',
 
-      red: '#bd0013',
-      brightRed: '#fc5f5a',
+      red: '#db2d20',
+      brightRed: '#e8bbd0',
 
-      green: '#4ab118',
-      brightGreen: '#9eff6e',
+      green: '#01a252',
+      brightGreen: '#3a3432',
 
-      yellow: '#e7741e',
-      brightYellow: '#efc11a',
+      yellow: '#fded02',
+      brightYellow: '#4a4543',
 
-      blue: '#0f4ac6',
-      brightBlue: '#1997c6',
+      blue: '#01a0e4',
+      brightBlue: '#807d7c',
 
-      magenta: '#665993',
-      brightMagenta: '#9b5953',
+      magenta: '#a16a94',
+      brightMagenta: '#d6d5d4',
 
-      cyan: '#70a598',
-      brightCyan: '#c8faf4',
+      cyan: '#b5e4f4',
+      brightCyan: '#cdab53',
 
-      white: '#f8dcc0',
-      brightWhite: '#f6f5fb'
+      white: '#a5a2a2',
+      brightWhite: '#f7f7f7'
     },
     rendererType: 'dom',
     minimumContrastRatio: 1,
     // 开启透明支持-支持CSS实现终端背景图设定
-    allowTransparency: true
+    // allowTransparency: true
   });
   /**
    * 终端会话连接与zsession
@@ -208,146 +214,6 @@
     });
   })
 
-  class SearchAddonBar {
-    constructor(term, searchAddon) {
-      this.term = term;
-      this.searchAddon = searchAddon;
-      this.searchOptions = {
-        /**
-         * 正则表达式
-         */
-        regex: false,
-        /**
-         * 单词
-         */
-        wholeWord: false,
-        /**
-         * 区分大小写
-         */
-        caseSensitive: false,
-        decorations: {
-          matchBackground: '#ffff00',
-          // matchOverviewRuler: '#30B0D7',
-          activeMatchBackground: '#ff9632'
-        }
-      }
-      this.parentContainerEl = this.term.element.parentElement;
-      this.render();
-      this.visible = true;
-      this.searchAddon.onDidChangeResults(({resultIndex, resultCount}) => {
-        this.resultElement.innerHTML = `${resultIndex + 1}/${resultCount}`;
-      });
-
-      this.onFindNextDebounce = debounce(this.onFindNext);
-    }
-
-    render() {
-      if (this.term.element.parentElement.getElementsByClassName('search-terminal').length) {
-        return;
-      }
-      const searcherEl = document.createElement('div');
-      this.searcherEl = searcherEl;
-      searcherEl.className = 'search-terminal';
-
-      this.parentContainerEl.style.position = 'relative';
-      searcherEl.style.top = '0';
-      searcherEl.style.left = (this.parentContainerEl.querySelector('.xterm-viewport').clientWidth - 285 - 20) + 'px';
-
-      searcherEl.innerHTML = `
-    <input/>
-    <span class="search-result-count"></span>
-    <button class="pre"></button>
-    <button class="next"></button>
-    <button class="match-case ${this.searchOptions.caseSensitive ? 'active' : ''}">Aa</button>
-    <button class="match-word ${this.searchOptions.wholeWord ? 'active' : ''}">W</button>
-    <button class="match-regex ${this.searchOptions.regex ? 'active' : ''}">.*</button>
-    <button class="close"></button>`;
-      this.parentContainerEl.appendChild(searcherEl);
-      searcherEl.children[0].focus();
-      const buttonEls = searcherEl.querySelectorAll('button');
-      const inputElement = searcherEl.querySelector('input');
-      const resultElement = searcherEl.querySelector('.search-result-count');
-
-      this.inputElement = inputElement;
-      this.resultElement = resultElement;
-
-      inputElement.addEventListener('keydown', this.onEnter.bind(this));
-      buttonEls[0].addEventListener('click', this.onFindPre.bind(this));
-      buttonEls[1].addEventListener('click', this.onFindNext.bind(this));
-      buttonEls[2].addEventListener('click', this.onMatchCase.bind(this));
-      buttonEls[3].addEventListener('click', this.onMatchWord.bind(this));
-      buttonEls[4].addEventListener('click', this.onMatchRegex.bind(this));
-      buttonEls[5].addEventListener('click', this.onHide.bind(this));
-    }
-
-    onFindPre(event) {
-      let value = event.target.parentElement.children[0].value;
-      if (!value || !value.trim()) {
-        return;
-      }
-      this.searchAddon.findPrevious(value, this.searchOptions);
-    }
-
-    onFindNext() {
-      let value = this.inputElement.value;
-      if (!value || !value.trim()) {
-        return;
-      }
-
-      this.searchAddon.findNext(value, this.searchOptions);
-    }
-
-
-    onEnter(event) {
-      let value = this.inputElement.value;
-      if (!value.trim()) {
-        this.searchAddon.clearDecorations();
-        return;
-      }
-      if (event.key === 'Enter') {
-        this.onFindNext();
-      } else {
-        return this.onFindNextDebounce();
-      }
-    }
-
-    onHide() {
-      const searchEl = this.parentContainerEl.querySelector('.search-terminal');
-      searchEl.remove();
-      this.searchAddon.clearDecorations();
-      this.term.focus();
-      this.visible = false;
-    }
-
-    onMatchWord(event) {
-      this.searchOptions.wholeWord = !this.searchOptions.wholeWord;
-      this.toggleActiveClass(event.target);
-      this.searchAddon.clearDecorations();
-      this.onFindNext();
-    }
-
-    onMatchCase(event) {
-      this.searchOptions.caseSensitive = !this.searchOptions.caseSensitive;
-      this.toggleActiveClass(event.target);
-      this.searchAddon.clearDecorations();
-      this.onFindNext();
-    }
-
-    onMatchRegex(event) {
-      this.searchOptions.regex = !this.searchOptions.regex;
-      this.toggleActiveClass(event.target);
-      this.searchAddon.clearDecorations();
-      this.onFindNext();
-    }
-
-    toggleActiveClass(el) {
-      if (el.classList.contains('active')) {
-        el.classList.remove('active');
-      } else {
-        el.classList.add('active');
-      }
-    }
-  }
 
   function _save_to_disk(xfer, buffer) {
     return Zmodem.Browser.save_to_disk(buffer, xfer.get_details().name);
