@@ -15,16 +15,17 @@ export class SearchAddonBar {
        * 区分大小写
        */
       caseSensitive: false,
-      // decorations: {
-      //   matchBackground: '#ffff00',
-      //   // matchOverviewRuler: '#30B0D7',
-      //   activeMatchBackground: '#ff9632'
-      // }
+      decorations: {
+        matchBackground: '#ffff00',
+        activeMatchBackground: '#ff9632'
+      }
     }
     this.parentContainerEl = this.term.element.parentElement;
     this.render();
     this.visible = true;
     this.searchAddon.onDidChangeResults((res) => {
+      console.log(res);
+
       if (res) {
         const {resultIndex, resultCount} = res;
         this.resultElement.innerHTML = `${resultIndex + 1}/${resultCount}`;
@@ -37,7 +38,8 @@ export class SearchAddonBar {
   }
 
   render() {
-    if (this.term.element.parentElement.getElementsByClassName('search-terminal').length) {
+    const elements = this.term.element.parentElement.getElementsByClassName('search-terminal');
+    if (elements.length) {
       return;
     }
     const searcherEl = document.createElement('div');
@@ -65,7 +67,7 @@ export class SearchAddonBar {
     this.inputElement = inputElement;
     this.resultElement = resultElement;
 
-    inputElement.addEventListener('keydown', this.onEnter.bind(this));
+    inputElement.addEventListener('keydown', this.onKeyDown.bind(this));
     buttonEls[0].addEventListener('click', this.onFindPre.bind(this));
     buttonEls[1].addEventListener('click', this.onFindNext.bind(this));
     buttonEls[2].addEventListener('click', this.onMatchCase.bind(this));
@@ -84,7 +86,7 @@ export class SearchAddonBar {
     this.searchAddon.findNext(value, this.searchOptions);
   }
 
-  onEnter(event) {
+  onKeyDown(event) {
     let value = this.inputElement.value.trim();
     if (!value) {
       this.searchAddon.clearDecorations();
@@ -133,5 +135,17 @@ export class SearchAddonBar {
       el.classList.add('active');
     }
   }
+}
+
+function debounce(fn, wait = 300) {
+  let timeId;
+  return function () {
+    if (timeId) {
+      clearTimeout(timeId);
+    }
+    timeId = setTimeout(() => {
+      fn.apply(this, arguments);
+    }, wait);
+  };
 }
 

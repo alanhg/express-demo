@@ -332,16 +332,6 @@
     term.write('\x1b[2K\r');
   }
 
-  function debounce(fn, wait = 300) {
-    let timeId;
-    return function () {
-      if (timeId) {
-        clearTimeout(timeId);
-      }
-      timeId = setTimeout(() => {
-        fn.apply(this, arguments);
-      }, wait);
-    };
-  }
+
 </script>
 </body>
