@@ -1,5 +1,16 @@
 /**
  * 搜索工具栏UI插件
+ * 使用例子
+ *   let searchAddon = new SearchAddon.SearchAddon();
+ *   let searchAddonBar = new SearchAddonBar({
+ *     searchAddon
+ *   });
+ *
+ *  if (event.key === 'f' && event.metaKey) {
+ *       event.preventDefault();
+ *       searchAddonBar.show();
+ *       return false;
+ *     }
  */
 export class SearchAddonBar {
   constructor(options) {
@@ -52,6 +63,7 @@ export class SearchAddonBar {
     this.visible = true;
     const elements = this.term.element.parentElement.getElementsByClassName('search-terminal');
     if (elements.length) {
+      this.inputElement.focus();
       return;
     }
     const searcherEl = document.createElement('div');

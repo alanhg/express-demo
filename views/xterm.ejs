@@ -148,23 +148,7 @@
     }));
   let searchAddon = new SearchAddon.SearchAddon();
   let searchAddonBar = new SearchAddonBar({
-    searchAddon,
-    /**
-     * 正则表达式
-     */
-    regex: false,
-    /**
-     * 单词
-     */
-    wholeWord: false,
-    /**
-     * 区分大小写
-     */
-    caseSensitive: false,
-    decorations: {
-      matchBackground: '#ffff00',
-      activeMatchBackground: '#ff9632'
-    },
+    searchAddon
   });
 
   term.loadAddon(searchAddon);
