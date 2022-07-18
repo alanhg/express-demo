@@ -24,20 +24,15 @@ export class SearchAddonBar {
       /**
        * 正则表达式
        */
-      regex: true,
-      /**
+      regex: true, /**
        * 单词
        */
-      wholeWord: false,
-      /**
+      wholeWord: false, /**
        * 区分大小写
        */
-      caseSensitive: false,
-      decorations: {
-        matchBackground: '#ffff00',
-        activeMatchBackground: '#ff9632'
-      },
-      ...searchOptions
+      caseSensitive: false, decorations: {
+        matchBackground: '#ffff00', activeMatchBackground: '#ff9632'
+      }, ...searchOptions
     }
     this.onFindNextDebounce = debounce(this.onFindNext);
   }
@@ -66,14 +61,13 @@ export class SearchAddonBar {
       this.inputElement.focus();
       return;
     }
-    const searcherEl = document.createElement('div');
-    searcherEl.className = 'search-terminal';
+    const searcherElement = document.createElement('div');
+    searcherElement.className = 'search-terminal';
 
     this.parentContainerEl.style.position = 'relative';
-    searcherEl.style.top = '0';
-    searcherEl.style.left = (this.parentContainerEl.querySelector('.xterm-viewport').clientWidth - 285 - 20) + 'px';
-
-    searcherEl.innerHTML = `
+    searcherElement.style.top = '0';
+    searcherElement.style.left = (this.parentContainerEl.querySelector('.xterm-viewport').clientWidth - 285 - 20) + 'px';
+    searcherElement.innerHTML = `
     <input/>
     <span class="search-result-count"></span>
     <button class="pre"></button>
@@ -82,23 +76,54 @@ export class SearchAddonBar {
     <button class="match-word ${this.searchOptions.wholeWord ? 'active' : ''}">W</button>
     <button class="match-regex ${this.searchOptions.regex ? 'active' : ''}">.*</button>
     <button class="close"></button>`;
-    this.parentContainerEl.appendChild(searcherEl);
-    searcherEl.children[0].focus();
-    const buttonEls = searcherEl.querySelectorAll('button');
-    const inputElement = searcherEl.querySelector('input');
-    const resultElement = searcherEl.querySelector('.search-result-count');
+    this.parentContainerEl.appendChild(searcherElement);
+    searcherElement.children[0].focus();
+    const inputElement = searcherElement.querySelector('input');
+    const resultElement = searcherElement.querySelector('.search-result-count');
 
     this.inputElement = inputElement;
-    this.searcherElement = searcherEl;
+    this.searcherElement = searcherElement;
     this.resultElement = resultElement;
+    searcherElement.addEventListener('click', this.onClick.bind(this));
+    searcherElement.addEventListener('keydown', this.onKeydown.bind(this));
+  }
 
-    inputElement.addEventListener('keydown', this.onKeyDown.bind(this));
-    buttonEls[0].addEventListener('click', this.onFindPre.bind(this));
-    buttonEls[1].addEventListener('click', this.onFindNext.bind(this));
-    buttonEls[2].addEventListener('click', this.onMatchCase.bind(this));
-    buttonEls[3].addEventListener('click', this.onMatchWord.bind(this));
-    buttonEls[4].addEventListener('click', this.onMatchRegex.bind(this));
-    buttonEls[5].addEventListener('click', this.onHide.bind(this));
+  onKeydown(event) {
+    if (event.target.tagName === 'INPUT') {
+      if (event.key === 'Enter') {
+        this.onFindNext(event);
+      } else {
+        this.onFindNextDebounce();
+      }
+    }
+  }
+
+  onClick(event) {
+    const classList = event.target.classList;
+    if (classList.contains('close')) {
+      this.onHide(event);
+      return;
+    }
+    if (classList.contains('pre')) {
+      this.onFindPre(event);
+      return;
+    }
+    if (classList.contains('next')) {
+      this.onFindNext(event);
+      return;
+    }
+    if (classList.contains('match-case')) {
+      this.onMatchCase(event);
+      return;
+    }
+    if (classList.contains('match-word')) {
+      this.onMatchWord(event);
+      return;
+    }
+    if (classList.contains('match-regex')) {
+      this.onMatchRegex(event);
+      return;
+    }
   }
 
   onFindPre() {
