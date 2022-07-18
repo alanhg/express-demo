@@ -147,7 +147,28 @@
       }
     }));
   let searchAddon = new SearchAddon.SearchAddon();
+  let searchAddonBar = new SearchAddonBar({
+    searchAddon,
+    /**
+     * 正则表达式
+     */
+    regex: false,
+    /**
+     * 单词
+     */
+    wholeWord: false,
+    /**
+     * 区分大小写
+     */
+    caseSensitive: false,
+    decorations: {
+      matchBackground: '#ffff00',
+      activeMatchBackground: '#ff9632'
+    },
+  });
+
   term.loadAddon(searchAddon);
+  term.loadAddon(searchAddonBar);
   term.attachCustomKeyEventHandler(function (event) {
     if (event.key === 'k' && event.metaKey) {
       term.clear();
@@ -156,7 +177,7 @@
 
     if (event.key === 'f' && event.metaKey) {
       event.preventDefault();
-      this.searchAddonBar = new SearchAddonBar(this, searchAddon);
+      searchAddonBar.show();
       return false;
     }
     /**
@@ -165,7 +186,6 @@
      */
     if (event.key === 'c' && event.ctrlKey) {
       if (zsession && !zsession._aborted) {
-        // attachAddon.activate(term);
         zsession.abort();
         term.writeln('');
       }

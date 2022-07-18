@@ -1,12 +1,19 @@
+/**
+ * 搜索工具栏UI插件
+ */
 export class SearchAddonBar {
-  constructor(term, searchAddon) {
-    this.term = term;
+  constructor(options) {
+    if (!options.searchAddon) {
+      console.error('inorder use search-addon-bar, xterm-addon-search should load firstly.');
+      return;
+    }
+    const {searchAddon, ...searchOptions} = options;
     this.searchAddon = searchAddon;
     this.searchOptions = {
       /**
        * 正则表达式
        */
-      regex: false,
+      regex: true,
       /**
        * 单词
        */
@@ -18,14 +25,16 @@ export class SearchAddonBar {
       decorations: {
         matchBackground: '#ffff00',
         activeMatchBackground: '#ff9632'
-      }
+      },
+      ...searchOptions
     }
-    this.parentContainerEl = this.term.element.parentElement;
-    this.render();
-    this.visible = true;
-    this.searchAddon.onDidChangeResults((res) => {
-      console.log(res);
+    this.onFindNextDebounce = debounce(this.onFindNext);
+  }
 
+  activate(term) {
+    this.term = term;
+    this.parentContainerEl = this.term.element.parentElement;
+    this.searchAddon.onDidChangeResults((res) => {
       if (res) {
         const {resultIndex, resultCount} = res;
         this.resultElement.innerHTML = `${resultIndex + 1}/${resultCount}`;
@@ -33,11 +42,14 @@ export class SearchAddonBar {
         this.resultElement.innerHTML = '';
       }
     });
-
-    this.onFindNextDebounce = debounce(this.onFindNext);
   }
 
-  render() {
+  dispose() {
+    this.onHide();
+  }
+
+  show() {
+    this.visible = true;
     const elements = this.term.element.parentElement.getElementsByClassName('search-terminal');
     if (elements.length) {
       return;
@@ -65,6 +77,7 @@ export class SearchAddonBar {
     const resultElement = searcherEl.querySelector('.search-result-count');
 
     this.inputElement = inputElement;
+    this.searcherElement = searcherEl;
     this.resultElement = resultElement;
 
     inputElement.addEventListener('keydown', this.onKeyDown.bind(this));
@@ -99,9 +112,11 @@ export class SearchAddonBar {
     }
   }
 
+  /**
+   * 搜索销毁
+   */
   onHide() {
-    const searchEl = this.parentContainerEl.querySelector('.search-terminal');
-    searchEl.remove();
+    this.searcherElement.remove();
     this.searchAddon.clearDecorations();
     this.term.focus();
     this.visible = false;
