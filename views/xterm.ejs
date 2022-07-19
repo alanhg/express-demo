@@ -151,9 +151,13 @@
     searchAddon
   });
 
-  term.loadAddon(searchAddon);
-  term.loadAddon(searchAddonBar);
+  // term.loadAddon(searchAddon);
+  // term.loadAddon(searchAddonBar);
   term.attachCustomKeyEventHandler(function (event) {
+    // if (event.key === '1' && event.metaKey) {
+    //   event.preventDefault();
+    //   return false;
+    // }
     if (event.key === 'k' && event.metaKey) {
       term.clear();
       return false;
