@@ -96,7 +96,7 @@
     window.term.blur();
     window.term.writeln('');
     const intervalId = setInterval(() => {
-      window.term.write((index++)+'\r');
+      window.term.write((index++) + '\r');
       if (index > 10000000) {
         clearInterval(intervalId);
       }
@@ -251,7 +251,7 @@
   function handleReceiveSession(zsession) {
     zsession.on("offer", function (xfer) {
       term.blur();
-      term.write('\x1b[2K\r');
+      term.write('\x1b[2K\r'); // 清除活跃行内容
       term.write('0%\r');
 
       function on_form_submit() {
@@ -304,6 +304,7 @@
               if (!xfer) {
                 term.write(`\n* The file ${obj.name} exists *\r`);
               } else {
+                term.write('\x1b[2K\r'); // 清除活跃行内容
                 term.blur();
                 xfer.on('send_progress', percent => {
                   console.log(percent + '%\r');
