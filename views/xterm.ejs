@@ -105,7 +105,7 @@
 
   function onInfinitePrintBtnClick() {
     let index = 0;
-    while (true){
+    while (true) {
       window.term.write((index++) + '\r');
     }
   }
@@ -234,7 +234,6 @@
           attachAddon.activate(term); // zmodem会话结束时，重新激活attachAddon
         });
       }
-
       do_zmodem();
     };
 
@@ -316,9 +315,10 @@
                 term.write('\x1b[2K\r'); // 清除活跃行内容
                 term.blur();
                 xfer.on('send_progress', percent => {
-                  console.log(percent + '%\r');
                   // 上传中，发送进度给后台
-                  term.write(percent + '%\r');
+                  term.write(percent + '%\r', () => {
+                    console.log(percent + '%\r');
+                  });
                 });
               }
             },
