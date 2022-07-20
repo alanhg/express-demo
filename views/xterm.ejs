@@ -102,10 +102,19 @@
       }
     })
   }
+
+  function onInfinitePrintBtnClick() {
+    let index = 0;
+    while (true){
+      window.term.write((index++) + '\r');
+    }
+  }
+
 </script>
 <div id="terminal"></div>
 <input id="zm_files" type="file" multiple style="display: none">
 <button onclick="onPrintBtnClick()">print something</button>
+<button onclick="onInfinitePrintBtnClick()">infinite print</button>
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
 
