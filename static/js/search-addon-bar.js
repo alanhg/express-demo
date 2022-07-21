@@ -31,7 +31,8 @@ export class SearchAddonBar {
        * 区分大小写
        */
       caseSensitive: false, decorations: {
-        matchBackground: '#ffff00', activeMatchBackground: '#ff9632'
+        matchBackground: '#ffff00',
+        activeMatchBackground: '#ff9632'
       }, ...searchOptions
     }
     this.onFindNextDebounce = debounce(this.onFindNext);
