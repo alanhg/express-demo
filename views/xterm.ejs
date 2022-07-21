@@ -125,6 +125,7 @@
     letterSpacing: 0,
     cursorBlink: true,
     theme: {
+      // selection: '#0000ff55',
       foreground: '#a5a2a2',
       background: '#090300',
       cursor: '#a5a2a2',
@@ -153,10 +154,10 @@
       white: '#a5a2a2',
       brightWhite: '#f7f7f7'
     },
-    rendererType: 'dom',
+    rendererType: 'dom', //  canvas,dom
     minimumContrastRatio: 1,
     // 开启透明支持-支持CSS实现终端背景图设定
-    // allowTransparency: true
+    allowTransparency: true
   });
   window.term = term;
   /**

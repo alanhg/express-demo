@@ -31,8 +31,12 @@ export class SearchAddonBar {
        * 区分大小写
        */
       caseSensitive: false, decorations: {
-        matchBackground: '#ffff00',
-        activeMatchBackground: '#ff9632'
+        activeMatchBackground: '#ff9632',
+        // matchOverviewRuler: '#cccc00',
+        // activeMatchColorOverviewRuler: '#ffff00',
+        matchBorder: '#cc0',
+        // activeMatchBorder: '#ff0',
+        // activeMatchBackground: 'rgba(255, 255, 0, 0.125)',
       }, ...searchOptions
     }
     this.onFindNextDebounce = debounce(this.onFindNext);
@@ -58,6 +62,7 @@ export class SearchAddonBar {
   show() {
     this.visible = true;
     const elements = this.term.element.parentElement.getElementsByClassName('search-terminal');
+    // this.term.blur();
     if (elements.length) {
       this.inputElement.focus();
       return;
@@ -165,6 +170,7 @@ export class SearchAddonBar {
     this.toggleActiveClass(event.target);
     this.searchAddon.clearDecorations();
     this.onFindNext();
+    // this.term.focus();
   }
 
   onMatchCase(event) {
