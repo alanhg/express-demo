@@ -90,18 +90,20 @@ export class SearchAddonBar {
     this.searcherElement = searcherElement;
     this.resultElement = resultElement;
     searcherElement.addEventListener('click', this.onClick.bind(this));
-    searcherElement.addEventListener('keydown', this.onKeydown.bind(this));
+    inputElement.addEventListener('keydown', this.onKeydown.bind(this));
   }
 
   onKeydown(event) {
-    if (event.target.tagName === 'INPUT') {
-      if (event.key === 'Enter') {
-        this.onFindNext(event);
-      } else {
-        this.onFindNextDebounce();
-      }
+    if (event.key === 'Enter') {
+      this.onFindNext(event);
+    } else {
+      this.onFindNextDebounce(event);
     }
   }
+
+  // onChange(event) {
+  //   this.onFindNextDebounce(event);
+  // }
 
   onClick(event) {
     const classList = event.target.classList;
