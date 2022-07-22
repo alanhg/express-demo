@@ -31,12 +31,11 @@ export class SearchAddonBar {
        * 区分大小写
        */
       caseSensitive: false, decorations: {
-        activeMatchBackground: '#ff9632',
-        // matchOverviewRuler: '#cccc00',
-        // activeMatchColorOverviewRuler: '#ffff00',
+        matchOverviewRuler: '#cccc00',
+        activeMatchColorOverviewRuler: '#ffff00',
         matchBorder: '#cc0',
-        // activeMatchBorder: '#ff0',
-        // activeMatchBackground: 'rgba(255, 255, 0, 0.125)',
+        activeMatchBorder: '#ff0',
+        activeMatchBackground: 'rgba(255, 255, 0, 0.125)',
       }, ...searchOptions
     }
     this.onFindNextDebounce = debounce(this.onFindNext);
