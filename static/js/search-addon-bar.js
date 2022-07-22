@@ -71,7 +71,7 @@ export class SearchAddonBar {
 
     this.parentContainerEl.style.position = 'relative';
     searcherElement.style.top = '0';
-    searcherElement.style.left = (this.parentContainerEl.querySelector('.xterm-viewport').clientWidth - 285 - 20) + 'px';
+    searcherElement.style.right = '12px';
     searcherElement.innerHTML = `
     <input/>
     <span class="search-result-count"></span>
