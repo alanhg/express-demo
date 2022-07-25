@@ -15,8 +15,7 @@
 export class SearchAddonBar {
   constructor(options) {
     if (!options.searchAddon) {
-      console.error('inorder use search-addon-bar, xterm-addon-search should load firstly.');
-      return;
+      throw new Error('can not use search-addon-bar until searchAddon setting.');
     }
     const {searchAddon, ...searchOptions} = options;
     this.searchAddon = searchAddon;
