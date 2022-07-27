@@ -58,6 +58,10 @@ export class SearchAddonBar {
   }
 
   show() {
+    if (this.term.buffer.active.type === 'alternate') {
+      console.warn('alternate state not support search');
+      return;
+    }
     this.visible = true;
     const elements = this.term.element.parentElement.getElementsByClassName('search-terminal');
     // this.term.blur();
