@@ -111,10 +111,15 @@
   }
 
 </script>
+
 <div id="terminal" translate="no"></div>
 <input id="zm_files" type="file" multiple style="display: none">
 <button onclick="onPrintBtnClick()">print something</button>
 <button onclick="onInfinitePrintBtnClick()">infinite print</button>
+<code>
+    <p>The function <code>selectAll()</code> highlights all the text in the
+        input field so the user can, for example, copy or delete the text.</p>
+</code>
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
 
@@ -235,6 +240,7 @@
           attachAddon.activate(term); // zmodem会话结束时，重新激活attachAddon
         });
       }
+
       do_zmodem();
     };
 
