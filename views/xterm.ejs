@@ -123,6 +123,7 @@
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
 
+  var isFullscreen = false;
   var term = new Terminal({
     // fontFamily: 'Hack Nerd Font',
     fontSize: 13,
@@ -194,6 +195,19 @@
     if (event.key === 'k' && event.metaKey) {
       term.clear();
       return false;
+    }
+
+    if (event.key === 'f' && event.ctrlKey) {
+      if (isFullscreen) {
+        document.exitFullscreen().then(() => {
+          isFullscreen = !isFullscreen;
+        });
+      } else {
+        term.element.requestFullscreen().then(() => {
+          isFullscreen = !isFullscreen;
+        });
+      }
+      return true;
     }
 
     if (event.key === 'f' && event.metaKey) {
