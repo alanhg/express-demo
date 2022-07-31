@@ -12,7 +12,7 @@
  *       return false;
  *     }
  */
-const DEFAULT_UI_BAR_CLASS_NAME = 'search-terminal';
+const DEFAULT_UI_BAR_CLASS_NAME = 'xterm-search-addon-bar';
 
 export class SearchAddonBar {
   constructor(options) {
