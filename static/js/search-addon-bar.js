@@ -12,13 +12,16 @@
  *       return false;
  *     }
  */
+const DEFAULT_UI_BAR_CLASS_NAME = 'search-terminal';
+
 export class SearchAddonBar {
   constructor(options) {
     if (!options.searchAddon) {
       throw new Error('can not use search-addon-bar until searchAddon setting.');
     }
-    const {searchAddon, ...searchOptions} = options;
+    const {searchAddon, className = DEFAULT_UI_BAR_CLASS_NAME, ...searchOptions} = options;
     this.searchAddon = searchAddon;
+    this.className = className;
     this.searchOptions = {
       /**
        * 正则表达式
@@ -63,18 +66,17 @@ export class SearchAddonBar {
       return;
     }
     this.visible = true;
-    const elements = this.term.element.parentElement.getElementsByClassName('search-terminal');
+    const elements = this.term.element.parentElement.getElementsByClassName(this.className);
     // this.term.blur();
     if (elements.length) {
       this.inputElement.focus();
       return;
     }
     const searcherElement = document.createElement('div');
-    searcherElement.className = 'search-terminal';
+    searcherElement.className = this.className;
 
     this.parentContainerEl.style.position = 'relative';
     searcherElement.style.top = '0';
-    searcherElement.style.right = '12px';
     searcherElement.innerHTML = `
     <input/>
     <span class="search-result-count"></span>
