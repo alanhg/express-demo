@@ -210,8 +210,8 @@
       }
       return true;
     }
-
-    if (event.key === 'f' && event.metaKey) {
+    // alternate screen模式比如vim模式下不开启终端检索
+    if (event.key === 'f' && event.metaKey && term.buffer.active.type === 'normal') {
       event.preventDefault();
       searchAddonBar.show();
       return false;
