@@ -7,6 +7,7 @@
     <script src="/js/xterm/xterm-addon-attach.js"></script>
     <script src="/js/xterm/zmodem.js"></script>
     <script src="/js/xterm/zmodem-browser.js"></script>
+    <script src="/js/mousetrap.min.js"></script>
 
     <style>
         #terminal {
@@ -394,6 +395,21 @@
     term.write('\x1b[2K\r');
   }
 
+  /**
+   * mod在Mac下即⌘，在windows等系统下即ctrl
+   */
+  Mousetrap.bind('mod+k', function () {
+    console.log('command k or control k');
 
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+  Mousetrap.bind('?', function () {
+    console.log('show help doc');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
 </script>
 </body>

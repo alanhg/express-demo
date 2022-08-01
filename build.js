@@ -9,4 +9,6 @@ xtermJS.forEach(f => {
 
 fs.copyFileSync(path.join(__dirname, 'node_modules', `nora-zmodemjs/dist/zmodem.js`), path.join(__dirname, 'static', `js/xterm/zmodem.js`));
 
-fs.copyFileSync(path.join(__dirname, 'node_modules',  `xterm/css/xterm.css`), path.join(__dirname, 'static', `js/xterm/xterm.css`));
+fs.copyFileSync(path.join(__dirname, 'node_modules', `xterm/css/xterm.css`), path.join(__dirname, 'static', `js/xterm/xterm.css`));
+
+fs.copyFileSync(path.join(__dirname, 'node_modules', 'mousetrap/mousetrap.min.js'), path.join(__dirname, 'static', `js/mousetrap.min.js`));

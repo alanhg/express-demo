@@ -54,8 +54,12 @@ router.get('/xterm', (req, res) => {
   res.render('xterm');
 });
 
+router.get('/shortcuts', (req, res) => {
+  res.render('shortcuts');
+});
+
 router.post('/xterm', (req, res) => {
-  let shell = '/bin/bash';// zsh,bash
+  let shell = 'bash';// zsh,bash
   var cols = parseInt(req.query.cols), rows = parseInt(req.query.rows),
     term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : shell, [], {
       encoding: null,

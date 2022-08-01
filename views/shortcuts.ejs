@@ -1,0 +1,67 @@
+<head>
+    <title>mousetrap测试</title>
+    <script src="/js/mousetrap.min.js"></script>
+
+    <style>
+
+    </style>
+</head>
+<body>
+<input type="text">
+<script>
+  const mousetrap = Mousetrap(document.body);
+  /**
+   * mod在Mac下即⌘，在windows等系统下即ctrl
+   */
+  mousetrap.bind('mod+k', function () {
+    console.log('command k or control k');
+
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+  mousetrap.bind('?', function () {
+    console.log('show help doc');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+
+  mousetrap.bind('mod+n', function () {
+    console.log('mod n');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+  mousetrap.bind('mod+1', function () {
+    console.log('mod 1');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+  mousetrap.bind('mod+0', function () {
+    console.log('mod 0');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+  mousetrap.bind('mod+f', function () {
+    console.log('mod f');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+  mousetrap.bind('mod+l', function () {
+    console.log('mod l');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+
+  mousetrap.bind('esc', function () {
+    console.log('escape');
+    return false;
+  }, 'keyup');
+
+</script>
+</body>
