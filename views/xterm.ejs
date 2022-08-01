@@ -188,6 +188,9 @@
 
   term.loadAddon(searchAddon);
   term.loadAddon(searchAddonBar);
+  /**
+   * 回调函数默认值，决定是否继续冒泡
+   */
   term.attachCustomKeyEventHandler(function (event) {
     // if (event.key === '1' && event.metaKey) {
     //   event.preventDefault();
@@ -214,7 +217,7 @@
     if (event.key === 'f' && event.metaKey && term.buffer.active.type === 'normal') {
       event.preventDefault();
       searchAddonBar.show();
-      return false;
+      return true;
     }
     /**
      * 如果在session会话中需要实现取消
@@ -225,8 +228,9 @@
         zsession.abort();
         term.writeln('');
       }
+      return false;
     }
-    return true;
+    return false;
   });
 
 
