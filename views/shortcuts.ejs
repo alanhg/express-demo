@@ -63,5 +63,25 @@
     return false;
   }, 'keyup');
 
+
+  mousetrap.bind('mod+t', function () {
+    console.log('mod t');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+  mousetrap.bind('mod+p', function () {
+    console.log('mod p');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+
+  mousetrap.bind('mod+,', function () {
+    console.log('mod ,');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
 </script>
 </body>
