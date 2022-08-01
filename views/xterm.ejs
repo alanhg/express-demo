@@ -189,14 +189,9 @@
 
   term.loadAddon(searchAddon);
   term.loadAddon(searchAddonBar);
-  /**
-   * 回调函数默认值，决定是否继续冒泡
-   */
+
+
   term.attachCustomKeyEventHandler(function (event) {
-    // if (event.key === '1' && event.metaKey) {
-    //   event.preventDefault();
-    //   return false;
-    // }
     if (event.key === 'k' && event.metaKey) {
       term.clear();
       return false;
@@ -231,7 +226,7 @@
       }
       return false;
     }
-    return false;
+    return true;
   });
 
 
