@@ -171,6 +171,10 @@ export class SearchAddonBar {
     this.visible = false;
   }
 
+  hide() {
+    return this.onHide();
+  }
+
   onMatchWord(event) {
     this.searchOptions.wholeWord = !this.searchOptions.wholeWord;
     this.toggleActiveClass(event.target);
