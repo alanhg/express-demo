@@ -37,6 +37,7 @@
     "passport": "^0.4.0",
     "query-string": "^6.10.1",
     "rimraf": "^3.0.2",
+    "screenfull": "^6.0.2",
     "sm-crypto": "^0.3.7",
     "ssh2": "^1.11.0",
     "ssh2-sftp-client": "^8.0.0",

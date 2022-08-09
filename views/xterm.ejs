@@ -421,5 +421,19 @@
     // and stop event from bubbling
     return false;
   });
+
+  Mousetrap.bind(['mod+ctrl+u', 'mod+enter'], function () {
+    console.log('show fullscreen doc');
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.body.requestFullscreen({
+        navigationUI: 'hide'
+      })
+    }
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
 </script>
 </body>
