@@ -195,11 +195,6 @@
 
 
   term.attachCustomKeyEventHandler(function (event) {
-    if (event.key === 'k' && event.metaKey) {
-      term.clear();
-      return false;
-    }
-
     if (event.key === 'f' && event.ctrlKey) {
       if (isFullscreen) {
         document.exitFullscreen().then(() => {
