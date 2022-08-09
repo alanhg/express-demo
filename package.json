@@ -42,7 +42,7 @@
     "ssh2-sftp-client": "^8.0.0",
     "ssh2-streams": "^0.4.10",
     "superagent": "^3.8.3",
-    "ua-parser-js": "^0.7.18",
+    "ua-parser-js": "^0.7.24",
     "ws": "^8.8.0",
     "xterm": "^4.19.0",
     "xterm-addon-attach": "^0.6.0",
