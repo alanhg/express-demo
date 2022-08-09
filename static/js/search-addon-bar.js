@@ -101,6 +101,12 @@ export class SearchAddonBar {
   onKeydown(event) {
     if (event.key === 'Enter') {
       this.onFindNext(event);
+    } else if (event.key === 'Escape') {
+      this.onHide();
+    } else if (event.key === 'ArrowDown') {
+      this.onFindNext(event);
+    } else if (event.key === 'ArrowUp') {
+      this.onFindPre(event);
     } else {
       this.onFindNextDebounce(event);
     }
