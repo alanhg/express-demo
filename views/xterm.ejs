@@ -427,7 +427,7 @@
    */
   Mousetrap.bind(['mod+enter', 'f11'], function () {
     if (isMac) {
-      return;
+      return true;
     }
     if (document.fullscreenElement) {
       document.exitFullscreen();
