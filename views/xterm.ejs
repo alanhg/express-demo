@@ -223,8 +223,14 @@
         zsession.abort();
         term.writeln('');
       }
+      if (term.hasSelection()) {
+        console.log('CV？');
+      } else {
+        console.log('no Selection for CV');
+      }
       return false;
     }
+
     if (event.key === 'Escape') {
       searchAddonBar.hide();
     }
