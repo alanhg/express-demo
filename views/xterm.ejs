@@ -232,6 +232,7 @@
     if (event.key === 'k' && (isMac ? event.metaKey : event.ctrlKey)) {
       console.log('清屏点击');
       term.clear();
+      event.preventDefault();
       return false;
     }
     return true;
