@@ -426,7 +426,7 @@
    * windows下走f11默认也可以，不需要JS支持
    */
   Mousetrap.bind(['mod+enter', 'f11'], function () {
-    if (isMac) {
+    if (!isMac) {
       return true;
     }
     if (document.fullscreenElement) {
