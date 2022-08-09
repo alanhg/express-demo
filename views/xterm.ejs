@@ -422,7 +422,10 @@
     return false;
   });
 
-  Mousetrap.bind(['f11', 'mod+enter'], function () {
+  /**
+   * windows下走f11默认也可以，不需要JS支持
+   */
+  Mousetrap.bind(['mod+enter', 'f11'], function () {
     console.log('show fullscreen doc');
     if (document.fullscreenElement) {
       document.exitFullscreen();
