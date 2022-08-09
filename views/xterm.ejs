@@ -91,6 +91,9 @@
 </head>
 <body>
 <script>
+  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  const isWin = navigator.platform.indexOf('Win') > -1;
+
   /**
    * 测试高频打印数据
    */
@@ -228,6 +231,12 @@
     }
     if (event.key === 'Escape') {
       searchAddonBar.hide();
+    }
+
+    if (event.key === 'k' && (isMac ? event.metaKey : event.ctrlKey)) {
+      console.log('清屏点击');
+      term.clear();
+      return false;
     }
     return true;
   });
