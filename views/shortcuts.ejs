@@ -98,8 +98,8 @@
     return false;
   });
 
-  mousetrap.bind('mod+v', function () {
-    console.log('mod v');
+  mousetrap.bind('mod+v', function (event, combo) {
+    console.log('mod v', event, combo);
     // return false to prevent default browser behavior
     // and stop event from bubbling
     return false;
