@@ -196,33 +196,21 @@
 
 
   term.attachCustomKeyEventHandler(function (event) {
-      if (event.type !== 'keydown') {
-          return false;
-      }
-    // if (event.key === 'f' && event.ctrlKey) {
-    //   if (isFullscreen) {
-    //     document.exitFullscreen().then(() => {
-    //       isFullscreen = !isFullscreen;
-    //     });
-    //   } else {
-    //     term.element.requestFullscreen().then(() => {
-    //       isFullscreen = !isFullscreen;
-    //     });
-    //   }
-    //   return true;
-    // }
+    if (event.type !== 'keydown') {
+      return false;
+    }
     // alternate screen模式比如vim模式下不开启终端检索
-    if (event.key === 'f' && (isMac ? event.metaKey : event.ctrlKey) && term.buffer.active.type === 'normal') {
+    if (event.key === 'f' && (event.metaKey || event.ctrlKey) && term.buffer.active.type === 'normal') {
       event.preventDefault();
       searchAddonBar.show();
       return true;
     }
 
 
-      if (event.key === ',' && event.ctrlKey && event.altKey) {
-          console.log(event);
-          return;
-      }
+    if (event.key === ',' && event.ctrlKey && event.altKey) {
+      console.log(event);
+      return;
+    }
 
 
     /**
