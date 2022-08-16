@@ -197,7 +197,7 @@
 
   term.attachCustomKeyEventHandler(function (event) {
     if (event.type !== 'keydown') {
-      return false;
+      return;
     }
     // alternate screen模式比如vim模式下不开启终端检索
     if (event.key === 'f' && (event.metaKey || event.ctrlKey) && term.buffer.active.type === 'normal') {
@@ -295,6 +295,11 @@
     });
 
     socket.addEventListener('message', (evt) => {
+      let data = Decodeuint8arr(evt.data);
+      const currenDirArr = data.match(/(?<=]1337;CurrentDir=).+/); // 根据PS1获取CWD
+      if (currenDirArr) {
+        console.log(currenDirArr[0]);
+      }
       if (!zsession) {
         term.write(evt.data);
       }
@@ -495,5 +500,13 @@
     // and stop event from bubbling
     return false;
   });
+
+  function Encodeuint8arr(myString) {
+    return new TextEncoder("utf-8").encode(myString);
+  }
+
+  function Decodeuint8arr(uint8array) {
+    return new TextDecoder("utf-8").decode(uint8array);
+  }
 </script>
 </body>
