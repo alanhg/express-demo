@@ -296,9 +296,9 @@
 
     socket.addEventListener('message', (evt) => {
       let data = Decodeuint8arr(evt.data);
-      const currenDirArr = data.match(/(?<=]1337;CurrentDir=).+/); // 根据PS1获取CWD
+      const currenDirArr = data.match(/(]1337;CurrentDir=)(.+)/); // 根据PS1获取CWD
       if (currenDirArr) {
-        console.log(currenDirArr[0]);
+        console.log(currenDirArr);
       }
       if (!zsession) {
         term.write(evt.data);
