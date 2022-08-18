@@ -151,9 +151,17 @@
     event.stopPropagation();
     if (event.dataTransfer.files.length) {
       console.log('Class: , Function: , Line 153, Param: ', event.dataTransfer.files);
-      event.dataTransfer.files[0].arrayBuffer().then(() => {
-
-      }).catch(console.error);
+      // event.dataTransfer.files[0].arrayBuffer().then(() => {
+      //
+      // }).catch(console.error);
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(event.dataTransfer.files[0]);
+      reader.onload = function () {
+        console.log('read ok', reader.result);
+      }
+      reader.onerror = function (e) {
+        console.error('read error', e.target.error);
+      }
     }
     return false;
   });
