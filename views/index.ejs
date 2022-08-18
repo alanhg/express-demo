@@ -114,5 +114,12 @@
     <a href="/xterm">terminal test</a>
     <a href="/shortcuts">shortcuts test</a>
 </div>
+
+<input id="myFolder" type="file" webkitdirectory onchange="onFolderChange(event)">
+<script>
+  function onFolderChange(event) {
+    console.log(event);
+  }
+</script>
 </body>
 </html>
