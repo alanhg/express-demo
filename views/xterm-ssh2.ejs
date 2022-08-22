@@ -116,11 +116,26 @@
     }
   }
 
+  function recordLogStart(event) {
+    event.target.innerText = event.target.dataset.start === 'true' ? 'log record start' : 'log record stop';
+    event.target.dataset.start = event.target.dataset.start !== 'true';
+
+    fetch(`/ssh2-log?start=${event.target.dataset.start === 'false'}`, {
+      method: 'get',
+    }).then(() => {
+      if (event.target.dataset.start === 'false') {
+        const anchorElement = document.createElement('a');
+        anchorElement.download = 'ssh-log-record.log';
+        anchorElement.href = '/logs/ssh-log-record.log';
+        anchorElement.click();
+      }
+    });
+  }
+
 </script>
 <div id="terminal-container"></div>
 <input id="zm_files" type="file" multiple style="display: none">
-<button onclick="onPrintBtnClick()">print something</button>
-<button onclick="onInfinitePrintBtnClick()">infinite print</button>
+<button data-start="false" onclick="recordLogStart(event)">log record start</button>
 <code>
     <p>The function <code>selectAll()</code> highlights all the text in the
         input field so the user can, for example, copy or delete the text.</p>

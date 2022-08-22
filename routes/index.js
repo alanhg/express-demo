@@ -3,6 +3,7 @@
  */
 var express = require('express');
 var WebSocket = require('ws');
+var fs = require('fs');
 var router = express.Router();
 var pty = require('node-pty');
 
@@ -13,9 +14,9 @@ const {Client} = require('ssh2');
 const apiRouter = require('./api');
 
 const authRouter = require('./auth');
+const path = require("path");
 
-var terminals = {}, logs = {}, stream;
-
+var terminals = {}, logs = {}, stream, logStartFlag = false;
 
 router.use('/api', apiRouter);
 router.use('/auth', authRouter);
@@ -90,7 +91,7 @@ router.get('/xterm-ssh2', (req, res) => {
 });
 
 router.ws('/ws/xterm-ssh2', function (ws, res) {
-  ws.send('hello world');
+  ws.send('\r\nlogining\n\r');
   const conn = new Client();
   conn.on('ready', () => {
     conn.shell((err, s) => {
@@ -101,6 +102,14 @@ router.ws('/ws/xterm-ssh2', function (ws, res) {
         conn.end();
       }).on('data', (data) => {
         ws.send(data);
+        if (logStartFlag) {
+          let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
+          if (fs.existsSync(fd)) {
+            fs.appendFileSync(fd, data);
+          } else {
+            fs.writeFileSync(fd, data);
+          }
+        }
       });
     });
   }).connect({
@@ -108,6 +117,14 @@ router.ws('/ws/xterm-ssh2', function (ws, res) {
   });
   ws.on('message', function (msg) {
     stream && stream.write(msg);
+  });
+});
+
+
+router.get('/ssh2-log', (req, res) => {
+  logStartFlag = req.query.start;
+  res.json({
+    status: 'ok'
   });
 });
 

@@ -22,6 +22,7 @@ app.use(cors());
 // mount the router on the app
 app.use('/', routes);
 app.use('/', express.static(path.join(__dirname, '/static')));
+app.use('/logs', express.static(path.join(__dirname, '/logs')));
 
 // var log = require('./config/log');
 // log.use(app);
