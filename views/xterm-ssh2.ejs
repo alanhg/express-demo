@@ -1,0 +1,507 @@
+<head>
+    <title>xterm.js-ssh2测试</title>
+    <link href="/js/xterm/xterm.css" rel="stylesheet">
+    <script src="/js/xterm/xterm.js"></script>
+    <script src="/js/xterm/xterm-addon-web-links.js"></script>
+    <script src="/js/xterm/xterm-addon-search.js"></script>
+    <script src="/js/xterm/xterm-addon-attach.js"></script>
+    <script src="/js/xterm/zmodem.js"></script>
+    <script src="/js/xterm/zmodem-browser.js"></script>
+    <script src="/js/mousetrap.min.js"></script>
+
+    <style>
+        #terminal {
+            /*background-image: url("/img/halo.jpeg");*/
+            background-repeat: no-repeat;
+            /*background-color: black;*/
+            /*background-size: cover;*/
+        }
+
+        /**
+          search-addon-bar样式
+         */
+        .xterm-search-addon-bar {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 285px;
+            color: #000;
+            padding: 5px 10px;
+            box-shadow: 0 2px 8px #000;
+            background: #252526;
+            z-index: 999;
+            display: flex;
+        }
+
+        .xterm-search-addon-bar input {
+            background-color: #3c3c3c;
+            color: #ccc;
+            border: 0;
+            padding: 2px;
+            height: 20px;
+            width: 227px;
+            outline: none;
+        }
+
+        .xterm-search-addon-bar button {
+            min-width: 20px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            flex: initial;
+            background-position: 50%;
+            margin-left: 3px;
+            background-repeat: no-repeat;
+            background-color: #252526;
+            border: 0;
+            cursor: pointer;
+        }
+
+        .xterm-search-addon-bar button.pre {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTUuNCA4YS42LjYgMCAwMS4xNzYtLjQyNGw0LTRhLjU5OC41OTggMCAwMS44NDggMCAuNTk4LjU5OCAwIDAxMCAuODQ4TDYuODQ5IDhsMy41NzUgMy41NzZhLjU5OC41OTggMCAwMTAgLjg0OC41OTguNTk4IDAgMDEtLjg0OCAwbC00LTRBLjYuNiAwIDAxNS40IDgiLz48L3N2Zz4=");
+        }
+
+        .xterm-search-addon-bar button.next {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEwLjYgOGEuNi42IDAgMDEtLjE3Ni40MjRsLTQgNGEuNTk4LjU5OCAwIDAxLS44NDggMCAuNTk4LjU5OCAwIDAxMC0uODQ4TDkuMTUxIDggNS41NzYgNC40MjRhLjU5OC41OTggMCAwMTAtLjg0OC41OTguNTk4IDAgMDEuODQ4IDBsNCA0QS42LjYgMCAwMTEwLjYgOCIvPjwvc3ZnPg==");
+        }
+
+        .xterm-search-addon-bar button.close {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
+        }
+
+        .xterm-search-addon-bar .search-result-count {
+            color: white;
+            position: absolute;
+            left: 126px;
+        }
+
+        .xterm-search-addon-bar .match-case,
+        .xterm-search-addon-bar .match-word,
+        .xterm-search-addon-bar .match-regex {
+            color: #c0bdbd;
+        }
+
+        .xterm-search-addon-bar .match-case.active,
+        .xterm-search-addon-bar .match-word.active,
+        .xterm-search-addon-bar .match-regex.active {
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<script>
+  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  const isWin = navigator.platform.indexOf('Win') > -1;
+
+  /**
+   * 测试高频打印数据
+   */
+  function onPrintBtnClick() {
+    let index = 0;
+    window.term.blur();
+    window.term.writeln('');
+    const intervalId = setInterval(() => {
+      window.term.write((index++) + '\r');
+      if (index > 10000000) {
+        clearInterval(intervalId);
+      }
+    })
+  }
+
+  function onInfinitePrintBtnClick() {
+    let index = 0;
+    while (true) {
+      window.term.write((index++) + '\r');
+    }
+  }
+
+</script>
+<div id="terminal-container"></div>
+<input id="zm_files" type="file" multiple style="display: none">
+<button onclick="onPrintBtnClick()">print something</button>
+<button onclick="onInfinitePrintBtnClick()">infinite print</button>
+<code>
+    <p>The function <code>selectAll()</code> highlights all the text in the
+        input field so the user can, for example, copy or delete the text.</p>
+</code>
+<script type="module">
+  import {SearchAddonBar} from '/js/search-addon-bar.js';
+
+  var isFullscreen = false;
+  var term = new Terminal({
+    // fontFamily: 'Hack Nerd Font',
+    fontSize: 13,
+    fontWeight: 'normal',
+    letterSpacing: 0,
+    cursorBlink: true,
+    theme: {
+      // selection: '#0000ff55',
+      foreground: '#a5a2a2',
+      background: '#090300',
+      cursor: '#a5a2a2',
+
+      black: '#090300',
+      brightBlack: '#5c5855',
+
+      red: '#db2d20',
+      brightRed: '#e8bbd0',
+
+      green: '#01a252',
+      brightGreen: '#3a3432',
+
+      yellow: '#fded02',
+      brightYellow: '#4a4543',
+
+      blue: '#01a0e4',
+      brightBlue: '#807d7c',
+
+      magenta: '#a16a94',
+      brightMagenta: '#d6d5d4',
+
+      cyan: '#b5e4f4',
+      brightCyan: '#cdab53',
+
+      white: '#a5a2a2',
+      brightWhite: '#f7f7f7'
+    },
+    rendererType: 'dom', //  canvas,dom
+    minimumContrastRatio: 1,
+    // 开启透明支持-支持CSS实现终端背景图设定
+    allowTransparency: true
+  });
+  window.term = term;
+  /**
+   * 终端会话连接与zsession
+   */
+  var socket, zsession, attachAddon;
+
+  term.open(document.getElementById('terminal-container'));
+  // 终端自定义打印内容
+  term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
+  term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
+  term.loadAddon(new WebLinksAddon.WebLinksAddon(
+    (event, uri) => {
+      if (event.metaKey) {
+        window.open(uri);
+      }
+    }));
+  let searchAddon = new SearchAddon.SearchAddon();
+  let searchAddonBar = new SearchAddonBar({
+    searchAddon
+  });
+
+  term.loadAddon(searchAddon);
+  term.loadAddon(searchAddonBar);
+  term.attachCustomKeyEventHandler(function (event) {
+    if (event.type !== 'keydown') {
+      return;
+    }
+    // alternate screen模式比如vim模式下不开启终端检索
+    if (event.key === 'f' && (event.metaKey || event.ctrlKey) && term.buffer.active.type === 'normal') {
+      event.preventDefault();
+      searchAddonBar.show();
+      return true;
+    }
+
+
+    if (event.key === ',' && event.ctrlKey && event.altKey) {
+      console.log(event);
+      return;
+    }
+
+
+    /**
+     * 如果在session会话中需要实现取消
+     * 由于开启zmodem会话时关闭了attach插件，因此这里WS直接发送取消命令
+     */
+    if (event.key === 'c' && event.ctrlKey) {
+      if (zsession && !zsession._aborted) {
+        zsession.abort();
+        term.writeln('');
+      }
+      if (term.hasSelection()) {
+        console.log('CV？');
+      } else {
+        console.log('no Selection for CV');
+      }
+      return false;
+    }
+
+    if (event.key === '.' && event.ctrlKey && event.altKey) {
+      console.log(event);
+      return false;
+    }
+
+
+    if (event.key === '.' && event.ctrlKey && event.altKey) {
+      console.log(event);
+      return false;
+    }
+
+
+    if (event.key === '.' && event.ctrlKey && event.altKey) {
+      console.log(event);
+      return false;
+    }
+
+    if (event.key === 'Escape') {
+      searchAddonBar.hide();
+    }
+
+    if (event.key === 'k' && (isMac ? event.metaKey : event.ctrlKey)) {
+      console.log('清屏点击');
+      term.clear();
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  });
+
+  socket = new WebSocket(`ws://127.0.0.1:8000/ws/xterm-ssh2`);
+  attachAddon = new AttachAddon.AttachAddon(socket);
+  term.loadAddon(attachAddon);
+  term.zmodemAttach(socket, {
+    noTerminalWriteOutsideSession: true,
+  });
+  term.zmodemDetect = (detection) => {
+
+    function do_zmodem() {
+      attachAddon.dispose(); // 开启zmodem会话时，临时销毁attachAddon
+      zsession = detection.confirm();
+
+      var promise;
+
+      if (zsession.type === "receive") {
+        promise = handleReceiveSession(zsession);
+      } else {
+        promise = handleSendSession(zsession);
+      }
+      promise.catch(console.error.bind(console)).then(() => {
+        zsession = null;
+        attachAddon.activate(term); // zmodem会话结束时，重新激活attachAddon
+      });
+    }
+
+    do_zmodem();
+  };
+
+  socket.addEventListener('open', () => {
+    socket.send('\r');
+  });
+
+  socket.addEventListener('message', (evt) => {
+    let data = Decodeuint8arr(evt.data);
+    const currenDirArr = data.match(/(]1337;CurrentDir=)(.+)/); // 根据PS1获取CWD
+    if (currenDirArr) {
+      console.log(currenDirArr);
+    }
+    if (!zsession) {
+      term.write(evt.data);
+    }
+  });
+
+
+  function _save_to_disk(xfer, buffer) {
+    return Zmodem.Browser.save_to_disk(buffer, xfer.get_details().name);
+  }
+
+  /**
+   * SZ接受文件
+   */
+  function handleReceiveSession(zsession) {
+    zsession.on("offer", function (xfer) {
+      term.blur();
+      term.write('\x1b[2K\r'); // 清除活跃行内容
+      term.write('0%\r');
+
+      function on_form_submit() {
+        const FILE_BUFFER = [];
+        xfer.on("input", (payload) => {
+          FILE_BUFFER.push(new Uint8Array(payload));
+          term.write(getProgress(xfer) + '\r');
+        });
+        xfer.accept().then(
+          () => {
+            term.write(`${xfer.get_details().name} download completed.\r`);
+            term.focus();
+            term.write(`\r\n`);
+            _save_to_disk(xfer, FILE_BUFFER);
+          },
+          console.error.bind(console)
+        );
+        //END
+      }
+
+      on_form_submit();
+    });
+
+    var promise = new Promise((res) => {
+      zsession.on("session_end", () => {
+        res();
+      });
+    });
+    zsession.start();
+    return promise;
+  }
+
+  /**
+   * rz接收文件
+   */
+  function handleSendSession(zsession) {
+    var file_el = document.getElementById("zm_files");
+
+    file_el.click();
+    var promise = new Promise((res) => {
+      file_el.onchange = function (e) {
+
+        var files_obj = file_el.files;
+
+        Zmodem.Browser.send_files(
+          zsession,
+          files_obj,
+          {
+            on_offer_response(obj, xfer) {
+              if (!xfer) {
+                term.write(`\n* The file ${obj.name} exists *\r`);
+              } else {
+                term.write('\x1b[2K\r'); // 清除活跃行内容
+                term.blur();
+                xfer.on('send_progress', percent => {
+                  // 上传中，发送进度给后台
+                  term.write(percent + '%\r', () => {
+                    console.log(percent + '%\r');
+                  });
+                });
+              }
+            },
+            on_progress(obj, xfer) {
+            },
+            on_file_complete(obj, xfer) {
+              term.write(`${xfer.get_details().name} upload completed.\r`);
+              term.focus();
+              term.write(`\r\n`);
+            },
+          }
+        ).then().then(
+          zsession.close.bind(zsession),
+          console.error.bind(console)
+        ).then(() => {
+          res();
+        });
+      };
+    });
+
+    return promise;
+  }
+
+  function getProgress(xhr) {
+    console.log(xhr.get_offset());
+    return (xhr.get_offset() * 100 / xhr.get_details().size).toFixed(2) + '%';
+  }
+
+  function ab2str(buf) {
+    return String.fromCharCode.apply(null, new Uint8Array(buf));
+  }
+
+  function str2ab(str) {
+    const buf = new ArrayBuffer(str.length);
+    const bufView = new Uint8Array(buf);
+    for (let i = 0, strLen = str.length; i < strLen; i++) {
+      bufView[i] = str.charCodeAt(i);
+    }
+    return bufView;
+  }
+
+  /**
+   * 清除光标所在行内容
+   * @param term
+   */
+  function eraseActiveLine(term) {
+    term.write('\x1b[2K\r');
+  }
+
+  /**
+   * 清屏
+   * mod在Mac下即⌘，在windows等系统下即ctrl
+   */
+  Mousetrap.bind(['mod+k', 'ctrl+k'], function (e) {
+    console.log('command k or control k', e);
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+
+  /**
+   * 开启新终端Tab
+   */
+  Mousetrap.bind(['ctrl+alt+,', 'alt+t', 'alt+w', 'alt+d'], function (e) {
+    console.log('meta+,', e);
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+  /**
+   * 关闭当前终端Tab
+   */
+  Mousetrap.bind(['ctrl+alt+.'], function (e) {
+    console.log('meta+.', e);
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+
+  /**
+   * 分屏打开
+   */
+  Mousetrap.bind(['ctrl+alt+;'], function (e) {
+    console.log('meta+;', e);
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+
+  Mousetrap.bind(['mod+1', 'mod+2', 'mod+3', 'mod+4', 'mod+5'], function (e) {
+    console.log('command k or control k', e);
+
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+
+
+  Mousetrap.bind('?', function () {
+    console.log('show help doc');
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+
+  /**
+   * windows下走f11默认也可以，不需要JS支持
+   */
+  Mousetrap.bind(['mod+enter', 'f11'], function () {
+    if (!isMac) {
+      return true;
+    }
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.body.requestFullscreen({
+        navigationUI: 'hide'
+      })
+    }
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
+
+  function Encodeuint8arr(myString) {
+    return new TextEncoder("utf-8").encode(myString);
+  }
+
+  function Decodeuint8arr(uint8array) {
+    return new TextDecoder("utf-8").decode(uint8array);
+  }
+</script>
+</body>

@@ -8,15 +8,16 @@ var pty = require('node-pty');
 
 const testRouter = require('./test');
 router.use('/test', testRouter);
-
+const {Client} = require('ssh2');
 
 const apiRouter = require('./api');
 
 const authRouter = require('./auth');
 
-var terminals = {}, logs = {};
-router.use('/api', apiRouter);
+var terminals = {}, logs = {}, stream;
 
+
+router.use('/api', apiRouter);
 router.use('/auth', authRouter);
 router.use(function (err, req, res, next) {
   res.json({
@@ -54,6 +55,7 @@ router.get('/xterm', (req, res) => {
   res.render('xterm');
 });
 
+
 router.get('/shortcuts', (req, res) => {
   res.render('shortcuts');
 });
@@ -62,11 +64,7 @@ router.post('/xterm', (req, res) => {
   let shell = 'zsh';// zsh,bash
   var cols = parseInt(req.query.cols), rows = parseInt(req.query.rows),
     term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : shell, [], {
-      encoding: null,
-      name: 'xterm-color',
-      cols: cols || 80,
-      rows: rows || 24,
-      cwd: process.env.PWD + '/_cache', // // 首次进入系统目录
+      encoding: null, name: 'xterm-color', cols: cols || 80, rows: rows || 24, cwd: process.env.PWD + '/_cache', // // 首次进入系统目录
       env: process.env
     });
 
@@ -86,6 +84,32 @@ router.post('/xterm/:pid/size', function (req, res) {
   res.end();
 });
 
+
+router.get('/xterm-ssh2', (req, res) => {
+  res.render('xterm-ssh2');
+});
+
+router.ws('/ws/xterm-ssh2', function (ws, res) {
+  ws.send('hello world');
+  const conn = new Client();
+  conn.on('ready', () => {
+    conn.shell((err, s) => {
+      if (err) throw err;
+      stream = s;
+      stream.on('close', () => {
+        console.log('Stream :: close');
+        conn.end();
+      }).on('data', (data) => {
+        ws.send(data);
+      });
+    });
+  }).connect({
+    host: process.env.host, port: 22, username: 'root', password: process.env.password
+  });
+  ws.on('message', function (msg) {
+    stream && stream.write(msg);
+  });
+});
 
 router.ws('/xterm/:pid', (ws, req) => {
   var term = terminals[parseInt(req.params.pid)];
