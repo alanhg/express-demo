@@ -171,8 +171,8 @@ export class SearchAddonBar {
    * 搜索销毁
    */
   onHide() {
-    this.searcherElement.remove();
-    this.searchAddon.clearDecorations();
+    this.searcherElement && this.searcherElement.remove();
+    this.searchAddon && this.searchAddon.clearDecorations();
     this.term.focus();
     this.visible = false;
   }
