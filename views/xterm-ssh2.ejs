@@ -87,6 +87,10 @@
             color: white;
         }
 
+        #terminal-container {
+            margin-bottom: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -119,8 +123,7 @@
   function recordLogStart(event) {
     event.target.innerText = event.target.dataset.start === 'true' ? 'log record start' : 'log record stop';
     event.target.dataset.start = event.target.dataset.start !== 'true';
-
-    fetch(`/ssh2-log?start=${event.target.dataset.start === 'false'}`, {
+    fetch(`/ssh2-log?start=${event.target.dataset.start}`, {
       method: 'get',
     }).then(() => {
       if (event.target.dataset.start === 'false') {
@@ -136,10 +139,6 @@
 <div id="terminal-container"></div>
 <input id="zm_files" type="file" multiple style="display: none">
 <button data-start="false" onclick="recordLogStart(event)">log record start</button>
-<code>
-    <p>The function <code>selectAll()</code> highlights all the text in the
-        input field so the user can, for example, copy or delete the text.</p>
-</code>
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
 
@@ -193,8 +192,6 @@
 
   term.open(document.getElementById('terminal-container'));
   // 终端自定义打印内容
-  term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
-  term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
     (event, uri) => {
       if (event.metaKey) {

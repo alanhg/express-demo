@@ -122,7 +122,14 @@ router.ws('/ws/xterm-ssh2', function (ws, res) {
 
 
 router.get('/ssh2-log', (req, res) => {
-  logStartFlag = req.query.start;
+  logStartFlag = req.query.start === 'true';
+  if (logStartFlag) {
+    let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
+    if (fs.existsSync(fd)) {
+      fs.unlink(fd, () => {
+      });
+    }
+  }
   res.json({
     status: 'ok'
   });
