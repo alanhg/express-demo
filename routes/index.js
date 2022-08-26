@@ -106,8 +106,6 @@ router.ws('/ws/xterm-ssh2', function (ws, res) {
           let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
           if (fs.existsSync(fd)) {
             fs.appendFileSync(fd, data);
-          } else {
-            fs.writeFileSync(fd, data);
           }
         }
       });
@@ -123,12 +121,15 @@ router.ws('/ws/xterm-ssh2', function (ws, res) {
 
 router.get('/ssh2-log', (req, res) => {
   logStartFlag = req.query.start === 'true';
+  let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
   if (logStartFlag) {
-    let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
     if (fs.existsSync(fd)) {
       fs.unlink(fd, () => {
       });
     }
+    fs.writeFileSync(fd, `[BEGIN] ${new Date().toLocaleString()}\n`);
+  } else {
+    fs.appendFileSync(fd, `\n[END] ${new Date().toLocaleString()}`);
   }
   res.json({
     status: 'ok'
