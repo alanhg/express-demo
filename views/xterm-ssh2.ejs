@@ -4,7 +4,6 @@
     <script src="/js/xterm/xterm.js"></script>
     <script src="/js/xterm/xterm-addon-web-links.js"></script>
     <script src="/js/xterm/xterm-addon-search.js"></script>
-    <script src="/js/xterm/xterm-addon-attach.js"></script>
     <script src="/js/xterm/zmodem.js"></script>
     <script src="/js/xterm/zmodem-browser.js"></script>
     <script src="/js/mousetrap.min.js"></script>
@@ -292,17 +291,20 @@
     }
     return true;
   });
+  term.onData((data) => {
+    socket.send(JSON.stringify({
+      type: 'data',
+      data
+    }))
+  })
 
   socket = new WebSocket(`ws://127.0.0.1:8000/ws/webshell`);
-  attachAddon = new AttachAddon.AttachAddon(socket);
-  term.loadAddon(attachAddon);
   term.zmodemAttach(socket, {
     noTerminalWriteOutsideSession: true,
   });
   term.zmodemDetect = (detection) => {
 
     function do_zmodem() {
-      attachAddon.dispose(); // 开启zmodem会话时，临时销毁attachAddon
       zsession = detection.confirm();
 
       var promise;
@@ -314,7 +316,6 @@
       }
       promise.catch(console.error.bind(console)).then(() => {
         zsession = null;
-        attachAddon.activate(term); // zmodem会话结束时，重新激活attachAddon
       });
     }
 
@@ -325,14 +326,18 @@
   });
 
   socket.addEventListener('message', (evt) => {
-    let data = Decodeuint8arr(evt.data);
-    const currenDirArr = data.match(/(]1337;CurrentDir=)(.+)/); // 根据PS1获取CWD
-    if (currenDirArr) {
-      console.log(currenDirArr);
+    // let data = Decodeuint8arr(evt.data);
+    // const currenDirArr = data.match(/(]1337;CurrentDir=)(.+)/); // 根据PS1获取CWD
+    // if (currenDirArr) {
+    //   console.log(currenDirArr);
+    // }
+    // if (!zsession) {
+    if (evt.data instanceof ArrayBuffer) {
+      term.write(Decodeuint8arr(evt.data));
+    } else {
+      term.write(evt.data.toString());
     }
-    if (!zsession) {
-      term.write(evt.data);
-    }
+    // }
   });
 
 

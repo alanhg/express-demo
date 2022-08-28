@@ -114,7 +114,8 @@ router.ws('/ws/webshell', function (ws, res) {
     host: process.env.host, port: 22, username: 'root', password: process.env.password
   });
   ws.on('message', function (msg) {
-      stream && stream.write(msg);
+    const options = JSON.parse(msg);
+    stream && stream.write(options.data);
   });
 });
 
