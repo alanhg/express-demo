@@ -10,6 +10,10 @@
     <script src="/js/mousetrap.min.js"></script>
 
     <style>
+        body {
+            margin: 0;
+        }
+
         #terminal {
             /*background-image: url("/img/halo.jpeg");*/
             background-repeat: no-repeat;
@@ -91,6 +95,13 @@
             margin-bottom: 20px;
         }
 
+        #file-editor {
+            margin-top: 20px;
+            display: flex;
+        }
+
+        #file-editor > div {
+        }
     </style>
 </head>
 <body>
@@ -137,8 +148,21 @@
 
 </script>
 <div id="terminal-container"></div>
+
 <input id="zm_files" type="file" multiple style="display: none">
 <button data-start="false" onclick="recordLogStart(event)">log record start</button>
+
+<div id="file-editor">
+    <div style="width: 180px">
+        <input type="text" placeholder="全文检索"/>
+    </div>
+    <div style="flex: 1">
+        检索结果
+        <div>
+
+        </div>
+    </div>
+</div>
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
 
@@ -269,7 +293,7 @@
     return true;
   });
 
-  socket = new WebSocket(`ws://127.0.0.1:8000/ws/xterm-ssh2`);
+  socket = new WebSocket(`ws://127.0.0.1:8000/ws/webshell`);
   attachAddon = new AttachAddon.AttachAddon(socket);
   term.loadAddon(attachAddon);
   term.zmodemAttach(socket, {
@@ -298,7 +322,6 @@
   };
 
   socket.addEventListener('open', () => {
-    socket.send('\r');
   });
 
   socket.addEventListener('message', (evt) => {

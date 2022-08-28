@@ -90,7 +90,7 @@ router.get('/xterm-ssh2', (req, res) => {
   res.render('xterm-ssh2');
 });
 
-router.ws('/ws/xterm-ssh2', function (ws, res) {
+router.ws('/ws/webshell', function (ws, res) {
   ws.send('\r\nlogining\n\r');
   const conn = new Client();
   conn.on('ready', () => {
@@ -114,10 +114,9 @@ router.ws('/ws/xterm-ssh2', function (ws, res) {
     host: process.env.host, port: 22, username: 'root', password: process.env.password
   });
   ws.on('message', function (msg) {
-    stream && stream.write(msg);
+      stream && stream.write(msg);
   });
 });
-
 
 router.get('/ssh2-log', (req, res) => {
   logStartFlag = req.query.start === 'true';

@@ -40,7 +40,7 @@
     "screenfull": "^6.0.2",
     "sm-crypto": "^0.3.10",
     "ssh2": "^1.11.0",
-    "ssh2-sftp-client": "^8.0.0",
+    "ssh2-sftp-client": "latest",
     "ssh2-streams": "^0.4.10",
     "superagent": "^3.8.3",
     "ua-parser-js": "^0.7.18",
