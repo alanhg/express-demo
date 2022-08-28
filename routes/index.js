@@ -17,7 +17,7 @@ const authRouter = require('./auth');
 const path = require("path");
 const EventEmitter = require("events");
 
-var terminals = {}, logs = {}, stream, conn, logStartFlag = false;
+var terminals = {}, logs = {}, logStartFlag = false;
 
 router.use('/api', apiRouter);
 router.use('/auth', authRouter);
@@ -96,15 +96,14 @@ router.ws('/ws/webshell', function (ws, res) {
   const sshClient = new SshClient();
   sshClient.connect();
   sshClient.on('data', (data) => {
-      ws.send(data);
-      if (logStartFlag) {
-        let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
-        if (fs.existsSync(fd)) {
-          fs.appendFileSync(fd, data);
-        }
+    ws.send(data);
+    if (logStartFlag) {
+      let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
+      if (fs.existsSync(fd)) {
+        fs.appendFileSync(fd, data);
       }
     }
-  );
+  });
   ws.on('message', function (msg) {
     const options = JSON.parse(msg);
     if (options.type === 'search') {
@@ -170,10 +169,7 @@ class SshClient extends EventEmitter {
 
   connect() {
     this.conn.connect({
-      host: process.env.host,
-      port: 22,
-      username: 'root',
-      password: process.env.password
+      host: process.env.host, port: 22, username: 'root', password: process.env.password
     })
     this.conn.on('ready', () => {
       this.conn.shell((err, s) => {
@@ -181,7 +177,7 @@ class SshClient extends EventEmitter {
         this.stream = s;
         this.stream.on('close', () => {
           console.log('Stream :: close');
-          this.conn.end();
+          // this.conn.end();
         }).on('data', (data) => {
           this.emit('data', data);
         });
@@ -210,3 +206,51 @@ class SshClient extends EventEmitter {
     this.stream && this.stream.write(data);
   }
 }
+
+
+class SftpClient extends EventEmitter {
+  constructor() {
+    super();
+    this.conn = new Client();
+  }
+
+  connect() {
+    this.conn.connect({
+      host: process.env.host, port: 22, username: 'root', password: process.env.password
+    })
+    this.conn.on('ready', () => {
+      this.conn.shell((err, s) => {
+        if (err) throw err;
+        this.stream = s;
+        this.stream.on('close', () => {
+          console.log('Stream :: close');
+          // this.conn.end();
+        }).on('data', (data) => {
+          this.emit('data', data);
+        });
+      });
+    });
+  }
+
+  execCommand(command) {
+    return new Promise((resolve, reject) => {
+      this.conn.exec(command, (err, stream) => {
+        if (err) {
+          console.log('SECOND :: exec error: ' + err);
+          this.conn.end();
+          return reject();
+        }
+        stream.on('close', () => {
+          this.conn.end(); // close parent (and this) connection
+        }).on('data', (data) => {
+          resolve(data);
+        });
+      })
+    })
+  }
+
+  write(data) {
+    this.stream && this.stream.write(data);
+  }
+}
+
