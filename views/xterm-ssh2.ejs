@@ -153,15 +153,18 @@
 
 <div id="file-editor">
     <div style="width: 180px">
-        <input type="text" placeholder="全文检索"/>
+        <input type="text" placeholder="全文检索" onkeydown="handleSearch(event)"/>
     </div>
     <div style="flex: 1">
         检索结果
-        <div>
+        <div class="search-result">
 
         </div>
     </div>
 </div>
+<script>
+  var socket, zsession, attachAddon;
+</script>
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
 
@@ -211,7 +214,7 @@
   /**
    * 终端会话连接与zsession
    */
-  var socket, zsession, attachAddon;
+
 
   term.open(document.getElementById('terminal-container'));
   // 终端自定义打印内容
@@ -334,8 +337,13 @@
     // if (!zsession) {
     if (evt.data instanceof ArrayBuffer) {
       term.write(Decodeuint8arr(evt.data));
-    } else {
-      term.write(evt.data.toString());
+    } else if (typeof evt.data === 'string') {
+      const options = JSON.parse(evt.data);
+      if (options.type === 'search') {
+        updateSearchResult(options.data.split('\n'));
+      } else {
+        term.write(evt.data.toString());
+      }
     }
     // }
   });
@@ -541,6 +549,24 @@
 
   function Decodeuint8arr(uint8array) {
     return new TextDecoder("utf-8").decode(uint8array);
+  }
+
+  function updateSearchResult(dataArr) {
+    document.getElementsByClassName('search-result')[0].innerHTML = `<ul>${
+      dataArr.map(item => '<li>' + item + '</li>').join('')
+    }</ul>`;
+  }
+</script>
+
+
+<script>
+  function handleSearch(event) {
+    if (event.key === 'Enter') {
+      socket.send(JSON.stringify({
+        type: 'search',
+        data: event.target.value
+      }))
+    }
   }
 </script>
 </body>

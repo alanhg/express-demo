@@ -16,7 +16,7 @@ const apiRouter = require('./api');
 const authRouter = require('./auth');
 const path = require("path");
 
-var terminals = {}, logs = {}, stream, logStartFlag = false;
+var terminals = {}, logs = {}, stream, conn, logStartFlag = false;
 
 router.use('/api', apiRouter);
 router.use('/auth', authRouter);
@@ -93,6 +93,8 @@ router.get('/xterm-ssh2', (req, res) => {
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('\r\nlogining\n\r');
   const conn = new Client();
+  const sshClient = new SshClient(conn);
+  this.conn = conn;
   conn.on('ready', () => {
     conn.shell((err, s) => {
       if (err) throw err;
@@ -115,7 +117,17 @@ router.ws('/ws/webshell', function (ws, res) {
   });
   ws.on('message', function (msg) {
     const options = JSON.parse(msg);
-    stream && stream.write(options.data);
+    if (options.type === 'search') {
+      sshClient.execCommand(`grep ${options.data} -r .`).then(res => {
+        console.log(res.toString());
+        ws.send(JSON.stringify({
+          type: 'search',
+          data: res.toString()
+        }));
+      })
+    } else {
+      stream && stream.write(options.data);
+    }
   });
 });
 
@@ -160,3 +172,27 @@ router.ws('/xterm/:pid', (ws, req) => {
 });
 
 module.exports = router;
+
+class SshClient {
+
+  constructor(conn) {
+    this.conn = conn;
+  }
+
+  execCommand(command) {
+    return new Promise((resolve, reject) => {
+      this.conn.exec(command, (err, stream) => {
+        if (err) {
+          console.log('SECOND :: exec error: ' + err);
+          this.conn.end();
+          return reject();
+        }
+        stream.on('close', () => {
+          this.conn.end(); // close parent (and this) connection
+        }).on('data', (data) => {
+          resolve(data);
+        });
+      })
+    })
+  }
+}
