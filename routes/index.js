@@ -15,6 +15,7 @@ const apiRouter = require('./api');
 
 const authRouter = require('./auth');
 const path = require("path");
+const EventEmitter = require("events");
 
 var terminals = {}, logs = {}, stream, conn, logStartFlag = false;
 
@@ -92,41 +93,29 @@ router.get('/xterm-ssh2', (req, res) => {
 
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('\r\nlogining\n\r');
-  const conn = new Client();
-  const sshClient = new SshClient(conn);
-  this.conn = conn;
-  conn.on('ready', () => {
-    conn.shell((err, s) => {
-      if (err) throw err;
-      stream = s;
-      stream.on('close', () => {
-        console.log('Stream :: close');
-        conn.end();
-      }).on('data', (data) => {
-        ws.send(data);
-        if (logStartFlag) {
-          let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
-          if (fs.existsSync(fd)) {
-            fs.appendFileSync(fd, data);
-          }
+  const sshClient = new SshClient();
+  sshClient.connect();
+  sshClient.on('data', (data) => {
+      ws.send(data);
+      if (logStartFlag) {
+        let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
+        if (fs.existsSync(fd)) {
+          fs.appendFileSync(fd, data);
         }
-      });
-    });
-  }).connect({
-    host: process.env.host, port: 22, username: 'root', password: process.env.password
-  });
+      }
+    }
+  );
   ws.on('message', function (msg) {
     const options = JSON.parse(msg);
     if (options.type === 'search') {
       sshClient.execCommand(`grep ${options.data} -r .`).then(res => {
         console.log(res.toString());
         ws.send(JSON.stringify({
-          type: 'search',
-          data: res.toString()
+          type: 'search', data: res.toString()
         }));
       })
     } else {
-      stream && stream.write(options.data);
+      sshClient.write(options.data);
     }
   });
 });
@@ -173,10 +162,31 @@ router.ws('/xterm/:pid', (ws, req) => {
 
 module.exports = router;
 
-class SshClient {
+class SshClient extends EventEmitter {
+  constructor() {
+    super();
+    this.conn = new Client();
+  }
 
-  constructor(conn) {
-    this.conn = conn;
+  connect() {
+    this.conn.connect({
+      host: process.env.host,
+      port: 22,
+      username: 'root',
+      password: process.env.password
+    })
+    this.conn.on('ready', () => {
+      this.conn.shell((err, s) => {
+        if (err) throw err;
+        this.stream = s;
+        this.stream.on('close', () => {
+          console.log('Stream :: close');
+          this.conn.end();
+        }).on('data', (data) => {
+          this.emit('data', data);
+        });
+      });
+    });
   }
 
   execCommand(command) {
@@ -194,5 +204,9 @@ class SshClient {
         });
       })
     })
+  }
+
+  write(data) {
+    this.stream && this.stream.write(data);
   }
 }
