@@ -11,7 +11,7 @@ const Base64 = require('js-base64').Base64;
 const unlessPath = [{url: '/api/login', methods: ['POST']}];
 
 const fs = require('fs');
-
+var crypto = require('crypto');
 // router.use(
 //     token.validToken.unless(unlessPath),
 //     token.noAuthorization,
@@ -23,6 +23,7 @@ router.put('/a', function (req, res) {
         value: 'forbid'
     });
 })
+
 router.get('/a', function (req, res) {
     res.json({
         value: 1
@@ -35,16 +36,16 @@ router.post('/a', function (req, res) {
     });
 });
 
+
 router.delete('/a', function (req, res) {
     res.json({
         value: 'ok'
     });
 });
-
-
 router.get('/b', function (req, res) {
     res.send({value: 2});
 });
+
 router.get('/protected',
     function (req, res) {
         if (!req.user.admin) return res.sendStatus(401);
@@ -55,8 +56,6 @@ router.use('/token', function (req, res) {
         res.json({a: 1});
     }
 );
-
-var crypto = require('../test/crypto');
 router.get('/crypto',
     function (req, res) {
         const secret = 'abcdefg';

@@ -1,14 +1,16 @@
 <head>
     <title>xterm.js-ssh2测试</title>
     <link href="/js/xterm/xterm.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+
     <script src="/js/xterm/xterm.js"></script>
     <script src="/js/xterm/xterm-addon-web-links.js"></script>
     <script src="/js/xterm/xterm-addon-search.js"></script>
     <script src="/js/xterm/zmodem.js"></script>
     <script src="/js/xterm/zmodem-browser.js"></script>
     <script src="/js/mousetrap.min.js"></script>
-    <script src="/js/tree.min.js"></script>
-
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/js/jquery.ztree.all.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -155,7 +157,7 @@
 <div id="file-editor">
     <div style="width: 180px">
         <input type="text" placeholder="全文检索" onkeydown="handleSearch(event)"/>
-        <div id="file-tree">
+        <div id="file-tree" class="ztree">
         </div>
     </div>
     <div style="flex: 1">
@@ -566,7 +568,8 @@
 
 <script>
   // 树JS文档 https://github.com/daweilv/treejs
-  var sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
+  const sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
+  let zTreeObj;
 
   function handleSearch(event) {
     if (event.key === 'Enter') {
@@ -577,10 +580,8 @@
     }
   }
 
-  const treeData = [];
-
-  const myTree = new Tree('#file-tree', {
-    data: treeData,
+  $(document).ready(function () {
+    zTreeObj = $.fn.zTree.init($("#file-tree"), {}, []);
   });
 
   function parseData(evt) {
@@ -604,10 +605,10 @@
       }));
     }
     if (opts.type === 'list') {
-      myTree.values = opts.data.map(item => ({
-        id: item.name,
-        text: item.name
-      }))
+      zTreeObj.addNodes(null, opts.data.map(item => ({
+        id: '/root/' + item.name,
+        name: item.name
+      })));
     }
   }
 </script>
