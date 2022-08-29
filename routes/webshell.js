@@ -5,6 +5,7 @@ const express = require("express");
 const router = express.Router();
 const SshFtpClient = require("../lib/ssh-ftp");
 const SshClient = require("../lib/ssh");
+const Stream = require("stream");
 let logStartFlag = false;
 
 router.ws('/ws/webshell', function (ws, res) {
@@ -66,6 +67,13 @@ router.ws('/ws/sftp', function (ws, res) {
         }))
       })
     }
+    if (options.type === 'get-file') {
+      const dst = new Throttle();
+      sshClient.get(options.path, dst);
+      dst.on('data', (chunk) => {
+        ws.send(chunk);
+      })
+    }
   });
 });
 
@@ -87,3 +95,12 @@ router.get('/ssh2-log', (req, res) => {
 });
 
 module.exports = router;
+
+class Throttle extends Stream.Transform {
+  _transform(buf, enc, next) {
+    this.push(buf)
+    next()
+  }
+}
+
+const writableStream = new Throttle();
