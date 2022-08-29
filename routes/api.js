@@ -56,7 +56,7 @@ router.use('/token', function (req, res) {
     }
 );
 
-var crypto = require('crypto');
+var crypto = require('../test/crypto');
 router.get('/crypto',
     function (req, res) {
         const secret = 'abcdefg';
