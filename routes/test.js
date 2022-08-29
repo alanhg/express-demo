@@ -12,7 +12,7 @@ let conf = require('../config');
 
 const superagent = require('superagent');
 const {utils} = require("@stacker/alfred-utils");
-const SshFtpClient = require("./ssh-ftp");
+const SshFtpClient = require("../lib/ssh-ftp");
 
 router.get('/css', function (req, res, next) {
   const items = utils.filterItemsBy([{

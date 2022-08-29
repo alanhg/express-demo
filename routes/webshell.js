@@ -1,8 +1,10 @@
+/**
+ * 聚焦WebShell相关功能调研
+ */
 const express = require("express");
 const router = express.Router();
-const EventEmitter = require("events");
-const {Client} = require("./ssh2");
-const SshFtpClient = require("./ssh-ftp");
+const SshFtpClient = require("../lib/ssh-ftp");
+const SshClient = require("../lib/ssh");
 let logStartFlag = false;
 
 router.ws('/ws/webshell', function (ws, res) {
@@ -77,99 +79,5 @@ router.get('/ssh2-log', (req, res) => {
     status: 'ok'
   });
 });
-
-
-class SshClient extends EventEmitter {
-  constructor() {
-    super();
-    this.conn = new Client();
-  }
-
-  connect(config) {
-    this.config = config;
-    this.conn.connect(config);
-    this.conn.on('ready', () => {
-      this.conn.shell((err, s) => {
-        if (err) throw err;
-        this.stream = s;
-        this.stream.on('close', () => {
-          console.log('Stream :: close');
-          // this.conn.end();
-        }).on('data', (data) => {
-          this.emit('data', data);
-        });
-      });
-    });
-  }
-
-  execCommand(command) {
-    return new Promise((resolve, reject) => {
-      this.conn.exec(command, (err, stream) => {
-        if (err) {
-          console.log('SECOND :: exec error: ' + err);
-          this.conn.end();
-          return reject();
-        }
-        stream.on('close', () => {
-          this.conn.end(); // close parent (and this) connection
-        }).on('data', (data) => {
-          resolve(data);
-        });
-      })
-    })
-  }
-
-  write(data) {
-    this.stream && this.stream.write(data);
-  }
-}
-
-
-class SftpClient extends EventEmitter {
-  constructor() {
-    super();
-    this.conn = new Client();
-  }
-
-  connect() {
-    this.conn.connect({
-      host: process.env.host, port: 22, username: 'root', password: process.env.password
-    })
-    this.conn.on('ready', () => {
-      this.conn.shell((err, s) => {
-        if (err) throw err;
-        this.stream = s;
-        this.stream.on('close', () => {
-          console.log('Stream :: close');
-          // this.conn.end();
-        }).on('data', (data) => {
-          this.emit('data', data);
-        });
-      });
-    });
-  }
-
-  execCommand(command) {
-    return new Promise((resolve, reject) => {
-      this.conn.exec(command, (err, stream) => {
-        if (err) {
-          console.log('SECOND :: exec error: ' + err);
-          this.conn.end();
-          return reject();
-        }
-        stream.on('close', () => {
-          this.conn.end(); // close parent (and this) connection
-        }).on('data', (data) => {
-          resolve(data);
-        });
-      })
-    })
-  }
-
-  write(data) {
-    this.stream && this.stream.write(data);
-  }
-}
-
 
 module.exports = router;
