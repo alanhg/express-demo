@@ -565,6 +565,7 @@
 
 
 <script>
+  // 树JS文档 https://github.com/daweilv/treejs
   var sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
 
   function handleSearch(event) {
@@ -592,10 +593,22 @@
 
 
   sftpSocket.onopen = function () {
-    sftpSocket.send(JSON.stringify({
-      type: 'list',
-      path: '/root'
-    }));
+
+  }
+  sftpSocket.onmessage = function (evt) {
+    const opts = JSON.parse(evt.data)
+    if (opts.type === 'connected') {
+      sftpSocket.send(JSON.stringify({
+        type: 'list',
+        path: '/root'
+      }));
+    }
+    if (opts.type === 'list') {
+      myTree.values = opts.data.map(item => ({
+        id: item.name,
+        text: item.name
+      }))
+    }
   }
 </script>
 </body>

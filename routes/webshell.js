@@ -44,21 +44,27 @@ router.ws('/ws/webshell', function (ws, res) {
 
 router.ws('/ws/sftp', function (ws, res) {
   const sshClient = new SshFtpClient();
-  // sshClient.connect({
-  //   host: process.env.host,
-  //   port: 22,
-  //   username: 'root',
-  //   password: process.env.password
-  // });
+  sshClient.connect({
+    host: process.env.host,
+    port: 22,
+    username: 'root',
+    password: process.env.password
+  });
+  sshClient.on('connected', () => {
+    ws.send(JSON.stringify({
+      type: 'connected'
+    }));
+  });
   ws.on('message', function (msg) {
     const options = JSON.parse(msg);
     if (options.type === 'list') {
-      // sshClient.list(`grep ${options.data} -r .`).then(res => {
-      //   console.log(res.toString());
-      //   ws.send(JSON.stringify({
-      //     type: 'list', data: res.toString()
-      //   }));
-      // });
+      sshClient.list(options.path).then(res => {
+        ws.send(JSON.stringify({
+          type: 'list',
+          path: msg.path,
+          data: res
+        }))
+      })
     }
   });
 });
