@@ -565,12 +565,14 @@
 
 
 <script>
+  var sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
+
   function handleSearch(event) {
     if (event.key === 'Enter') {
-      socket.send(JSON.stringify({
-        type: 'search',
-        data: event.target.value
-      }))
+      // socket.send(JSON.stringify({
+      //   type: 'search',
+      //   data: event.target.value
+      // }))
     }
   }
 
@@ -586,6 +588,14 @@
     } catch {
       return evt.data;
     }
+  }
+
+
+  sftpSocket.onopen = function () {
+    sftpSocket.send(JSON.stringify({
+      type: 'list',
+      path: '/root'
+    }));
   }
 </script>
 </body>

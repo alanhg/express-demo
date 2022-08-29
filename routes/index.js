@@ -6,19 +6,14 @@ var WebSocket = require('ws');
 var fs = require('fs');
 var router = express.Router();
 var pty = require('node-pty');
-
 const testRouter = require('./test');
 router.use('/test', testRouter);
-const {Client} = require('ssh2');
-
 const apiRouter = require('./api');
-
 const authRouter = require('./auth');
-const path = require("path");
-const EventEmitter = require("events");
+const webShellRouter = require('./webshell');
+var terminals = {}, logs = {};
 
-var terminals = {}, logs = {}, logStartFlag = false;
-
+router.use('/', webShellRouter);
 router.use('/api', apiRouter);
 router.use('/auth', authRouter);
 router.use(function (err, req, res, next) {
@@ -33,7 +28,6 @@ router.get('/', (req, res) => {
   res.cookie('name', Math.random(), {domain: 'localhost'})
   res.render('index');
 });
-
 
 router.get('/ws', (req, res) => {
   const ws = new WebSocket(``, "rust");
@@ -91,50 +85,6 @@ router.get('/xterm-ssh2', (req, res) => {
   res.render('xterm-ssh2');
 });
 
-router.ws('/ws/webshell', function (ws, res) {
-  ws.send('\r\nlogining\n\r');
-  const sshClient = new SshClient();
-  sshClient.connect();
-  sshClient.on('data', (data) => {
-    ws.send(data);
-    if (logStartFlag) {
-      let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
-      if (fs.existsSync(fd)) {
-        fs.appendFileSync(fd, data);
-      }
-    }
-  });
-  ws.on('message', function (msg) {
-    const options = JSON.parse(msg);
-    if (options.type === 'search') {
-      sshClient.execCommand(`grep ${options.data} -r .`).then(res => {
-        console.log(res.toString());
-        ws.send(JSON.stringify({
-          type: 'search', data: res.toString()
-        }));
-      })
-    } else {
-      sshClient.write(options.data);
-    }
-  });
-});
-
-router.get('/ssh2-log', (req, res) => {
-  logStartFlag = req.query.start === 'true';
-  let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
-  if (logStartFlag) {
-    if (fs.existsSync(fd)) {
-      fs.unlink(fd, () => {
-      });
-    }
-    fs.writeFileSync(fd, `[BEGIN] ${new Date().toLocaleString()}\n`);
-  } else {
-    fs.appendFileSync(fd, `\n[END] ${new Date().toLocaleString()}`);
-  }
-  res.json({
-    status: 'ok'
-  });
-});
 
 router.ws('/xterm/:pid', (ws, req) => {
   var term = terminals[parseInt(req.params.pid)];
@@ -160,97 +110,3 @@ router.ws('/xterm/:pid', (ws, req) => {
 });
 
 module.exports = router;
-
-class SshClient extends EventEmitter {
-  constructor() {
-    super();
-    this.conn = new Client();
-  }
-
-  connect() {
-    this.conn.connect({
-      host: process.env.host, port: 22, username: 'root', password: process.env.password
-    })
-    this.conn.on('ready', () => {
-      this.conn.shell((err, s) => {
-        if (err) throw err;
-        this.stream = s;
-        this.stream.on('close', () => {
-          console.log('Stream :: close');
-          // this.conn.end();
-        }).on('data', (data) => {
-          this.emit('data', data);
-        });
-      });
-    });
-  }
-
-  execCommand(command) {
-    return new Promise((resolve, reject) => {
-      this.conn.exec(command, (err, stream) => {
-        if (err) {
-          console.log('SECOND :: exec error: ' + err);
-          this.conn.end();
-          return reject();
-        }
-        stream.on('close', () => {
-          this.conn.end(); // close parent (and this) connection
-        }).on('data', (data) => {
-          resolve(data);
-        });
-      })
-    })
-  }
-
-  write(data) {
-    this.stream && this.stream.write(data);
-  }
-}
-
-
-class SftpClient extends EventEmitter {
-  constructor() {
-    super();
-    this.conn = new Client();
-  }
-
-  connect() {
-    this.conn.connect({
-      host: process.env.host, port: 22, username: 'root', password: process.env.password
-    })
-    this.conn.on('ready', () => {
-      this.conn.shell((err, s) => {
-        if (err) throw err;
-        this.stream = s;
-        this.stream.on('close', () => {
-          console.log('Stream :: close');
-          // this.conn.end();
-        }).on('data', (data) => {
-          this.emit('data', data);
-        });
-      });
-    });
-  }
-
-  execCommand(command) {
-    return new Promise((resolve, reject) => {
-      this.conn.exec(command, (err, stream) => {
-        if (err) {
-          console.log('SECOND :: exec error: ' + err);
-          this.conn.end();
-          return reject();
-        }
-        stream.on('close', () => {
-          this.conn.end(); // close parent (and this) connection
-        }).on('data', (data) => {
-          resolve(data);
-        });
-      })
-    })
-  }
-
-  write(data) {
-    this.stream && this.stream.write(data);
-  }
-}
-
