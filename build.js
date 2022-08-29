@@ -12,3 +12,4 @@ fs.copyFileSync(path.join(__dirname, 'node_modules', `nora-zmodemjs/dist/zmodem.
 fs.copyFileSync(path.join(__dirname, 'node_modules', `xterm/css/xterm.css`), path.join(__dirname, 'static', `js/xterm/xterm.css`));
 
 fs.copyFileSync(path.join(__dirname, 'node_modules', 'mousetrap/mousetrap.min.js'), path.join(__dirname, 'static', `js/mousetrap.min.js`));
+fs.copyFileSync(path.join(__dirname, 'node_modules', '@widgetjs/tree/dist/tree.min.js'), path.join(__dirname, 'static', `js/tree.min.js`));

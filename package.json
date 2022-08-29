@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@stacker/alfred-utils": "^0.1.10",
+    "@widgetjs/tree": "^1.8.3",
     "axios": "^0.27.2",
     "base-58": "0.0.1",
     "body-parser": "^1.18.2",

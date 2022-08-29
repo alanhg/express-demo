@@ -7,6 +7,7 @@
     <script src="/js/xterm/zmodem.js"></script>
     <script src="/js/xterm/zmodem-browser.js"></script>
     <script src="/js/mousetrap.min.js"></script>
+    <script src="/js/tree.min.js"></script>
 
     <style>
         body {
@@ -154,8 +155,7 @@
 <div id="file-editor">
     <div style="width: 180px">
         <input type="text" placeholder="全文检索" onkeydown="handleSearch(event)"/>
-        <div>
-            文件树
+        <div id="file-tree">
         </div>
     </div>
     <div style="flex: 1">
@@ -338,10 +338,12 @@
     //   console.log(currenDirArr);
     // }
     // if (!zsession) {
+
+
     if (evt.data instanceof ArrayBuffer) {
       term.write(Decodeuint8arr(evt.data));
     } else if (typeof evt.data === 'string') {
-      const options = JSON.parse(evt.data);
+      const options = parseData(evt);
       if (options.type === 'search') {
         updateSearchResult(options.data.split('\n'));
       } else {
@@ -569,6 +571,20 @@
         type: 'search',
         data: event.target.value
       }))
+    }
+  }
+
+  const treeData = [];
+
+  const myTree = new Tree('#file-tree', {
+    data: treeData,
+  });
+
+  function parseData(evt) {
+    try {
+      return JSON.parse(evt.data);
+    } catch {
+      return evt.data;
     }
   }
 </script>
