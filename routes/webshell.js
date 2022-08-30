@@ -9,7 +9,7 @@ const Stream = require("stream");
 let logStartFlag = false;
 
 router.ws('/ws/webshell', function (ws, res) {
-  ws.send('\r\nlogining\n\r');
+  ws.send('logining\r');
   const sshClient = new SshClient();
   sshClient.connect(
     {
