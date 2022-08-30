@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const xtermJS = ['xterm-addon-search', 'xterm-addon-web-links', 'xterm-addon-web-links', 'xterm-addon-attach', 'xterm']
+const xtermJS = ['xterm-addon-search', 'xterm-addon-web-links', 'xterm-addon-web-links', 'xterm-addon-attach', 'xterm', 'xterm-addon-serialize']
 
 xtermJS.forEach(f => {
   fs.copyFileSync(path.join(__dirname, 'node_modules', f, `lib/${f}.js`), path.join(__dirname, 'static', `js/xterm/${f}.js`));

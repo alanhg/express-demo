@@ -7,6 +7,7 @@
     <script src="/js/xterm/xterm.js"></script>
     <script src="/js/xterm/xterm-addon-web-links.js"></script>
     <script src="/js/xterm/xterm-addon-search.js"></script>
+    <script src="/js/xterm/xterm-addon-serialize.js"></script>
     <script src="/js/xterm/zmodem.js"></script>
     <script src="/js/xterm/zmodem-browser.js"></script>
     <script src="/js/mousetrap.min.js"></script>
@@ -157,6 +158,11 @@
     });
   }
 
+
+  function serializeTerminal(event) {
+    console.log(serializeAddon.serialize());
+  }
+
 </script>
 <div id="terminal-container"></div>
 
@@ -166,6 +172,7 @@
     record timestamp
     <input id="record-timestamp" type="checkbox" checked>
 </label>
+<button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
 
 <div id="file-editor">
     <div style="width: 180px">
@@ -185,13 +192,13 @@
     </div>
 </div>
 <script>
-  var socket, zsession, attachAddon;
+  var socket, zsession, attachAddon, serializeAddon, term;
 </script>
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
 
   var isFullscreen = false;
-  var term = new Terminal({
+  term = new Terminal({
     // fontFamily: 'Hack Nerd Font',
     fontSize: 13,
     fontWeight: 'normal',
@@ -247,12 +254,16 @@
       }
     }));
   let searchAddon = new SearchAddon.SearchAddon();
+  serializeAddon = new SerializeAddon.SerializeAddon();
+
   let searchAddonBar = new SearchAddonBar({
     searchAddon
   });
 
   term.loadAddon(searchAddon);
   term.loadAddon(searchAddonBar);
+  term.loadAddon(serializeAddon);
+
   term.attachCustomKeyEventHandler(function (event) {
     if (event.type !== 'keydown') {
       return;
