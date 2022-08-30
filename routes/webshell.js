@@ -18,7 +18,6 @@ router.ws('/ws/webshell', function (ws, res) {
   });
   sshClient.on('data', (data) => {
     ws.send(data);
-    console.log(data.toString());
     if (logStartFlag) {
       shellLog.appendData(data);
     }
