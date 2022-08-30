@@ -7,6 +7,17 @@ function ansiRegex({onlyFirst = false} = {}) {
   return new RegExp(pattern, onlyFirst ? undefined : 'g');
 }
 
+const util = require('util');
+const strContainAnsi = ']1337;PostExec;Exit=0;CurrentDir=/root;Timestamp=1661857938;[root@VM-4-34-centos ~]# ';
+const strContainsControl = 'vi a\btest.sh';
 
-console.log(']1337;PostExec;Exit=0;CurrentDir=/root;Timestamp=1661857938;[root@VM-4-34-centos ~]# ');
-console.log('vi a\btest.sh');
+console.log(strContainAnsi);
+console.log(strContainsControl);
+
+console.log(strContainsControl.toString());
+const fs = require('fs');
+const path = require("path");
+
+fs.writeFileSync(path.join(__dirname, 'a.log'), strContainsControl);
+
+

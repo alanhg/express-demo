@@ -1,0 +1,31 @@
+[BEGIN] 2022/08/30 20:13:01
+ls
+[2022/08/30 20:13:02] helloworld  test.sh
+[2022/08/30 20:13:02] [root@VM-4-34-centos ~]# vi a test.sh 
+[2022/08/30 20:13:08] "test.sh" 51L, 1239C#!/bin/bash
+cd `dirname $0`
+
+PID_FILE="/var/run/tat_agent.pid"
+PID=0
+if [ -e ${PID_FILE} ]; then
+    PID=`cat ${PID_FILE}`
+fi
+SERVICE_DIR="/usr/local/qcloud/tat_agent/"
+TAT_AGENT="tat_agent"
+SYSTEMD_DIR="/etc/systemd/system/"
+
+if [ -e ${SYSTEMD_DIR}tat_agent.service ]; then
+    systemctl stop ${TAT_AGENT}
+    rm -f ${SYSTEMD_DIR}tat_agent.service
+    rm -f ${SYSTEMD_DIR}multi-user.target.wants/tat_agent.service
+    systemctl daemon-reload
+fi
+
+if [ -e /etc/init/tat_agent_service.conf ]; then
+    initctl stop tat_agent_service
+    rm -f /etc/init/tat_agent_service.conf
+fi:q![2022/08/30 20:13:10] [root@VM-4-34-centos ~]# ls
+[2022/08/30 20:13:11] helloworld  test.sh
+[2022/08/30 20:13:11] [root@VM-4-34-centos ~]# 
+
+[END] 2022/08/30 20:13:12
