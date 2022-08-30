@@ -71,12 +71,16 @@ router.get('/ssh2-log', (req, res) => {
   if (logStartFlag) {
     shellLog = new ShellLog({timestamp: req.query.recordTimestamp === 'true'})
     shellLog.start();
+    res.json({
+      status: 'ok'
+    });
   } else {
-    shellLog.done();
+    shellLog.done(() => {
+      res.json({
+        status: 'ok'
+      });
+    });
   }
-  res.json({
-    status: 'ok'
-  });
 });
 
 module.exports = router;
