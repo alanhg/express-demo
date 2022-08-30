@@ -69,8 +69,8 @@ router.ws('/ws/sftp', function (ws, res) {
 
 router.get('/ssh2-log', (req, res) => {
   logStartFlag = req.query.start === 'true';
-  shellLog = new ShellLog({timestamp: req.query.recordTimestamp === 'true'})
   if (logStartFlag) {
+    shellLog = new ShellLog({timestamp: req.query.recordTimestamp === 'true'})
     shellLog.start();
   } else {
     shellLog.done();
