@@ -145,7 +145,7 @@
   function recordLogStart(event) {
     event.target.innerText = event.target.dataset.start === 'true' ? 'log record start' : 'log record stop';
     event.target.dataset.start = event.target.dataset.start !== 'true';
-    fetch(`/ssh2-log?start=${event.target.dataset.start}`, {
+    fetch(`/ssh2-log?start=${event.target.dataset.start}&&recordTimestamp=${document.getElementById('record-timestamp').checked}`, {
       method: 'get',
     }).then(() => {
       if (event.target.dataset.start === 'false') {
@@ -162,6 +162,10 @@
 
 <input id="zm_files" type="file" multiple style="display: none">
 <button data-start="false" onclick="recordLogStart(event)">log record start</button>
+<label for="record-timestamp">
+    record timestamp
+    <input id="record-timestamp" type="checkbox" checked>
+</label>
 
 <div id="file-editor">
     <div style="width: 180px">

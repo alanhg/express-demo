@@ -8,7 +8,7 @@ const SshClient = require("../lib/ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
 let logStartFlag = false;
-let shellLog = new ShellLog({timestamp: true});
+let shellLog;
 
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('logining\r');
@@ -69,6 +69,7 @@ router.ws('/ws/sftp', function (ws, res) {
 
 router.get('/ssh2-log', (req, res) => {
   logStartFlag = req.query.start === 'true';
+  shellLog = new ShellLog({timestamp: req.query.recordTimestamp === 'true'})
   if (logStartFlag) {
     shellLog.start();
   } else {
