@@ -6,6 +6,8 @@ const router = express.Router();
 const SshFtpClient = require("../lib/ssh-ftp");
 const SshClient = require("../lib/ssh");
 const Stream = require("stream");
+const path = require("path");
+const fs = require("fs");
 let logStartFlag = false;
 
 router.ws('/ws/webshell', function (ws, res) {
