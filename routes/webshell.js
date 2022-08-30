@@ -8,7 +8,7 @@ const SshClient = require("../lib/ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
 let logStartFlag = false;
-let shellLog = new ShellLog();
+let shellLog = new ShellLog({timestamp: true});
 
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('logining\r');
@@ -18,6 +18,7 @@ router.ws('/ws/webshell', function (ws, res) {
   });
   sshClient.on('data', (data) => {
     ws.send(data);
+    console.log(data.toString());
     if (logStartFlag) {
       shellLog.appendData(data);
     }
