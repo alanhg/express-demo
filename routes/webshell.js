@@ -5,29 +5,21 @@ const express = require("express");
 const router = express.Router();
 const SshFtpClient = require("../lib/ssh-ftp");
 const SshClient = require("../lib/ssh");
+const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
-const path = require("path");
-const fs = require("fs");
 let logStartFlag = false;
+let shellLog = new ShellLog();
 
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('logining\r');
   const sshClient = new SshClient();
-  sshClient.connect(
-    {
-      host: process.env.host,
-      port: 22,
-      username: 'root',
-      password: process.env.password
-    }
-  );
+  sshClient.connect({
+    host: process.env.host, port: 22, username: 'root', password: process.env.password
+  });
   sshClient.on('data', (data) => {
     ws.send(data);
     if (logStartFlag) {
-      let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
-      if (fs.existsSync(fd)) {
-        fs.appendFileSync(fd, data);
-      }
+      shellLog.appendData(data);
     }
   });
   ws.on('message', function (msg) {
@@ -48,10 +40,7 @@ router.ws('/ws/webshell', function (ws, res) {
 router.ws('/ws/sftp', function (ws, res) {
   const sshClient = new SshFtpClient();
   sshClient.connect({
-    host: process.env.host,
-    port: 22,
-    username: 'root',
-    password: process.env.password
+    host: process.env.host, port: 22, username: 'root', password: process.env.password
   });
   sshClient.on('connected', () => {
     ws.send(JSON.stringify({
@@ -63,9 +52,7 @@ router.ws('/ws/sftp', function (ws, res) {
     if (options.type === 'list') {
       sshClient.list(options.path).then(res => {
         ws.send(JSON.stringify({
-          type: 'list',
-          path: msg.path,
-          data: res
+          type: 'list', path: msg.path, data: res
         }))
       })
     }
@@ -81,15 +68,10 @@ router.ws('/ws/sftp', function (ws, res) {
 
 router.get('/ssh2-log', (req, res) => {
   logStartFlag = req.query.start === 'true';
-  let fd = path.join(__dirname, '..', 'logs', 'ssh-log-record.log');
   if (logStartFlag) {
-    if (fs.existsSync(fd)) {
-      fs.unlink(fd, () => {
-      });
-    }
-    fs.writeFileSync(fd, `[BEGIN] ${new Date().toLocaleString()}\n`);
+    shellLog.start();
   } else {
-    fs.appendFileSync(fd, `\n[END] ${new Date().toLocaleString()}`);
+    shellLog.done();
   }
   res.json({
     status: 'ok'
