@@ -16,13 +16,13 @@ function ansiRegex({onlyFirst = false} = {}) {
  */
 function eraseTerminalSequence(line) {
   // line = line.replace(/[\x00\x07\x0B\x0C\x0E\x0F\x1B]/g, '');
-  line = line.replace(/[\x07]/g, '');
-  let afterLine = line.replace(/(.\x08)/, '');
-  while (afterLine !== line) {
-    line = afterLine;
-    afterLine = line.replace(/(.\x08)/, '');
+  let left = line.replace(/[\x07]/g, '');
+  let right = left.replace(/(.\x08)/, '');
+  while (left !== right) {
+    left = right;
+    right = left.replace(/(.\x08)/, '');
   }
-  return line;
+  return right;
 }
 
 const util = require('util');
