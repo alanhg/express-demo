@@ -163,11 +163,27 @@
     console.log(serializeAddon.serialize());
   }
 
+  function clientRecordLogStart(event) {
+    event.target.innerText = event.target.dataset.start === 'true' ? 'client log record start' : 'client log record stop';
+    event.target.dataset.start = event.target.dataset.start !== 'true';
+    clientRecordLogFlag = event.target.dataset.start === 'true';
+    if (clientRecordLogFlag) {
+      clientRecordLogBlobs = [];
+    } else {
+      let htmlAnchorElement = document.createElement('a');
+      htmlAnchorElement.style.display = 'hidden';
+      htmlAnchorElement.download = Date.now() + '.log';
+      htmlAnchorElement.href = URL.createObjectURL(new Blob(clientRecordLogBlobs));
+      htmlAnchorElement.click();
+    }
+  }
+
 </script>
 <div id="terminal-container"></div>
 
 <input id="zm_files" type="file" multiple style="display: none">
 <button data-start="false" onclick="recordLogStart(event)">log record start</button>
+<button data-start="false" onclick="clientRecordLogStart(event)">client log record start</button>
 <label for="record-timestamp">
     record timestamp
     <input id="record-timestamp" type="checkbox" checked>
@@ -192,7 +208,7 @@
     </div>
 </div>
 <script>
-  var socket, zsession, attachAddon, serializeAddon, term;
+  var socket, zsession, attachAddon, serializeAddon, term, clientRecordLogFlag, clientRecordLogBlobs = [];
 </script>
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
@@ -371,7 +387,11 @@
 
 
     if (evt.data instanceof ArrayBuffer) {
-      term.write(Decodeuint8arr(evt.data));
+      let data = Decodeuint8arr(evt.data);
+      if (clientRecordLogFlag) {
+        clientRecordLogBlobs.push(evt.data);
+      }
+      term.write(data);
     } else if (typeof evt.data === 'string') {
       const options = parseData(evt);
       if (options.type === 'search') {
