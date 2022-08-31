@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require("path");
+
 /**
  * @see https://github.com/chalk/ansi-regex
  * ANSI转义序列是带信号的标准编码,用于控制视频文本终端和终端模拟器上的光标位置、颜色、字体样式
@@ -7,17 +10,27 @@ function ansiRegex({onlyFirst = false} = {}) {
   return new RegExp(pattern, onlyFirst ? undefined : 'g');
 }
 
+/**
+ * https://xtermjs.org/docs/api/vtfeatures/#bell
+ * 终端行打印时需要根据控制符抹除部分字符显示，比如BS，删除前一个显示字符
+ */
+function eraseTerminalSequence(line) {
+  // line = line.replace(/[\x00\x07\x0B\x0C\x0E\x0F\x1B]/g, '');
+  line = line.replace(/[\x07]/g, '');
+  let afterLine = line.replace(/(.\x08)/, '');
+  while (afterLine !== line) {
+    line = afterLine;
+    afterLine = line.replace(/(.\x08)/, '');
+  }
+  return line;
+}
+
 const util = require('util');
 const strContainAnsi = ']1337;PostExec;Exit=0;CurrentDir=/root;Timestamp=1661857938;[root@VM-4-34-centos ~]# ';
-const strContainsControl = 'vi a\btest.sh';
+const strContainsControl = '[2022/08/31 15:42:07] [2022/08/31 15:42:07] [root@VM-4-34-centos helloworld]# vi a.txt \b\b\b\b\b\bb.txt \n';
 
-console.log(strContainAnsi);
+console.log(JSON.stringify(eraseTerminalSequence(strContainsControl.replace(ansiRegex(), ''))));
 console.log(strContainsControl);
 
-console.log(strContainsControl.toString());
-const fs = require('fs');
-const path = require("path");
-
-fs.writeFileSync(path.join(__dirname, 'a.log'), strContainsControl);
 
 
