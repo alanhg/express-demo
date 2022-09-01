@@ -130,6 +130,7 @@
 
   var isFullscreen = false;
   var term = new Terminal({
+    allowProposedApi: true,
     fontFamily: 'Hack Nerd Font',
     fontSize: 13,
     fontWeight: 'normal',
@@ -165,11 +166,12 @@
       white: '#a5a2a2',
       brightWhite: '#f7f7f7'
     },
-    rendererType: 'dom', //  canvas,dom
+    rendererType: 'canvas', //  canvas,dom
     minimumContrastRatio: 1,
     // 开启透明支持-支持CSS实现终端背景图设定
     allowTransparency: true
   });
+  debugger;
   window.term = term;
   /**
    * 终端会话连接与zsession
