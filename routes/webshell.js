@@ -22,10 +22,17 @@ router.ws('/ws/webshell', function (ws, res) {
       shellLog.appendData(data);
     }
   });
+  sshClient.on('close', (e) => {
+    debugger;
+  });
   ws.on('message', function (msg) {
     const options = JSON.parse(msg);
     if (options.type === 'search') {
-      sshClient.execCommand(`grep ${options.data} -r .`).then(res => {
+      /**
+       * -a 或 --text : 不要忽略二进制的数据。
+       *
+       */
+      sshClient.execCommand(`grep -r ${options.data} /root/helloworld`).then(res => {
         console.log(res.toString());
         ws.send(JSON.stringify({
           type: 'search', data: res.toString()
