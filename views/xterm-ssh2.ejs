@@ -623,6 +623,7 @@
   const sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
   let typeMode;
   let zTreeObj;
+  let iStandaloneCodeEditor;
 
   function handleSearch(event) {
     if (event.key === 'Enter') {
@@ -663,6 +664,9 @@
   }
   sftpSocket.onmessage = function (evt) {
     if (typeMode === 'get-file' && evt.data instanceof Blob) {
+      evt.data.text().then((value) => {
+        iStandaloneCodeEditor.getModel().setValue(value);
+      })
       console.log(evt.data.toString());
       return;
     }
@@ -685,11 +689,11 @@
   // require is provided by loader.min.js.
   require.config({paths: {'vs': 'https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs'}});
   require(["vs/editor/editor.main"], () => {
-    monaco.editor.create(document.getElementById('monaco_editor'), {
+    iStandaloneCodeEditor = monaco.editor.create(document.getElementById('monaco_editor'), {
       value: '',
       language: 'javascript',
       theme: 'vs-dark',
-    })
+    });
   });
 
 </script>
