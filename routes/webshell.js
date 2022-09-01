@@ -32,7 +32,7 @@ router.ws('/ws/webshell', function (ws, res) {
        * -a 或 --text : 不要忽略二进制的数据。
        *
        */
-      sshClient.execCommand(`grep -r ${options.data} /root/helloworld`).then(res => {
+      sshClient.execCommand(`grep -rn ${options.data} /root/helloworld`).then(res => {
         console.log(res.toString());
         ws.send(JSON.stringify({
           type: 'search', data: res.toString()
