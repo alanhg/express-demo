@@ -622,10 +622,10 @@
 
   function handleSearch(event) {
     if (event.key === 'Enter') {
-      // socket.send(JSON.stringify({
-      //   type: 'search',
-      //   data: event.target.value
-      // }))
+      socket.send(JSON.stringify({
+        type: 'search',
+        data: event.target.value
+      }))
     }
   }
 
