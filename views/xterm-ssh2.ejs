@@ -734,5 +734,10 @@
     });
   });
 
+  window.addEventListener('beforeunload', (e) => {
+    e.preventDefault();
+    e.returnValue = 'Changes you made may not be saved.';
+  });
+
 </script>
 </body>
