@@ -725,18 +725,12 @@
       }
     });
 
-    codeEditor.addCommand(monaco.KeyCode.Space, function () {
-      debugger;
-      alert('SAVE pressed!');
-    });
+    // let actions = codeEditor.getSupportedActions().map((a) => a.id);
+    // console.log(actions);
 
-    codeEditor.addAction({
-      id: "saveFile",
-      label: "Save...",
-      keybindings: [monaco.KeyCode.Ctrl | monaco.KeyCode.KeyS],
-      run: () => {
-        alert('save');
-      },
+    codeEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
+      console.log(codeEditor.getValue());
+      alert('saved');
     });
   });
 

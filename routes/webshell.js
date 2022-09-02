@@ -70,6 +70,9 @@ router.ws('/ws/sftp', function (ws, res) {
         ws.send(chunk);
       })
     }
+
+    if (options.type === 'put-file') {
+    }
   });
 });
 
