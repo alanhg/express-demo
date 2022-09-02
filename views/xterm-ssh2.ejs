@@ -196,7 +196,7 @@
 <button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
 
 <div id="file-editor">
-    <div style="width: 180px">
+    <div style="width: 280px">
         <input type="text" placeholder="全文检索" onkeydown="handleSearch(event)"/>
         <div id="file-tree" class="ztree">
         </div>
@@ -710,13 +710,23 @@
       value: '',
       language: 'javascript',
       theme: 'vs-dark',
+      minimap:{
+        enabled:false
+      }
     });
 
-    // 后台保存
-    codeEditor.onKeyDown(function (e) {
-      if (e.ctrlKey && e.code === 'KeyS') {
-        e.preventDefault();
-      }
+    codeEditor.addCommand(monaco.KeyCode.Space, function() {
+      debugger;
+      alert('SAVE pressed!');
+    });
+
+    codeEditor.addAction({
+      id: "saveFile",
+      label: "Save...",
+      keybindings: [monaco.KeyCode.Ctrl | monaco.KeyCode.KeyS],
+      run: () => {
+        alert('save');
+      },
     });
   });
 
