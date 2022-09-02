@@ -200,6 +200,9 @@
         <input type="text" placeholder="全文检索" onkeydown="handleSearch(event)"/>
         <div id="file-tree" class="ztree">
         </div>
+        <div>
+
+        </div>
         检索结果
         <div class="search-result">
 
@@ -625,9 +628,11 @@
 <script>
   // 树JS文档 https://github.com/daweilv/treejs
   const sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
+  const rootPath = '/root';
   let typeMode;
   // 文件树
   let zTreeObj;
+  let zTreeNodeSelectedId = rootPath;
   // 文本编辑器
   let codeEditor;
 
@@ -635,6 +640,7 @@
     if (event.key === 'Enter') {
       socket.send(JSON.stringify({
         type: 'search',
+        path: zTreeNodeSelectedId,
         data: event.target.value
       }))
     }
@@ -642,11 +648,14 @@
 
   function myOnClick(event, treeId, treeNode) {
     typeMode = 'get-file';
-    sftpSocket.send(JSON.stringify({
-      type: 'get-file',
-      path: treeNode.id
-    }));
-  };
+    if (treeNode.type === '-') {
+      sftpSocket.send(JSON.stringify({
+        type: 'get-file',
+        path: treeNode.id
+      }));
+    }
+    zTreeNodeSelectedId = treeNode.id;
+  }
 
   function zTreeOnExpand(event, treeId, treeNode) {
     sftpSocket.send(JSON.stringify({
@@ -672,7 +681,6 @@
     }
   }
 
-  const rootPath = '/root';
 
   sftpSocket.onopen = function () {
 
@@ -697,7 +705,8 @@
       zTreeObj.addNodes(parentNode, opts.data.map(item => ({
         id: opts.path + '/' + item.name,
         name: item.name,
-        children: item.type === 'd' ? [] : null
+        children: item.type === 'd' ? [] : null,
+        type: item.type
       })));
     }
   }
@@ -710,12 +719,12 @@
       value: '',
       language: 'javascript',
       theme: 'vs-dark',
-      minimap:{
-        enabled:false
+      minimap: {
+        enabled: false
       }
     });
 
-    codeEditor.addCommand(monaco.KeyCode.Space, function() {
+    codeEditor.addCommand(monaco.KeyCode.Space, function () {
       debugger;
       alert('SAVE pressed!');
     });

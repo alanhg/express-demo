@@ -30,12 +30,12 @@ router.ws('/ws/webshell', function (ws, res) {
     if (options.type === 'search') {
       /**
        * -a 或 --text : 不要忽略二进制的数据。
-       *
+       * -i 或 --ignore-case : 忽略字符大小写的差别。
        */
-      sshClient.execCommand(`grep -rn ${options.data} /root/helloworld`).then(res => {
+      sshClient.execCommand(`grep -rn ${options.data} ${options.path}`).then(res => {
         console.log(res.toString());
         ws.send(JSON.stringify({
-          type: 'search', data: res.toString()
+          type: 'search', path: options.path, keyword: options.data, data: res.toString()
         }));
       })
     } else {
