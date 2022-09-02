@@ -59,7 +59,7 @@ router.ws('/ws/sftp', function (ws, res) {
     if (options.type === 'list') {
       sshClient.list(options.path).then(res => {
         ws.send(JSON.stringify({
-          type: 'list', path: msg.path, data: res
+          type: 'list', path: options.path, data: res
         }))
       })
     }

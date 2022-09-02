@@ -644,14 +644,22 @@
     typeMode = 'get-file';
     sftpSocket.send(JSON.stringify({
       type: 'get-file',
-      path: '/root/' + treeNode.name
+      path: treeNode.id
     }));
   };
+
+  function zTreeOnExpand(event, treeId, treeNode) {
+    sftpSocket.send(JSON.stringify({
+      type: 'list',
+      path: treeNode.id
+    }));
+  }
 
   $(document).ready(function () {
     zTreeObj = $.fn.zTree.init($("#file-tree"), {
       callback: {
-        onClick: myOnClick
+        onClick: myOnClick,
+        onExpand: zTreeOnExpand
       }
     }, []);
   });
@@ -664,6 +672,7 @@
     }
   }
 
+  const rootPath = '/root';
 
   sftpSocket.onopen = function () {
 
@@ -680,13 +689,15 @@
     if (opts.type === 'connected') {
       sftpSocket.send(JSON.stringify({
         type: 'list',
-        path: '/root'
+        path: rootPath
       }));
     }
     if (opts.type === 'list') {
-      zTreeObj.addNodes(null, opts.data.map(item => ({
-        id: '/root/' + item.name,
-        name: item.name
+      const parentNode = zTreeObj.getNodeByParam('id', opts.path, null);
+      zTreeObj.addNodes(parentNode, opts.data.map(item => ({
+        id: opts.path + '/' + item.name,
+        name: item.name,
+        children: item.type === 'd' ? [] : null
       })));
     }
   }
