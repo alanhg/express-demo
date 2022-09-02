@@ -405,7 +405,11 @@
     } else if (typeof evt.data === 'string') {
       const options = parseData(evt);
       if (options.type === 'search') {
-        updateSearchResult(options.data.split('\n'));
+        updateSearchResult(options.data.split('\n'), options.keyword);
+        //
+        // updateSearchResult(options.data.split('\n').map(item => {
+        //   return item.match(new RegExp('^(.*):(\d+):(.+)$'));
+        // }), options.keyword);
       } else {
         term.write(evt.data.toString());
       }
@@ -616,9 +620,9 @@
     return new TextDecoder("utf-8").decode(uint8array);
   }
 
-  function updateSearchResult(dataArr) {
+  function updateSearchResult(result = [], keyword) {
     document.getElementsByClassName('search-result')[0].innerHTML = `<ul>${
-      dataArr.map(item => '<li>' + item + '</li>').join('')
+      result.map(item => '<li>' + item + '</li>').join('')
     }</ul>`;
   }
 </script>

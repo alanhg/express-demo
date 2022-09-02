@@ -29,6 +29,7 @@ router.ws('/ws/webshell', function (ws, res) {
     const options = JSON.parse(msg);
     if (options.type === 'search') {
       /**
+       * @see https://www.runoob.com/linux/linux-comm-grep.html
        * -a 或 --text : 不要忽略二进制的数据。
        * -i 或 --ignore-case : 忽略字符大小写的差别。
        */
