@@ -21,8 +21,9 @@ app.use(bodyParser.json({limit: '50mb'})); // for parsing application/json
 app.use(cors());
 // mount the router on the app
 app.use('/', routes);
-app.use('/', express.static(path.join(__dirname, '/static')));
+app.use('/js', express.static(path.join(__dirname, '/node_modules')));
 app.use('/logs', express.static(path.join(__dirname, '/logs')));
+app.use('/', express.static(path.join(__dirname, '/static')));
 
 // var log = require('./config/log');
 // log.use(app);
