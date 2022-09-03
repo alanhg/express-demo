@@ -115,11 +115,23 @@
     }
   }
 
+  function onRenderTypeChange(e) {
+    window.term.setOption('rendererType', e.target.value);
+  }
+
 </script>
 <div id="terminal-container"></div>
 <input id="zm_files" type="file" multiple style="display: none">
 <button onclick="onPrintBtnClick()">print something</button>
 <button onclick="onInfinitePrintBtnClick()">infinite print</button>
+<select onchange="onRenderTypeChange(event)">
+    <option value="dom">
+        dom
+    </option>
+    <option selected value="canvas">
+        canvas
+    </option>
+</select>
 <code>
     <p>The function <code>selectAll()</code> highlights all the text in the
         input field so the user can, for example, copy or delete the text.</p>
@@ -164,7 +176,7 @@
       white: '#a5a2a2',
       brightWhite: '#f7f7f7'
     },
-    rendererType: 'dom', //  canvas,dom
+    rendererType: 'canvas', //  canvas,dom
     minimumContrastRatio: 1,
     // 开启透明支持-支持CSS实现终端背景图设定
     allowTransparency: true
