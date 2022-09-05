@@ -749,6 +749,9 @@
         type: item.type
       })));
     }
+    if (opts.type === 'put-file') {
+      alert(`${zTreeNodeSelectedId} saved!`);
+    }
   }
 
 
@@ -769,8 +772,11 @@
     // console.log(actions);
 
     codeEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
-      console.log(codeEditor.getValue());
-      alert('saved');
+      sftpSocket.send(JSON.stringify({
+        type: 'put-file',
+        path: zTreeNodeSelectedId,
+        data: codeEditor.getValue()
+      }));
     });
   });
 

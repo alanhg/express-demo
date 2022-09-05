@@ -72,6 +72,19 @@ router.ws('/ws/sftp', function (ws, res) {
     }
 
     if (options.type === 'put-file') {
+      const readerStream = Stream.Readable.from([options.data]);
+      try {
+        sshClient.put(readerStream, options.path).then(res => {
+          ws.send(JSON.stringify({
+            type: 'put-file', path: options.path,
+          }))
+        }).catch(e => {
+          console.error(e);
+        }).finally(() => {
+        })
+      } catch (e) {
+        debugger;
+      }
     }
   });
 });
