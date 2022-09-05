@@ -34,7 +34,6 @@ router.ws('/ws/webshell', function (ws, res) {
        * -i 或 --ignore-case : 忽略字符大小写的差别。
        */
       sshClient.execCommand(`grep -rn ${options.data} ${options.path}`).then(res => {
-        console.log(res.toString());
         ws.send(JSON.stringify({
           type: 'search', path: options.path, keyword: options.data, data: res.toString()
         }));

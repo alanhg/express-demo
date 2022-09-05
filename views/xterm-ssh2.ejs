@@ -410,10 +410,15 @@
     } else if (typeof evt.data === 'string') {
       const options = parseData(evt);
       if (options.type === 'search') {
-        options.data = options.data.replace(/\n$/, '');
-        updateSearchResult(options.data.split('\n').map(item => {
-          return item.split(':');
-        }), options.keyword);
+        if (options.data.length) {
+          options.data = options.data.replace(/\n$/, '');
+          updateSearchResult(options.data.split('\n').map(item => {
+            return item.split(':');
+          }), options.keyword);
+        } else {
+          updateSearchResult([], options.keyword);
+        }
+
       } else {
         term.write(evt.data.toString());
       }
@@ -637,6 +642,10 @@
 
   function updateSearchResult(result = [], keyword) {
     const elementsByClassNameElement = document.getElementsByClassName('search-result')[0];
+    if (result.length === 0) {
+      elementsByClassNameElement.innerHTML = `无相关内容`;
+      return;
+    }
     elementsByClassNameElement.innerHTML = `<ul>${
       result.map(item => `<li><a data-path='${item[0]}' data-row='${item[1]}' data-keyword='${keyword}'>${item[0]};${item[1]};${item[2]}</a></li>`).join('')
     }</ul>`;
