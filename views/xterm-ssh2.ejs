@@ -673,7 +673,14 @@
         onClick: myOnClick,
         onExpand: zTreeOnExpand
       }
-    }, []);
+    }, [
+      {
+        id: rootPath,
+        name: '~',
+        children: [],
+        type: 'd'
+      }
+    ]);
   });
 
   function parseData(evt) {
