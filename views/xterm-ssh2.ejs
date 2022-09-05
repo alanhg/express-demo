@@ -661,7 +661,7 @@
 <script>
   // 树JS文档 https://github.com/daweilv/treejs
   const sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
-  const rootPath = '/root';
+  const rootPath = '/';
   let typeMode;
   // 文件树
   let zTreeObj;
@@ -706,7 +706,7 @@
     }, [
       {
         id: rootPath,
-        name: '~',
+        name: rootPath,
         children: [],
         type: 'd'
       }
@@ -742,6 +742,7 @@
     }
     if (opts.type === 'list') {
       const parentNode = zTreeObj.getNodeByParam('id', opts.path, null);
+      zTreeObj.removeChildNodes(parentNode);
       zTreeObj.addNodes(parentNode, opts.data.map(item => ({
         id: opts.path + '/' + item.name,
         name: item.name,
