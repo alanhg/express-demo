@@ -118,6 +118,11 @@
         #monaco_editor {
             height: 400px;
         }
+
+        .search-result a:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -196,7 +201,7 @@
 
 <div id="file-editor">
     <div style="width: 280px">
-        <input type="text" placeholder="全文检索" onkeydown="handleSearch(event)"/>
+        <input type="text" placeholder="内容全文检索" onkeydown="handleSearch(event)"/>
         <div id="file-tree" class="ztree">
         </div>
         <div>
@@ -405,11 +410,10 @@
     } else if (typeof evt.data === 'string') {
       const options = parseData(evt);
       if (options.type === 'search') {
-        updateSearchResult(options.data.split('\n'), options.keyword);
-        //
-        // updateSearchResult(options.data.split('\n').map(item => {
-        //   return item.match(new RegExp('^(.*):(\d+):(.+)$'));
-        // }), options.keyword);
+        options.data = options.data.replace(/\n$/, '');
+        updateSearchResult(options.data.split('\n').map(item => {
+          return item.split(':');
+        }), options.keyword);
       } else {
         term.write(evt.data.toString());
       }
@@ -620,10 +624,27 @@
     return new TextDecoder("utf-8").decode(uint8array);
   }
 
+  /**
+   * 获取文件内容，同时高亮命中文本，滚动到指定位置
+   * @param event
+   */
+  function searchResultItemOnClick(event) {
+    sftpSocket.send(JSON.stringify({
+      type: 'get-file',
+      path: event.target.dataset.path
+    }));
+  }
+
   function updateSearchResult(result = [], keyword) {
-    document.getElementsByClassName('search-result')[0].innerHTML = `<ul>${
-      result.map(item => '<li>' + item + '</li>').join('')
+    const elementsByClassNameElement = document.getElementsByClassName('search-result')[0];
+    elementsByClassNameElement.innerHTML = `<ul>${
+      result.map(item => `<li><a data-path='${item[0]}' data-row='${item[1]}' data-keyword='${keyword}'>${item[0]};${item[1]};${item[2]}</a></li>`).join('')
     }</ul>`;
+    elementsByClassNameElement.addEventListener('click', (event) => {
+      if (event.target.tagName === 'A') {
+        searchResultItemOnClick(event);
+      }
+    });
   }
 </script>
 
@@ -744,10 +765,9 @@
     });
   });
 
-  window.addEventListener('beforeunload', (e) => {
-    e.preventDefault();
-    e.returnValue = 'Changes you made may not be saved.';
-  });
-
+  // window.addEventListener('beforeunload', (e) => {
+  //   e.preventDefault();
+  //   e.returnValue = 'Changes you made may not be saved.';
+  // });
 </script>
 </body>
