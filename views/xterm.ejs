@@ -122,11 +122,13 @@
 
   function webGLFlagChange(e) {
     if (e.target.checked) {
-      window.term.loadAddon(window.webglAddon);
+      window.webglAddon.activate(window.term);
     } else {
       window.webglAddon.dispose();
     }
   }
+
+
 </script>
 <div id="terminal-container"></div>
 <input id="zm_files" type="file" multiple style="display: none">
@@ -142,7 +144,7 @@
 </select>
 <label for="webglFlag">
     WebGL2-based renderer
-    <input type="checkbox" id="webglFlag" onchange="webGLFlagChange(event)"/>
+    <input type="checkbox" id="webglFlag" onchange="webGLFlagChange(event)" checked/>
 </label>
 <code>
     <p>The function <code>selectAll()</code> highlights all the text in the
@@ -218,6 +220,11 @@
   term.loadAddon(searchAddonBar);
   const webglAddon = new WebglAddon.WebglAddon();
   window.webglAddon = webglAddon;
+  webglAddon.onContextLoss(e => {
+    webglAddon.dispose();
+  });
+
+  term.loadAddon(webglAddon);
 
   term.attachCustomKeyEventHandler(function (event) {
     if (event.type !== 'keydown') {
