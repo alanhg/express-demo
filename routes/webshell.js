@@ -28,13 +28,15 @@ router.ws('/ws/webshell', function (ws, res) {
   ws.on('message', function (msg) {
     const options = JSON.parse(msg);
     if (options.type === 'search') {
+      let command = `ug -r '${options.data}' -n -k -I ${options.path} --ignore-files`;
       /**
        * @see https://www.runoob.com/linux/linux-comm-grep.html
        * -a 或 --text : 不要忽略二进制的数据。
        * -i 或 --ignore-case : 忽略字符大小写的差别。
        *
        */
-      sshClient.execCommand(`grep -rn ${options.data} ${options.path}`).then(res => {
+      console.log(command);
+      sshClient.execCommand(command).then(res => {
         ws.send(JSON.stringify({
           type: 'search', path: options.path, keyword: options.data, data: res.toString()
         }));

@@ -664,6 +664,10 @@
 
 
 <script>
+  function joinPath(l, r) {
+    return `${l}/${r}`.replace(/\/{2,}/g, '/');
+  }
+
   // 树JS文档 https://github.com/daweilv/treejs
   const sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
   const rootPath = '/';
@@ -749,7 +753,7 @@
       const parentNode = zTreeObj.getNodeByParam('id', opts.path, null);
       zTreeObj.removeChildNodes(parentNode);
       zTreeObj.addNodes(parentNode, opts.data.map(item => ({
-        id: opts.path + '/' + item.name,
+        id: joinPath(opts.path, item.name),
         name: item.name,
         children: item.type === 'd' ? [] : null,
         type: item.type
