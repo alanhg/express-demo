@@ -74,6 +74,14 @@ router.ws('/ws/sftp', function (ws, res) {
       })
     }
 
+    if (options.type === 'download-file') {
+      const dst = new Throttle();
+      sshClient.get(options.path, dst);
+      dst.on('data', (chunk) => {
+        ws.send(chunk);
+      })
+    }
+
     if (options.type === 'put-file') {
       const readerStream = Stream.Readable.from([options.data]);
       try {

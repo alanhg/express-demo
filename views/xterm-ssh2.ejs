@@ -20,6 +20,8 @@
     <!--    <script src="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.nls.js"></script>-->
     <!--    <script src="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.js"></script>-->
 
+    <script src="/js/@mboussaid/contextmenu.js/src/contextMenu.min.js"></script>
+    <link href="/js/@mboussaid/contextmenu.js/themes/contextMenuDark.css" rel="stylesheet">
 
     <style>
         body {
@@ -672,6 +674,7 @@
   const sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
   const rootPath = '/';
   let typeMode;
+
   // 文件树
   let zTreeObj;
   let zTreeNodeSelectedId = rootPath;
@@ -742,6 +745,12 @@
       console.log(evt.data.toString());
       return;
     }
+
+    if (typeMode === 'download-file' && evt.data instanceof Blob) {
+      saveFile(evt.data, window.term.getSelection());
+      return;
+    }
+
     const opts = JSON.parse(evt.data)
     if (opts.type === 'connected') {
       sftpSocket.send(JSON.stringify({
@@ -794,5 +803,32 @@
   //   e.preventDefault();
   //   e.returnValue = 'Changes you made may not be saved.';
   // });
+
+  contextMenu({
+    items: [
+      {
+
+        template: "<button>download file</button>", ///html template
+        onClick: function () {
+          const filename = window.term.getSelection();
+          typeMode = 'download-file';
+
+          sftpSocket.send(JSON.stringify({
+            type: 'download-file',
+            path: joinPath('/root', filename)
+          }));
+        }
+      }
+    ]
+  }).init(document.getElementById('terminal-container') /* where you want to add contextmenu document by default */)
+
+
+  function saveFile(content, filename) {
+    const a = document.createElement("a");
+    const file = new Blob([content], {type: 'application/zip'});
+    a.href = URL.createObjectURL(file);
+    a.download = filename;
+    a.click();
+  }
 </script>
 </body>
