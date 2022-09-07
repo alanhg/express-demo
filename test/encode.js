@@ -6,3 +6,8 @@ const szStart = Buffer.from('rz\r**\x18B00000000000000\r');
 const szStart2 = Buffer.from('rz\r**B00000000000000\r');
 
 console.log(szStart.toString() === szStart2.toString());
+
+const BSON = require('bson');
+
+console.log(typeof BSON.serialize({a: 1, b: 'username'}));
+console.log(BSON.deserialize(JSON.stringify({a: 1, b: 'username'})),);
