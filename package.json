@@ -7,7 +7,7 @@
     "build": "node build.js"
   },
   "dependencies": {
-    "@mboussaid/contextmenu.js": "^1.0.0",
+    "@cloudstudio/editor-sdk": "^1.0.4",
     "@stacker/alfred-utils": "^0.1.10",
     "@widgetjs/tree": "^1.8.3",
     "axios": "^0.27.2",
@@ -26,6 +26,8 @@
     "express-session": "^1.15.6",
     "express-ws": "^5.0.2",
     "finalhandler": "^1.1.2",
+    "jquery": "^3.6.1",
+    "jquery-contextmenu": "^2.9.2",
     "js-base64": "^2.1.9",
     "jsrsasign": "^10.5.8",
     "jsrsasign-util": "^1.0.5",

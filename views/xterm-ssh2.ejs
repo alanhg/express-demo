@@ -2,6 +2,10 @@
     <title>xterm.js-ssh2测试</title>
     <link href="/js/xterm/css/xterm.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+    <link data-name="vs/editor/editor.main"
+          href="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.min.css"
+          rel="stylesheet">
+    <link href="/js/contextMenu.css" rel="stylesheet">
 
     <script src="/js/xterm/lib/xterm.js"></script>
     <script src="/js/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
@@ -11,17 +15,13 @@
     <script src="/js/nora-zmodemjs/dist/zmodem.js"></script>
     <script src="/js/xterm/zmodem-browser.js"></script>
     <script src="/js/mousetrap.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/js/jquery.ztree.all.min.js"></script>
-    <link data-name="vs/editor/editor.main"
-          href="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.min.css"
-          rel="stylesheet">
     <script src="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
-    <!--    <script src="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.nls.js"></script>-->
-    <!--    <script src="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.js"></script>-->
 
-    <script src="/js/@mboussaid/contextmenu.js/src/contextMenu.min.js"></script>
-    <link href="/js/@mboussaid/contextmenu.js/themes/contextMenuDark.css" rel="stylesheet">
+    <script src="/js/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/js/jquery.ztree.all.min.js"></script>
+    <script src="/js/contextMenu.js"></script>
+
+    <!--    <script src="/js/jquery-contextmenu/dist/jquery.ui.position.js"></script>-->
 
     <style>
         body {
@@ -664,7 +664,6 @@
   }
 </script>
 
-
 <script>
   function joinPath(l, r) {
     return `${l}/${r}`.replace(/\/{2,}/g, '/');
@@ -804,24 +803,6 @@
   //   e.returnValue = 'Changes you made may not be saved.';
   // });
 
-  contextMenu({
-    items: [
-      {
-
-        template: "<button>download file</button>", ///html template
-        onClick: function () {
-          const filename = window.term.getSelection();
-          typeMode = 'download-file';
-
-          sftpSocket.send(JSON.stringify({
-            type: 'download-file',
-            path: joinPath(CurrentDir, filename)
-          }));
-        }
-      }
-    ]
-  }).init(document.getElementById('terminal-container') /* where you want to add contextmenu document by default */)
-
 
   function saveFile(content, filename) {
     const a = document.createElement("a");
@@ -830,5 +811,21 @@
     a.download = filename;
     a.click();
   }
+  $('#terminal-container').contextmenu(function (e) {
+    const menu = [
+      [
+        'download file', //title
+        function (key, opt) {
+          const filename = window.term.getSelection();
+          typeMode = 'download-file';
+          sftpSocket.send(JSON.stringify({
+            type: 'download-file',
+            path: joinPath(CurrentDir, filename)
+          }));
+        }
+      ],
+    ];
+    ContextMenu.render(e,menu,this); //开始渲染
+  });
 </script>
 </body>
