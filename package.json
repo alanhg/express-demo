@@ -27,7 +27,6 @@
     "express-ws": "^5.0.2",
     "finalhandler": "^1.1.2",
     "jquery": "^3.6.1",
-    "jquery-contextmenu": "^2.9.2",
     "js-base64": "^2.1.9",
     "jsrsasign": "^10.5.8",
     "jsrsasign-util": "^1.0.5",
