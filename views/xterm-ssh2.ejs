@@ -227,7 +227,7 @@
     </div>
 </div>
 <script>
-  var socket, zsession, attachAddon, serializeAddon, term, clientRecordLogFlag, clientRecordLogBlobs = [];
+  var socket, zsession, attachAddon, serializeAddon, term, clientRecordLogFlag, clientRecordLogBlobs = [], CurrentDir;
 </script>
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
@@ -400,11 +400,7 @@
   });
 
   socket.addEventListener('message', (evt) => {
-    // let data = Decodeuint8arr(evt.data);
-    // const currenDirArr = data.match(/(]1337;CurrentDir=)(.+)/); // 根据PS1获取CWD
-    // if (currenDirArr) {
-    //   console.log(currenDirArr);
-    // }
+
     // if (!zsession) {
 
 
@@ -412,6 +408,10 @@
       let data = Decodeuint8arr(evt.data);
       if (clientRecordLogFlag) {
         clientRecordLogBlobs.push(evt.data);
+      }
+      const currenDirArr = data.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
+      if (currenDirArr?.length >= 3) {
+        CurrentDir = currenDirArr[2];
       }
       term.write(data);
     } else if (typeof evt.data === 'string') {
@@ -815,7 +815,7 @@
 
           sftpSocket.send(JSON.stringify({
             type: 'download-file',
-            path: joinPath('/root', filename)
+            path: joinPath(CurrentDir, filename)
           }));
         }
       }
