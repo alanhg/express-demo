@@ -14,7 +14,7 @@ router.ws('/ws/webshell', function (ws, res) {
   ws.send('logining\r');
   const sshClient = new SshClient();
   sshClient.connect({
-    host: process.env.host, port: 22, username: 'root', password: process.env.password
+    host: process.env.host, port: 22, username: process.env.username || 'root', password: process.env.password
   });
   sshClient.on('data', (data) => {
     ws.send(data);

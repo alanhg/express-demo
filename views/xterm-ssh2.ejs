@@ -235,7 +235,7 @@
   var isFullscreen = false;
   term = new Terminal({
     // fontFamily: 'Hack Nerd Font',
-    fontSize: 13,
+    fontSize: 16,
     fontWeight: 'normal',
     letterSpacing: 0,
     cursorBlink: true,
@@ -403,6 +403,7 @@
 
     // if (!zsession) {
 
+    console.log(window.term.rows, window.term.cols);
 
     if (evt.data instanceof ArrayBuffer) {
       let data = Decodeuint8arr(evt.data);
@@ -811,6 +812,7 @@
     a.download = filename;
     a.click();
   }
+
   $('#terminal-container').contextmenu(function (e) {
     const menu = [
       [
@@ -825,7 +827,7 @@
         }
       ],
     ];
-    ContextMenu.render(e,menu,this); //开始渲染
+    ContextMenu.render(e, menu, this); //开始渲染
   });
 </script>
 </body>
