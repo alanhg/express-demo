@@ -280,6 +280,11 @@
    * 终端会话连接与zsession
    */
 
+  term.onSelectionChange(() => {
+    // const selectionMaskEl = term.element.getElementsByClassName('xterm-selection')[0].children[0];
+    // const newLeft = +selectionMaskEl.style.left.replace('px', '') - term._core._renderService._renderer.dimensions.actualCellWidth * 2;
+    // selectionMaskEl.style.left = (newLeft > 0 ? newLeft : 0) + 'px';
+  });
 
   term.open(document.getElementById('terminal-container'));
   // 终端自定义打印内容
