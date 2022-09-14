@@ -7,15 +7,20 @@ const SshFtpClient = require("../lib/ssh-ftp");
 const SshClient = require("../lib/ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
+const SshProxyClient = require("../lib/ssh-proxy");
 let logStartFlag = false;
 let shellLog;
 
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('logining\r');
   const sshClient = new SshClient();
-  sshClient.connect({
+  const opts = {
     host: process.env.host, port: 22, username: process.env.username || 'root', password: process.env.password
-  });
+  };
+  sshClient.connect(opts);
+
+  new SshProxyClient().connect(opts);
+
   sshClient.on('data', (data) => {
     ws.send(data);
     if (logStartFlag) {
@@ -45,6 +50,8 @@ router.ws('/ws/webshell', function (ws, res) {
       sshClient.write(options.data);
     }
   });
+
+
 });
 
 router.ws('/ws/sftp', function (ws, res) {
