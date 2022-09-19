@@ -8,7 +8,7 @@ const net = require("net");
  *
  *
  * 内网穿透
- *
+ * @see https://github.com/mscdex/ssh2/issues/40
  *
  */
 const conn = new Client();
@@ -18,7 +18,7 @@ conn.on('ready', () => {
 
   net.createServer(function(sock) {
     // may want to sock.pause() first if on an older (pre-v0.10-ish?) node version
-    conn.forwardOut('127.0.0.1', 8000, '127.0.0.1', 8000,  function(err, stream) {
+    conn.forwardOut(sock.remoteAddress, sock.remotePort, '127.0.0.1', 8000,  function(err, stream) {
       if (err) throw err; // do something better than this
 
       sock.pipe(stream);
