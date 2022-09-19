@@ -10,6 +10,7 @@ const rzStartBuffer = Buffer.from(rzStart);
 const zAbortBuffer = Buffer.from(zAbort);
 
 const Stream = require("stream");
+const path = require("path");
 
 let bufferLength = 5;
 let offset = 0;
@@ -35,7 +36,7 @@ writableStream.on('end', () => {
 let interval = setInterval(() => {
   // 接收前端binaryData
   const buf = Buffer.from(offset.toString(), "utf-8");
-  writableStream.write(buf);
+  writableStream.write(Buffer.from([104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]));
   offset = offset + buf.byteLength;
   if ((offset + buf.byteLength) > bufferLength) {
     clearInterval(interval);
@@ -43,3 +44,5 @@ let interval = setInterval(() => {
   }
 }, 1000);
 
+
+console.log('Class: , Function: , Line 49, Param: ', path.join('/a/', '/b'));
