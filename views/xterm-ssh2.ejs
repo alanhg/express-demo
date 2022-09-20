@@ -162,6 +162,7 @@
   function recordLogStart(event) {
     event.target.innerText = event.target.dataset.start === 'true' ? 'log record start' : 'log record stop';
     event.target.dataset.start = event.target.dataset.start !== 'true';
+
     fetch(`/ssh2-log?start=${event.target.dataset.start}&&recordTimestamp=${document.getElementById('record-timestamp').checked}`, {
       method: 'get',
     }).then(() => {
