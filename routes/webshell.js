@@ -12,15 +12,17 @@ const Stream = require("stream");
 let logStartFlag = false;
 let shellLog;
 
+const connectOpts = {
+  host: process.env.host, port: 22, username: process.env.username || 'root', password: process.env.password
+};
+
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('logining\r');
   const sshClient = new SshClient();
-  const opts = {
-    host: process.env.host, port: 22, username: process.env.username || 'root', password: process.env.password
-  };
-  sshClient.connect(opts);
 
-  // new SshProxyClient().connect(opts);
+  sshClient.connect(connectOpts);
+
+  // new SshProxyClient().connect(connectOpts);
 
   sshClient.on('data', (data) => {
     ws.send(data);
@@ -68,9 +70,7 @@ router.ws('/ws/webshell', function (ws, res) {
 
 router.ws('/ws/sftp', function (ws, res) {
   const sshClient = new SshFtpClient();
-  sshClient.connect({
-    host: process.env.host, port: 22, username: 'root', password: process.env.password
-  });
+  sshClient.connect(connectOpts);
   sshClient.on('connected', () => {
     ws.send(JSON.stringify({
       type: 'connected'
