@@ -18,53 +18,15 @@ const connectOpts = {
 
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('logining\r');
-  const sshClient = new SshClient();
-
+  const sshClient = new SshClient(ws);
   sshClient.connect(connectOpts);
 
-  // new SshProxyClient().connect(connectOpts);
-
   sshClient.on('data', (data) => {
-    ws.send(data);
     if (logStartFlag) {
       shellLog.appendData(data);
     }
   });
   sshClient.on('close', (e) => {
-    debugger;
-  });
-  ws.on('message', function (msg) {
-    const options = JSON.parse(msg);
-    if (options.type === 'search') {
-      let command = `ug -r '${options.data}' -n -k -I ${options.path} --ignore-files`;
-      /**
-       * @see https://www.runoob.com/linux/linux-comm-grep.html
-       * -a 或 --text : 不要忽略二进制的数据。
-       * -i 或 --ignore-case : 忽略字符大小写的差别。
-       *
-       */
-      console.log(command);
-      sshClient.execCommand(command).then(res => {
-        ws.send(JSON.stringify({
-          type: 'search', path: options.path, keyword: options.data, data: res.toString()
-        }));
-      })
-    }
-    if (options.type === 'codeserver') {
-      sshClient.execCommand('ws').then(() => {
-        // const proxy = new CodeServerProxy();
-        // proxy.connect(sshClient.config);
-        // proxy.on('ready', () => {
-        //   proxy.proxyCodeWeb().then(() => {
-        //     ws.send(JSON.stringify({
-        //       type: 'codeserver'
-        //     }));
-        //   })
-        // });
-      })
-    } else {
-      sshClient.write(options.data);
-    }
   });
 });
 
