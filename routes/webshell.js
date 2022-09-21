@@ -8,6 +8,7 @@ const SshClient = require("../lib/ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
 const SshProxyClient = require("../lib/ssh-proxy");
+const CodeServerProxy = require("../lib/code-server-proxy");
 let logStartFlag = false;
 let shellLog;
 
@@ -46,12 +47,23 @@ router.ws('/ws/webshell', function (ws, res) {
           type: 'search', path: options.path, keyword: options.data, data: res.toString()
         }));
       })
+    }
+    if (options.type === 'codeserver') {
+      sshClient.execCommand('ws').then(() => {
+        const proxy = new CodeServerProxy();
+        proxy.connect(sshClient.config);
+        proxy.on('ready', () => {
+          proxy.proxyCodeWeb().then(() => {
+            ws.send(JSON.stringify({
+              type: 'codeserver'
+            }));
+          })
+        });
+      })
     } else {
       sshClient.write(options.data);
     }
   });
-
-
 });
 
 router.ws('/ws/sftp', function (ws, res) {

@@ -51,3 +51,38 @@ const dataParsed = BSON.deserialize(dataStr);
 console.log('Class: , Function: , Line 51, Param: ', dataParsed.a.buffer);
 
 writableStream.write(dataParsed.a.buffer);
+
+let uploadStream = null;
+
+const client = {
+  connect: () => {
+    setTimeout(() => {
+      uploadStream.write(Buffer.from(Math.random().toString()));
+      uploadStream.on('data', (buf) => {
+        console.log(buf.byteLength);
+      })
+    }, 3000);
+  }, upload: () => {
+    uploadStream = new Throttle();
+    // const res = uploadStream.write(Buffer.from(Math.random().toString()));
+    const res = uploadStream.write(Buffer.from([104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]));
+    console.log('Class: client, Function: upload, Line 61, Param: res', res);
+
+    uploadStream.on('data', (buf) => {
+      console.log(buf.toString());
+    })
+  }
+}
+
+// client.connect();
+client.upload();
+
+const input = 'drwxr-xr-x 3 root root 4096 Jun 05 22:01 .local';
+
+
+const owner = input ? input.match(/(\d+\s)(\S+)/)[0].replace(/\d+\s/, '') : '';
+
+console.log(owner);
+
+
+

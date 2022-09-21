@@ -195,6 +195,12 @@
     }
   }
 
+  function runCodeServer(event) {
+    socket.send(JSON.stringify({
+      type: 'codeserver'
+    }))
+  }
+
 </script>
 <div id="terminal-container"></div>
 
@@ -206,7 +212,7 @@
     <input id="record-timestamp" type="checkbox" checked>
 </label>
 <button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
-
+<button data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
 <div id="file-editor">
     <div style="width: 280px">
         <input type="text" placeholder="内容全文检索" onkeydown="handleSearch(event)"/>
