@@ -4,7 +4,7 @@
 const express = require("express");
 const router = express.Router();
 const SshFtpClient = require("../lib/ssh-ftp");
-const SshClient = require("../lib/ssh");
+const SshClient = require("../lib/webshell-ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
 // const SshProxyClient = require("../lib/ssh-proxy");
