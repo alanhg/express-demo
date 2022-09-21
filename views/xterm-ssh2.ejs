@@ -407,7 +407,9 @@
 
     do_zmodem();
   };
-
+  socket.addEventListener('close', () => {
+    location.reload();
+  });
   socket.addEventListener('open', () => {
   });
 
