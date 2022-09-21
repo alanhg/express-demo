@@ -7,8 +7,8 @@ const SshFtpClient = require("../lib/ssh-ftp");
 const SshClient = require("../lib/ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
-const SshProxyClient = require("../lib/ssh-proxy");
-const CodeServerProxy = require("../lib/code-server-proxy");
+// const SshProxyClient = require("../lib/ssh-proxy");
+// const CodeServerProxy = require("../lib/code-server-proxy");
 let logStartFlag = false;
 let shellLog;
 
@@ -20,7 +20,7 @@ router.ws('/ws/webshell', function (ws, res) {
   };
   sshClient.connect(opts);
 
-  new SshProxyClient().connect(opts);
+  // new SshProxyClient().connect(opts);
 
   sshClient.on('data', (data) => {
     ws.send(data);
@@ -50,15 +50,15 @@ router.ws('/ws/webshell', function (ws, res) {
     }
     if (options.type === 'codeserver') {
       sshClient.execCommand('ws').then(() => {
-        const proxy = new CodeServerProxy();
-        proxy.connect(sshClient.config);
-        proxy.on('ready', () => {
-          proxy.proxyCodeWeb().then(() => {
-            ws.send(JSON.stringify({
-              type: 'codeserver'
-            }));
-          })
-        });
+        // const proxy = new CodeServerProxy();
+        // proxy.connect(sshClient.config);
+        // proxy.on('ready', () => {
+        //   proxy.proxyCodeWeb().then(() => {
+        //     ws.send(JSON.stringify({
+        //       type: 'codeserver'
+        //     }));
+        //   })
+        // });
       })
     } else {
       sshClient.write(options.data);
