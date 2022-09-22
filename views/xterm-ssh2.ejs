@@ -443,7 +443,11 @@
 
       }
       if (options.type === 'codeserver') {
-        const codeServerWeb = window.open('http://127.0.0.1:8001', '_blank');
+        /**
+         * workspace
+         * folder参数控制缺省打开文件夹
+         */
+        const codeServerWeb = window.open('http://127.0.0.1:8001/?folder=/home/lighthouse/.ssh', '_blank');
         codeServerWeb.onclose = () => {
           alert('codeserver网页已关闭');
         }
