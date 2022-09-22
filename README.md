@@ -10,3 +10,10 @@
     - 终端会话录制
     - 全文检索
     - 文件编辑
+
+### code-server源码拉取
+
+```shell
+git clone git@github.com:coder/code-server.git  --single-branch main
+
+```

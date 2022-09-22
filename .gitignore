@@ -4,3 +4,5 @@ node_modules
 
 _cache
 !_cache/.gitkeep
+
+lib/code-server/install-package-source
