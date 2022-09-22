@@ -443,7 +443,10 @@
 
       }
       if (options.type === 'codeserver') {
-        window.open('http://127.0.0.1:8001', '_blank');
+        const codeServerWeb = window.open('http://127.0.0.1:8001', '_blank');
+        codeServerWeb.onclose = () => {
+          alert('codeserver网页已关闭');
+        }
       } else {
         term.write(evt.data.toString());
       }
