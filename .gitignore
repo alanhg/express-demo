@@ -6,3 +6,5 @@ _cache
 !_cache/.gitkeep
 
 lib/code-server/install-package-source
+!lib/code-server/install-package-source/.gikeeper
+
