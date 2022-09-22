@@ -130,6 +130,13 @@
             height: 300px;
             overflow-y: auto;
         }
+
+        #code-server-inline {
+            margin: 0;
+            border: 0;
+            height: 200px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -213,6 +220,9 @@
 </label>
 <button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
 <button data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
+<iframe id="code-server-inline">
+
+</iframe>
 <div id="file-editor">
     <div style="width: 280px">
         <input type="text" placeholder="内容全文检索" onkeydown="handleSearch(event)"/>
@@ -448,6 +458,8 @@
          * folder参数控制缺省打开文件夹
          */
         const codeServerWeb = window.open('http://127.0.0.1:8001/?folder=/home/lighthouse/.ssh', '_blank');
+        // const codeServerWeb = document.querySelector('[id=code-server-inline]').src = 'http://127.0.0.1:8001/?folder=/home/lighthouse/.ssh';
+
         codeServerWeb.onclose = () => {
           alert('codeserver网页已关闭');
         }
