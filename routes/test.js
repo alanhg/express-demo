@@ -231,18 +231,4 @@ router.post('/upload', function (req, res) {
   res.json({status: 'ok'});
 });
 
-
-router.get('/ssh2-sftp-client', async function (req, res) {
-  const client = new SshFtpClient({
-    host: req.query.host,
-    port: req.query.port ? +req.query.port : 22,
-    username: req.query.username || 'root',
-    password: req.query.password
-  });
-  await client.init();
-  const directoryList = await client.list('/root');
-  // await client.downloadFile('/root/ticket.gif')
-  res.json({directoryList});
-});
-
 module.exports = router;
