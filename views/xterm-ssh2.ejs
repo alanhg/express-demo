@@ -458,7 +458,8 @@
          * workspace
          * folder参数控制缺省打开文件夹
          */
-        const codeServerWeb = window.open('http://127.0.0.1:8001/?folder=/home/lighthouse/.ssh', '_blank');
+        // const codeServerWeb = window.open('http://127.0.0.1:8001/?folder=/home/lighthouse/.ssh', '_blank');
+        const codeServerWeb = window.open('/tty?folder=/home/lighthouse/.ssh', '_blank');
         // const codeServerWeb = document.querySelector('[id=code-server-inline]').src = 'http://127.0.0.1:8001/?folder=/home/lighthouse/.ssh';
 
         codeServerWeb.onclose = () => {

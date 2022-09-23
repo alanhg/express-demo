@@ -97,6 +97,10 @@ router.get('/ssh2-log', (req, res) => {
   }
 });
 
+router.get('/tty', (req, res) => {
+  res.render('tty');
+});
+
 module.exports = router;
 
 class Throttle extends Stream.Transform {
@@ -106,4 +110,3 @@ class Throttle extends Stream.Transform {
   }
 }
 
-const writableStream = new Throttle();
