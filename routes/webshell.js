@@ -97,7 +97,8 @@ router.get('/ssh2-log', (req, res) => {
   }
 });
 
-router.get('/ws', (req, res) => {
+router.get('/ws/:id', (req, res) => {
+  console.log(req.params.id.info);
   res.render('ws');
 });
 
