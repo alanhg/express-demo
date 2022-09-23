@@ -97,8 +97,8 @@ router.get('/ssh2-log', (req, res) => {
   }
 });
 
-router.get('/tty', (req, res) => {
-  res.render('tty');
+router.get('/ws', (req, res) => {
+  res.render('ws');
 });
 
 module.exports = router;
