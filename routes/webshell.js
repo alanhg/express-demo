@@ -97,6 +97,9 @@ router.get('/ssh2-log', (req, res) => {
   }
 });
 
+/**
+ * 指定目标机器的CodeServer
+ */
 router.get('/ws/:id', (req, res) => {
   console.log(req.params.id.info);
   res.render('ws');
