@@ -48,9 +48,9 @@ writableStream.on('end', () => {
 // }, 1000);
 const dataStr = BSON.serialize({a: Buffer.from('112323')});
 const dataParsed = BSON.deserialize(dataStr);
-console.log('Class: , Function: , Line 51, Param: ', dataParsed.a.buffer);
+// console.log('Class: , Function: , Line 51, Param: ', dataParsed.a.buffer);
 
-writableStream.write(dataParsed.a.buffer);
+// writableStream.write(dataParsed.a.buffer);
 
 let uploadStream = null;
 
@@ -75,18 +75,25 @@ const client = {
 }
 
 // client.connect();
-client.upload();
+// client.upload();
 
 const input = 'drwxr-xr-x 3 root root 4096 Jun 05 22:01 .local';
 
 
 const owner = input ? input.match(/(\d+\s)(\S+)/)[0].replace(/\d+\s/, '') : '';
 
-console.log(owner);
+// console.log(owner);
 
 
-let data1 = JSON.stringify({a: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]});
-console.log(data1);
+let now = new Date();
+let data1 = JSON.stringify({a: now});
+// console.log(data1);
 
-console.log('Class: , Function: , Line 91, Param: ', Buffer.from(JSON.parse(data1).a).toString());
+// console.log(typeof JSON.parse(data1).a);
+
+// console.log('Class: , Function: , Line 91, Param: ', Buffer.from(JSON.parse(data1).a).toString());
+
+let data2 = BSON.serialize({a: now});
+console.log(Buffer.from(data1).byteLength);
+console.log(data2.byteLength);
 
