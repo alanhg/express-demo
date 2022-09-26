@@ -7,9 +7,7 @@ const SshFtpClient = require("../lib/ssh-ftp");
 const SshClient = require("../lib/webshell-ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
-const {codeServerProxifier} = require("../lib/code-server/code-server-proxy");
-// const SshProxyClient = require("../lib/ssh-proxy");
-// const CodeServerProxy = require("../lib/code-server-proxy");
+const {codeServerProxifier, remoteCodeServerPort} = require("../lib/code-server/code-server-proxy");
 let logStartFlag = false;
 let shellLog;
 
@@ -102,14 +100,25 @@ router.get('/ssh2-log', (req, res) => {
  * 指定目标机器的CodeServer,修改URL，调整为访问目标服务器的URL
  * 需要代理HTTP/WS
  */
-router.get('/ws/:id', (req, res) => {
-  console.log(req.url.replace(/^\/ws\/\d*/, '/'));
-  // res.render('ws');
+const http = require('http');
+router.use('/ws', (req, res) => {
+  const url = req.url.replace(/^\/\d+/, '');
+  let agent = codeServerProxifier.codeServerPool.get(process.env.host).httpAgent;
+  let headers = req.headers;
+  headers['host'] = '127.0.0.1';
+  http.request({
+    host: '127.0.0.1', headers, port: remoteCodeServerPort, method: req.method, path: url, agent
+  }, (response) => {
+    response.resume();
+    response.on('end', () => {
+      console.log('Class: , Function: , Line 116, Param: ', response);
+    });
+  });
+  // codeServerProxifier.codeServerPool.get(process.env.host).stream.pipe(res);
 });
 
 router.ws('/ws/:id', function (ws, res) {
   console.log(ws.url.replace(/^\/ws\/\d*/, '/'));
-
 });
 
 module.exports = router;
