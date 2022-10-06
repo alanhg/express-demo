@@ -11,6 +11,7 @@ router.use('/test', testRouter);
 const apiRouter = require('./api');
 const authRouter = require('./auth');
 const webShellRouter = require('./webshell');
+const path = require("path");
 var terminals = {}, logs = {};
 
 router.use('/', webShellRouter);
@@ -25,8 +26,11 @@ router.get('/search', (req, res) => {
   res.render('search', {keyword: req.query.q});
 });
 router.get('/', (req, res) => {
-  res.cookie('name', Math.random(), {domain: 'localhost'})
-  res.render('index');
+  res.cookie('name', Math.random(), {domain: 'localhost'});
+  const views = fs.readdirSync(path.join(__dirname, '../views'));
+  res.render('index', {
+    views: views.map(item => item.replace(/\.[^.]+$/, ''))
+  });
 });
 
 router.get('/ws', (req, res) => {
@@ -51,6 +55,9 @@ router.get('/xterm', (req, res) => {
   res.render('xterm');
 });
 
+router.get('/home', (req, res) => {
+  res.render('home');
+});
 
 router.get('/shortcuts', (req, res) => {
   res.render('shortcuts');
