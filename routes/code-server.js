@@ -26,6 +26,7 @@ router.get('/:id', (req, res) => {
 router.all('/:id/*', (req, res) => {
   let url = req.url.replace(/^\/\d*/, '');
   axios({
+    // headers: req.headers,
     method: req.method, url: 'http://localhost:8002' + url, data: req.body,
   }).then(response => {
     res.set(response.headers);
