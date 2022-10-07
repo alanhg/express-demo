@@ -3,34 +3,36 @@
  * @type {e | (() => Express)}
  */
 const express = require("express");
-const http = require("http");
-const path = require("path");
 const axios = require("axios");
 const router = express.Router();
 
-router.get('/:id', (req, res) => {
-  let url = req.url.replace(/^\/\d*/, '/');
-  console.log(url);
-  url = 'http://localhost:8002' + url;
-  http.get(url, (message) => {
-    const {
-      headers: {
-        location
-      }
-    } = message;
-    let redirectPath = path.join('/ws/', req.params.id, location);
-    res.redirect(redirectPath);
-  });
-});
-
-router.all('/:id/*', (req, res) => {
+/**
+ * http://127.0.0.1:8000/ws/1665154822948?folder=/home/lighthouse/.ssh
+ *
+ * /ws/1665154822948视为rootPath替换为/，进行转发代理
+ */
+router.all('/:id/?*', (req, res) => {
   let url = req.url.replace(/^\/\d*/, '');
+  const headers = Object.keys(req.headers).reduce((h, key) => {
+    h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, 'localhost:8002');
+    return h;
+  }, {});
+  const bodyData = Object.keys(req.body).reduce((h, key) => {
+    if (!req.body[key]) {
+      return h;
+    }
+    h[key] = req.body[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, 'localhost:8002');
+    return h;
+  }, {});
   axios({
-    // headers: req.headers,
-    method: req.method, url: 'http://localhost:8002' + url, data: req.body,
+    headers, baseURL: 'http://localhost:8002', method: req.method, url, data: bodyData,
   }).then(response => {
     res.set(response.headers);
     res.send(response.data);
+  }).catch(e => {
+    console.error(e);
+    res.set(e.response.headers);
+    res.send(e.response.data);
   });
 });
 
