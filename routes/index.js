@@ -92,7 +92,6 @@ router.get('/xterm-ssh2', (req, res) => {
   res.render('xterm-ssh2');
 });
 
-
 router.ws('/xterm/:pid', (ws, req) => {
   var term = terminals[parseInt(req.params.pid)];
   ws.send(logs[term.pid]);
