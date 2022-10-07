@@ -8,20 +8,29 @@ const {HTTPAgent} = require("ssh2");
 const router = express.Router();
 
 const httpAgent = new HTTPAgent({
-  host: process.env.host, port: 22, username: process.env.username || 'root', password: process.env.password
+  host: process.env.host,
+  port: 22,
+  username: process.env.username || 'root',
+  password: process.env.password,
+  keepaliveInterval: 1000,
+  keepaliveCountMax: 1
 });
 
 /**
  * http://127.0.0.1:8000/ws/1665154822948?folder=/home/lighthouse/.ssh
  *
  * /ws/1665154822948视为rootPath替换为/，进行转发代理
+ *
+ * URL，请求头，请求体三部分需要处理下。
+ * 响应头，响应体也需要处理下
  */
 router.all('/:id/?*', (req, res) => {
-  let url = req.url.replace(/^\/\d*/, '');
+  let url = req.url.replace(/^\/\d*/, '/');
   const headers = Object.keys(req.headers).reduce((h, key) => {
     h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, 'localhost:8080');
     return h;
   }, {});
+
   const bodyData = Object.keys(req.body).reduce((h, key) => {
     if (!req.body[key]) {
       return h;
@@ -34,13 +43,17 @@ router.all('/:id/?*', (req, res) => {
    * 根据ID确定需要连接的httpAgent
    */
   axios({
-    headers, baseURL: 'http://localhost:8080', method: req.method, url, data: bodyData,
-    httpAgent
+    headers, baseURL: 'http://localhost:8080', method: req.method, url, data: bodyData, httpAgent
   }).then(response => {
     res.set(response.headers);
     res.send(response.data);
   }).catch(e => {
+    const {response} = e;
     console.error(e);
+
+    if (response.status === 302) {
+      debugger;
+    }
     res.set(e.response.headers);
     res.send(e.response.data);
   });
