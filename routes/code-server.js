@@ -16,18 +16,14 @@ router.ws('*', function (ws, req) {
   const id = req.url.match(/(?<=^\/)[\da-z]+/);
   const path = req.url.replace(/(\/)[\da-z]+/, '');
   let targetWs;
-  const headers = Object.keys(req.headers).reduce((h, key) => {
-    h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/[\da-z]+)?/, codeServerProxifier.url);
-    return h;
-  }, {});
+  const headers = req.headers;
   if (id) {
     httpAgent = codeServerProxifier.getProxy(id[0]);
     if (!httpAgent) {
       return;
     }
     targetWs = new WebSocket(`ws://${codeServerProxifier.url}${path}`, {
-      agent: httpAgent,
-      headers
+      agent: httpAgent, headers
     });
   }
   targetWs.on('open', () => {
@@ -50,9 +46,6 @@ router.ws('*', function (ws, req) {
  * http://127.0.0.1:8000/ws/1665154822948?folder=/home/lighthouse/.ssh
  *
  * /ws/1665154822948视为rootPath替换为/，进行转发代理
- *
- * URL，请求头，请求体三部分需要处理下。
- * 响应头，响应体也需要处理下
  */
 router.all('*', (req, res) => {
   const id = req.url.match(/(?<=^\/)[\da-z]+/);
@@ -64,11 +57,7 @@ router.all('*', (req, res) => {
     }
   }
   let url = req.url.replace(/^\/[\da-z]*/, '');
-  const headers = Object.keys(req.headers).reduce((h, key) => {
-    h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/[\da-z]+)?/, codeServerProxifier.url);
-    return h;
-  }, {});
-
+  const headers = req.headers;
   const bodyData = headers['content-type'] === 'application/x-www-form-urlencoded' ? querystring.stringify(req.body) : req.body;
 
   /**
@@ -91,3 +80,10 @@ router.all('*', (req, res) => {
 });
 
 module.exports = router;
+
+function processHeaders(headers) {
+  return Object.keys(headers).reduce((h, key) => {
+    h[key.toLowerCase()] = headers[key].replace(/127.0.0.1:8000(\/ws\/[\da-z]+)?/, codeServerProxifier.url);
+    return h;
+  }, {});
+}
