@@ -26,7 +26,7 @@ router.all('*', (req, res) => {
   }
   let url = req.url.replace(/^\/\d*/, '/');
   const headers = Object.keys(req.headers).reduce((h, key) => {
-    h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, 'localhost:8080');
+    h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, codeServerProxifier.url);
     return h;
   }, {});
 
@@ -34,7 +34,7 @@ router.all('*', (req, res) => {
     if (!req.body[key]) {
       return h;
     }
-    h[key] = req.body[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, 'localhost:8080');
+    h[key] = req.body[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, codeServerProxifier.url);
     return h;
   }, {});
 
@@ -42,7 +42,7 @@ router.all('*', (req, res) => {
    * 根据ID确定需要连接的httpAgent
    */
   axios({
-    headers, baseURL: 'http://localhost:8080', method: req.method, url, data: bodyData, httpAgent
+    headers, baseURL: `http://${codeServerProxifier.url}`, method: req.method, url, data: bodyData, httpAgent
   }).then(response => {
     res.set(response.headers);
     res.send(response.data);
