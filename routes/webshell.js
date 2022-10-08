@@ -7,8 +7,7 @@ const SshFtpClient = require("../lib/ssh-ftp");
 const SshClient = require("../lib/webshell-ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
-const {codeServerProxifier} = require("../lib/code-server/code-server-proxy");
-const codeServerProxyRouter = require('./code-server');
+const codeServerProxyRouter = require('../lib/code-server/code-server-route');
 
 // const SshProxyClient = require("../lib/ssh-proxy");
 // const CodeServerProxy = require("../lib/code-server-proxy");
