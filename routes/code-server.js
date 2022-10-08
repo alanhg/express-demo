@@ -17,7 +17,7 @@ let httpAgent;
  * 响应头，响应体也需要处理下
  */
 router.all('*', (req, res) => {
-  const id = req.url.match(/(?<=^\/)\d+/);
+  const id = req.url.match(/(?<=^\/)[\da-z]+/);
   if (id) {
     httpAgent = codeServerProxifier.getProxy(id[0]);
     if (!httpAgent) {
@@ -25,9 +25,9 @@ router.all('*', (req, res) => {
       return;
     }
   }
-  let url = req.url.replace(/^\/\d*/, '');
+  let url = req.url.replace(/^\/[\da-z]*/, '');
   const headers = Object.keys(req.headers).reduce((h, key) => {
-    h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, codeServerProxifier.url);
+    h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/[\da-z]+)?/, codeServerProxifier.url);
     return h;
   }, {});
 
@@ -53,7 +53,7 @@ router.all('*', (req, res) => {
   });
 });
 
-router.ws('/:id/*', function (ws, res) {
+router.ws('*', function (ws, res) {
   console.log(ws.url.replace(/^\/ws\/\d*/, '/'));
 });
 
