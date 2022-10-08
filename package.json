@@ -54,7 +54,7 @@
     "ssh2-streams": "^0.4.10",
     "superagent": "^3.8.3",
     "ua-parser-js": "^0.7.18",
-    "ws": "^8.8.0",
+    "ws": "^8.9.0",
     "xterm": "4.19.0",
     "xterm-addon-attach": "^0.6.0",
     "xterm-addon-search": "0.10.0-beta.3",

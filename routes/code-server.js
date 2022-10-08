@@ -7,7 +7,40 @@ const axios = require("axios");
 const {codeServerProxifier} = require("../lib/code-server/code-server-proxy");
 const querystring = require("querystring");
 const router = express.Router();
+const WebSocket = require('ws');
+
 let httpAgent;
+
+router.ws('*', function (ws, req) {
+  console.log('Class: , Function: , Line 15, Param: ', req.url);
+  const id = req.url.match(/(?<=^\/)[\da-z]+/);
+  const path = req.url.replace(/(\/)[\da-z]+/, '');
+  let targetWs;
+  if (id) {
+    httpAgent = codeServerProxifier.getProxy(id[0]);
+    if (!httpAgent) {
+      return;
+    }
+    targetWs = new WebSocket(`ws://${codeServerProxifier.url}${path}`, {
+      agent: httpAgent
+    });
+  }
+  targetWs.on('open', () => {
+    ws.on('message', function (msg) {
+      targetWs.send(msg);
+    });
+  });
+  targetWs.on('error', function (err) {
+    console.log('socket error', err);
+  });
+  targetWs.on('close', function () {
+    console.log('socket close');
+  });
+  targetWs.on('message', (msg2) => {
+    ws.send(msg2);
+  });
+});
+
 /**
  * http://127.0.0.1:8000/ws/1665154822948?folder=/home/lighthouse/.ssh
  *
@@ -48,13 +81,8 @@ router.all('*', (req, res) => {
     res.set(response.headers).status(response.status).send(response.data);
   }).catch(e => {
     const {response} = e;
-    console.error(e);
     res.set(response.headers).status(response.status).send(response.data);
   });
-});
-
-router.ws('*', function (ws, res) {
-  console.log(ws.url.replace(/^\/ws\/\d*/, '/'));
 });
 
 module.exports = router;
