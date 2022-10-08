@@ -4,18 +4,9 @@
  */
 const express = require("express");
 const axios = require("axios");
-const {HTTPAgent} = require("ssh2");
+const {codeServerProxifier} = require("../lib/code-server/code-server-proxy");
 const router = express.Router();
-
-const httpAgent = new HTTPAgent({
-  host: process.env.host,
-  port: 22,
-  username: process.env.username || 'root',
-  password: process.env.password,
-  keepaliveInterval: 1000,
-  keepaliveCountMax: 1
-});
-
+let httpAgent;
 /**
  * http://127.0.0.1:8000/ws/1665154822948?folder=/home/lighthouse/.ssh
  *
@@ -24,7 +15,15 @@ const httpAgent = new HTTPAgent({
  * URL，请求头，请求体三部分需要处理下。
  * 响应头，响应体也需要处理下
  */
-router.all('/:id/?*', (req, res) => {
+router.all('*', (req, res) => {
+  const id = req.url.match(/(?<=^\/)\d+/);
+  if (id) {
+    httpAgent = codeServerProxifier.getProxy(id[0]);
+    if (!httpAgent) {
+      res.send('no agent');
+      return;
+    }
+  }
   let url = req.url.replace(/^\/\d*/, '/');
   const headers = Object.keys(req.headers).reduce((h, key) => {
     h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, 'localhost:8080');
