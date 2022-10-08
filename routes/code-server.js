@@ -5,6 +5,7 @@
 const express = require("express");
 const axios = require("axios");
 const {codeServerProxifier} = require("../lib/code-server/code-server-proxy");
+const querystring = require("querystring");
 const router = express.Router();
 let httpAgent;
 /**
@@ -30,13 +31,7 @@ router.all('*', (req, res) => {
     return h;
   }, {});
 
-  const bodyData = Object.keys(req.body).reduce((h, key) => {
-    if (!req.body[key]) {
-      return h;
-    }
-    h[key] = req.body[key].replace(/127.0.0.1:8000(\/ws\/\d+)?/, codeServerProxifier.url);
-    return h;
-  }, {});
+  const bodyData = headers['content-type'] === 'application/x-www-form-urlencoded' ? querystring.stringify(req.body) : req.body;
 
   /**
    * 根据ID确定需要连接的httpAgent
