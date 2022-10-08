@@ -12,17 +12,22 @@ const WebSocket = require('ws');
 let httpAgent;
 
 router.ws('*', function (ws, req) {
-  console.log('Class: , Function: , Line 15, Param: ', req.url);
+  console.log('Class: , Function: , Line 16, Param: ', req.url);
   const id = req.url.match(/(?<=^\/)[\da-z]+/);
   const path = req.url.replace(/(\/)[\da-z]+/, '');
   let targetWs;
+  const headers = Object.keys(req.headers).reduce((h, key) => {
+    h[key.toLowerCase()] = req.headers[key].replace(/127.0.0.1:8000(\/ws\/[\da-z]+)?/, codeServerProxifier.url);
+    return h;
+  }, {});
   if (id) {
     httpAgent = codeServerProxifier.getProxy(id[0]);
     if (!httpAgent) {
       return;
     }
     targetWs = new WebSocket(`ws://${codeServerProxifier.url}${path}`, {
-      agent: httpAgent
+      agent: httpAgent,
+      headers
     });
   }
   targetWs.on('open', () => {
