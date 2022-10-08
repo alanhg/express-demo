@@ -458,7 +458,7 @@
          * workspace
          * folder参数控制缺省打开文件夹
          */
-        const codeServerWeb = window.open(`/ws/${options.id}`, '_blank');
+        const codeServerWeb = window.open(`/ws/${options.id}/`, '_blank');
 
         codeServerWeb.onclose = () => {
           alert('codeserver网页已关闭');
