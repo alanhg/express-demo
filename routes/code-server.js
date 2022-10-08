@@ -50,13 +50,11 @@ router.all('*', (req, res) => {
     httpAgent,
     maxRedirects: 0
   }).then(response => {
-    res.set(response.headers);
-    res.send(response.data);
+    res.set(response.headers).status(response.status).send(response.data);
   }).catch(e => {
     const {response} = e;
     console.error(e);
-    res.set(e.response.headers);
-    res.send(e.response.data);
+    res.set(response.headers).status(response.status).send(response.data);
   });
 });
 
