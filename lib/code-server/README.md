@@ -19,3 +19,9 @@ https://github.com/coder/code-server/blob/main/docs/requirements.md
   
 ## 宿主机网络要求
 1. SSH-22端口对外或者对代理机器开放
+
+
+## 国际化
+配置文件所在位置
+
+~/.local/share/code-server
