@@ -28,7 +28,23 @@ let obj = {
 // });
 
 
-const targetWs = new WebSocket(`ws://127.0.0.1:8002/stable-74b1f979648cc44d385a2286793c226e611f59e7?reconnectionToken=32b52a08-155c-4ab9-866a-3d7e770c754a&reconnection=false&skipWebSocketFrames=false`, {});
+const targetWs = new WebSocket(`ws://127.0.0.1:8002/stable-74b1f979648cc44d385a2286793c226e611f59e7?reconnectionToken=32b52a08-155c-4ab9-866a-3d7e770c754a&reconnection=false&skipWebSocketFrames=false`, [], {
+  headers: {
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Cache-Control': 'no-cache',
+    Connection: 'Upgrade',
+    Cookie: 'code-server-session=%24argon2id%24v%3D19%24m%3D4096%2Ct%3D3%2Cp%3D1%24pD1qEB30OTMyNPBnuRdwKg%24je0n1egEOmsFygTpCk1BROtgIn%2BhN6XiDInAau7cyfc',
+    Host: 'localhost:8002',
+    Origin: 'http://localhost:8002',
+    Pragma: 'no-cache',
+    'Sec-WebSocket-Extensions': 'permessage-deflate; client_max_window_bits',
+    'Sec-WebSocket-Key': 'Ivxk04U/FYM98Ovpwj8Y1Q==',
+    'Sec-WebSocket-Version': 13,
+    Upgrade: 'websocket',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36'
+  }
+});
 targetWs.on('open', () => {
   console.log('socket open');
 });
