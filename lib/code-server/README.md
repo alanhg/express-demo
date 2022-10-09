@@ -1,0 +1,21 @@
+## 基本原理
+1. SSH连通目标机器，用于执行命令
+2. SSH方式检测/安装/启动 code-server
+3. SSH方式启动目标机器代理服务，生成唯一识别代理服务的ID
+4. 根据ID，走代理访问code-server服务
+
+## 好处
+1. 目标机器不需要对外开放code-server web端口
+2. 用户一键安装code-server
+3. 支持动态代理多台code-server，且可控，登录/安全均可走业务实现
+
+
+## code-server宿主机硬件最低要求
+
+- 1 GB of RAM
+- 2 CPU cores
+https://github.com/coder/code-server/blob/main/docs/requirements.md
+
+  
+## 宿主机网络要求
+1. SSH-22端口对外或者对代理机器开放
