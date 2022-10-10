@@ -49,4 +49,9 @@ cat ~/.config/code-server/config.yaml
 
 "window.commandCenter": true
 
+### logo
+
+workbench.web.main.css内联SVG，修改的话，需要源码修改
+
+### favicon.ico
 
