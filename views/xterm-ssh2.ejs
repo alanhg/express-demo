@@ -425,11 +425,6 @@
   });
 
   socket.addEventListener('message', (evt) => {
-
-    // if (!zsession) {
-
-    console.log(window.term.rows, window.term.cols);
-
     if (evt.data instanceof ArrayBuffer) {
       let data = Decodeuint8arr(evt.data);
       if (clientRecordLogFlag) {
