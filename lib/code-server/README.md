@@ -47,6 +47,8 @@ cat ~/.config/code-server/config.yaml
 
 
 ### 国际化
+code-server --install-extension zhanghua.vscodium-language-pack-zh-cn
+
 配置文件所在位置
 ~/.local/share/code-server
 
