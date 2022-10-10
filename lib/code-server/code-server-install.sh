@@ -17,6 +17,13 @@ ln -s ~/.local/lib/code-server-$VERSION/bin/code-server /usr/bin/code-server
 
 # 预装插件
 code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans
+
+# 个性化配置
+
+cat << EOF >  ~/.local/share/code-server/User/settings.json
+{"window.commandCenter": true,"window.menuBarVisibility": "classic"}
+EOF
+
 cat << EOF >  ~/.local/share/code-server/User/argv.json
 {"locale": "zh-cn"}
 EOF

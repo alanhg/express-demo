@@ -33,11 +33,14 @@ cat ~/.config/code-server/config.yaml
 
 定制化有几个方法，用于解决特定问题。
 
-1. 配置文件
-2. CSS/JS源码修改
-3. code-server拓展
-
-
+1. code-server启动配置文件
+   ~/.config/code-server/config.yaml
+2. 用户设置配置文件
+   ~/.local/share/code-server/User/settings.json
+3. 缺省配置文件，需要源码修改
+   defaultSettings.json
+4. CSS/JS源码修改
+5. code-server拓展
 
 ### 菜单栏
 
