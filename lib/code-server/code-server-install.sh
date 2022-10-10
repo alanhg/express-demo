@@ -1,14 +1,19 @@
 # 安装code-server包，也可以使用官方脚本 https://raw.githubusercontent.com/coder/code-server/main/install.sh
 
 VERSION=4.7.1
-PORT=8080
+PORT=8090
 
 mkdir -p ~/.local/lib ~/.local/bin
+
 curl -fL https://github.com/coder/code-server/releases/download/v$VERSION/code-server-$VERSION-linux-amd64.tar.gz \
   | tar -C ~/.local/lib -xz
+
 mv ~/.local/lib/code-server-$VERSION-linux-amd64 ~/.local/lib/code-server-$VERSION
+
 ln -s ~/.local/lib/code-server-$VERSION/bin/code-server ~/.local/bin/code-server
-PATH="~/.local/bin:$PATH"
+ln -s ~/.local/lib/code-server-$VERSION/bin/code-server /usr/bin/code-server
+
+# PATH="~/.local/bin:$PATH"
 
 # 预装插件
 code-server --install-extension MS-CEINTL.vscode-language-pack-zh-hans
@@ -21,7 +26,7 @@ After=network.target
 
 [Service]
 Type=exec
-ExecStart=/usr/bin/code-server --bind-addr=0.0.0.0:8090
+ExecStart=/usr/bin/code-server --bind-addr=0.0.0.0:$PORT
 Restart=always
 User=%i
 
