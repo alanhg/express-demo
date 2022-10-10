@@ -456,10 +456,11 @@
       if (options.type === 'codeserver') {
         /**
          * workspace
-         * folder参数控制缺省打开文件夹
+         * folder参数控制缺省打开文件夹,不传则走前端存储的最后打开文件夹
+         * ?folder=/home
          */
-        const codeServerWeb = window.open(`/ws/${options.id}/?folder=/home`, '_blank');
-        console.log(`访问地址：${window.location.protocol}//${window.location.host}/ws/${options.id}/`);
+        const codeServerWeb = window.open(`/tty/${options.id}/`, '_blank');
+        console.log(`访问地址：${window.location.protocol}//${window.location.host}/tty/${options.id}/`);
         codeServerWeb.onclose = () => {
           alert('codeserver网页已关闭');
         }

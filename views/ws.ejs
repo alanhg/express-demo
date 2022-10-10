@@ -8,12 +8,6 @@
     <title>WebShell IDE</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/4.5.2/socket.io.min.js"></script>
     <script>
-      var socket = io.connect('http://127.0.0.1:8000');
-      socket.on('httpServer', function (data) {
-        console.log(data);
-        document.write(data + "\r\n");
-        socket.emit('tcp', "For TCP");
-      });
     </script>
 </head>
 <body>

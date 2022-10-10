@@ -104,7 +104,7 @@ router.get('/ssh2-log', (req, res) => {
  * 需要代理HTTP/WS
  */
 
-router.use('/ws',codeServerProxyRouter)
+router.use('/tty',codeServerProxyRouter)
 
 module.exports = router;
 
