@@ -5,6 +5,7 @@
 4. 根据ID，走代理访问code-server服务
 
 ## 好处
+
 1. 目标机器不需要对外开放code-server web端口
 2. 用户一键安装code-server
 3. 支持动态代理多台code-server，且可控，登录/安全均可走业务实现
@@ -17,8 +18,8 @@
 
 https://github.com/coder/code-server/blob/main/docs/requirements.md
 
-  
 ## 宿主机网络要求
+
 1. SSH-22端口对外或者对代理机器开放
 
 
@@ -27,7 +28,16 @@ https://github.com/coder/code-server/blob/main/docs/requirements.md
 cat ~/.config/code-server/config.yaml
 
 
+
 ## 定制化
+
+定制化有几个方法，用于解决特定问题。
+
+1. 配置文件
+2. CSS/JS源码修改
+3. code-server拓展
+
+
 
 ### 菜单栏
 
@@ -55,3 +65,10 @@ workbench.web.main.css内联SVG，修改的话，需要源码修改
 
 ### favicon.ico
 
+## Code-Server升级
+code-server配置文件位置在`~/.local/share/code-server`，与程序安装位置不同，因此升级安装不会造成配置丢失等。
+https://coder.com/docs/code-server/latest/upgrade
+
+### app-name
+
+目前没有设置支持，需要源码层面解决
