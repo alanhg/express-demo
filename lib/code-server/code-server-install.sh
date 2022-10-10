@@ -17,6 +17,10 @@ ln -s ~/.local/lib/code-server-$VERSION/bin/code-server /usr/bin/code-server
 
 # 预装插件
 code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans
+cat << EOF >  ~/.local/share/code-server/User/argv.json
+{"locale": "zh-cn"}
+EOF
+
 
 # 服务化code-server，自定义端口,端口修改还有一个办法是 ~/.config/code-server/config.yaml修改缺省配置值
 cat > /usr/lib/systemd/system/code-server@.service << EOF

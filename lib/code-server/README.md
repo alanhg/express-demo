@@ -47,10 +47,12 @@ cat ~/.config/code-server/config.yaml
 
 
 ### 国际化
-code-server --install-extension zhanghua.vscodium-language-pack-zh-cn
+https://github.com/Microsoft/vscode-loc
 
-配置文件所在位置
-~/.local/share/code-server
+code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans
+
+配置所在位置
+~/.local/share/code-server/User/argv.json
 
 ![https://i.imgur.com/fns2NYn.jpg](https://i.imgur.com/fns2NYn.jpg)
 
