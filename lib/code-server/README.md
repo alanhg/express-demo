@@ -14,6 +14,7 @@
 
 - 1 GB of RAM
 - 2 CPU cores
+
 https://github.com/coder/code-server/blob/main/docs/requirements.md
 
   
@@ -21,7 +22,31 @@ https://github.com/coder/code-server/blob/main/docs/requirements.md
 1. SSH-22端口对外或者对代理机器开放
 
 
-## 国际化
-配置文件所在位置
+## 登录密码
 
+cat ~/.config/code-server/config.yaml
+
+
+## 定制化
+
+### 菜单栏
+
+"window.menuBarVisibility": "classic"
+
+![https://i.imgur.com/9bBHUAa.jpg](https://i.imgur.com/9bBHUAa.jpg)
+
+
+### 国际化
+配置文件所在位置
 ~/.local/share/code-server
+
+![https://i.imgur.com/fns2NYn.jpg](https://i.imgur.com/fns2NYn.jpg)
+
+
+### 命令中心
+
+![https://i.imgur.com/tDubXca.jpg](https://i.imgur.com/tDubXca.jpg)
+
+"window.commandCenter": true
+
+
