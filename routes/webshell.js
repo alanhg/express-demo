@@ -8,11 +8,8 @@ const SshClient = require("../lib/webshell-ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
 const codeServerProxyRouter = require('../lib/code-server/route/agent-route');
-const proxyRouter = require('../lib/code-server/route/frame-route');
+const csRouter = require('../lib/code-server/route/cs-route');
 
-
-// const SshProxyClient = require("../lib/ssh-proxy");
-// const CodeServerProxy = require("../lib/code-server-proxy");
 let logStartFlag = false;
 let shellLog;
 
@@ -107,7 +104,7 @@ router.get('/ssh2-log', (req, res) => {
  */
 
 router.use('/tty', codeServerProxyRouter)
-router.use('/proxy', proxyRouter)
+router.use('/cs', csRouter)
 
 module.exports = router;
 
