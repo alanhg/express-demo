@@ -37,9 +37,9 @@ After=network.target
 
 [Service]
 Type=exec
-ExecStart=/usr/bin/code-server --bind-addr=0.0.0.0:$PORT
+ExecStart=/usr/bin/code-server --bind-addr=0.0.0.0:$PORT --auth none
 Restart=always
-User=%i
+#User=%i
 
 [Install]
 WantedBy=default.target

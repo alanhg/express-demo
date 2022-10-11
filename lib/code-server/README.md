@@ -27,7 +27,7 @@ https://github.com/coder/code-server/blob/main/docs/requirements.md
 
 cat ~/.config/code-server/config.yaml
 
-
+除了密码登录，也可以通过设置做到免密登录
 
 ## 定制化
 
