@@ -2,7 +2,7 @@
 
 VERSION=4.7.1
 PORT=36000
-ROOT_PATH=~/.orca_term
+ROOT_PATH=~/.webshell
 
 mkdir -p $ROOT_PATH/code-server/.local/lib $ROOT_PATH/code-server/.local/bin
 
@@ -30,9 +30,9 @@ EOF
 
 
 # 服务化code-server，自定义端口,端口修改还有一个办法是 ~/.config/code-server/config.yaml修改缺省配置值
-cat > /usr/lib/systemd/system/orcaterm-code-server@.service << EOF
+cat > /usr/lib/systemd/system/webshell-code-server@.service << EOF
 [Unit]
-Description=orcaterm-code-server
+Description=webshell-code-server
 After=network.target
 
 [Service]
