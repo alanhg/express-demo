@@ -7,7 +7,9 @@ const SshFtpClient = require("../lib/ssh-ftp");
 const SshClient = require("../lib/webshell-ssh");
 const ShellLog = require("../lib/shell-log");
 const Stream = require("stream");
-const codeServerProxyRouter = require('../lib/code-server/code-server-route');
+const codeServerProxyRouter = require('../lib/code-server/route/agent-route');
+const proxyRouter = require('../lib/code-server/route/frame-route');
+
 
 // const SshProxyClient = require("../lib/ssh-proxy");
 // const CodeServerProxy = require("../lib/code-server-proxy");
@@ -104,7 +106,8 @@ router.get('/ssh2-log', (req, res) => {
  * 需要代理HTTP/WS
  */
 
-router.use('/tty',codeServerProxyRouter)
+router.use('/tty', codeServerProxyRouter)
+router.use('/proxy', proxyRouter)
 
 module.exports = router;
 

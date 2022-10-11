@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WebShell IDE</title>
+    <style>
+        .loading-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .workspace-loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .workspace {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<!--<iframe src="https://wx.cloudstudio.net/ws/embeded" class="workspace-loader"></iframe>-->
+<iframe src="/tty/<%= proxyId %>/?folder=/home " class="workspace"></iframe>
+<!--<iframe src="https://cs-res-1258344699.file.myqcloud.com/cloudstudio/vscode/3e54a6f80cbf72e76cc91bb32178e6b3ede84e3f/release-standalone/out/vs/code/browser/workbench/loading.html"-->
+<!--        class="loading-iframe"></iframe>-->
+</body>
+</html>
