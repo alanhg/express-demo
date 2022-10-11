@@ -455,11 +455,9 @@
          * ?folder=/home
          */
         const codeServerWeb = (`/tty/${options.id}/?folder=/home`);
-        location.href = codeServerWeb;
+        // location.href = codeServerWeb;
+        window.open(codeServerWeb, '_blank');
         console.log(`访问地址：${window.location.protocol}//${window.location.host}/tty/${options.id}/`);
-        codeServerWeb.onclose = () => {
-          alert('codeserver网页已关闭');
-        }
       } else {
         term.write(evt.data.toString());
       }
