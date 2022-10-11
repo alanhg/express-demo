@@ -21,13 +21,13 @@ https://github.com/coder/code-server/blob/main/docs/requirements.md
 ## 宿主机网络要求
 
 1. SSH-22端口对外或者对代理机器开放
+2. 云机器本身的安全策略，比如需要对代理服务端网络开放
 
 
 ## 登录密码
 
-cat ~/.config/code-server/config.yaml
-
-除了密码登录，也可以通过设置做到免密登录
+1. 默认启动后登录会有密码保护， cat ~/.config/code-server/config.yaml
+2. 除了密码登录，也可以通过设置做到免密登录
 
 ## 定制化
 
@@ -79,7 +79,6 @@ workbench.web.main.css内联SVG，修改的话，需要源码修改
 目前没有设置支持，需要源码层面解决
 
 
-
 ### 服务端口-名称
 
 ```shell
@@ -100,8 +99,6 @@ User=%i
 WantedBy=default.target
 EOF
 ``` 
-
-
 
 ## Code-Server升级
 
