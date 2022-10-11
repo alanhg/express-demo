@@ -2,18 +2,18 @@
 
 VERSION=4.7.1
 PORT=36000
-ROOT_PATH=~/.webshell
+ROOT_PATH=~/.webshell/code-server
 
-mkdir -p $ROOT_PATH/code-server/.local/lib $ROOT_PATH/code-server/.local/bin
+mkdir -p $ROOT_PATH/.local/lib $ROOT_PATH/.local/bin
 
 curl -fL https://github.com/coder/code-server/releases/download/v$VERSION/code-server-$VERSION-linux-amd64.tar.gz \
-  | tar -C $ROOT_PATH/code-server/.local/lib -xz
+  | tar -C $ROOT_PATH/.local/lib -xz
 
-mv $ROOT_PATH/code-server/.local/lib/code-server-$VERSION-linux-amd64 $ROOT_PATH/code-server/.local/lib/code-server-$VERSION
+mv $ROOT_PATH/.local/lib/code-server-$VERSION-linux-amd64 $ROOT_PATH/.local/lib/code-server-$VERSION
 
-ln -s $ROOT_PATH/code-server/.local/lib/code-server-$VERSION/bin/code-server $ROOT_PATH/code-server/.local/bin/code-server
+ln -s $ROOT_PATH/.local/lib/code-server-$VERSION/bin/code-server $ROOT_PATH/.local/bin/code-server
 
-PATH="$ROOT_PATH/code-server/.local/bin:$PATH"
+PATH="$ROOT_PATH/.local/bin:$PATH"
 
 # 预装插件
 code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans
@@ -37,7 +37,7 @@ After=network.target
 
 [Service]
 Type=exec
-ExecStart=$ROOT_PATH/code-server/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none
+ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --extensions-dir $ROOT_PATH/.local/share/extensions
 Restart=always
 #User=%i
 
