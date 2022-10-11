@@ -29,7 +29,7 @@ cat << EOF >  $ROOT_PATH/.local/share/code-server/User/argv.json
 EOF
 
 
-# 服务化code-server，自定义端口,端口修改还有一个办法是 ~/.config/code-server/config.yaml修改缺省配置值
+# 服务化code-server
 cat > /usr/lib/systemd/system/webshell-code-server@.service << EOF
 [Unit]
 Description=webshell-code-server
@@ -37,7 +37,7 @@ After=network.target
 
 [Service]
 Type=exec
-ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --extensions-dir $ROOT_PATH/.local/share/extensions
+ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --extensions-dir $ROOT_PATH/.local/share/extensions --config $ROOT_PATH
 Restart=always
 #User=%i
 
