@@ -1,5 +1,5 @@
 const {codeServerProxifier} = require("../lib/code-server/model/proxy");
-codeServerProxifier.connect({
+codeServerProxifier.createProxy({
   host: '', port: 22, username: 'lighthouse', password: ''
 }).on('ready', () => {
 
@@ -8,7 +8,7 @@ codeServerProxifier.connect({
 });
 
 
-codeServerProxifier.connect({
+codeServerProxifier.createProxy({
   host: '', port: 22, username: 'lighthouse', password: ''
 }).on('ready', () => {
 

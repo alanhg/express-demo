@@ -43,7 +43,6 @@
 </head>
 <body>
 <iframe src="https://wx.cloudstudio.net/ws/embeded" class="workspace-loader"></iframe>
-<iframe src="/tty/?<%= queryParams %>" class="workspace"></iframe>
 <!--<iframe src="https://cs-res-1258344699.file.myqcloud.com/cloudstudio/vscode/3e54a6f80cbf72e76cc91bb32178e6b3ede84e3f/release-standalone/out/vs/code/browser/workbench/loading.html"-->
 <!--        class="loading-iframe"></iframe>-->
 <script>
@@ -51,8 +50,16 @@
   ws.addEventListener('open', () => {
 
   });
-  ws.addEventListener('message', (msg) => {
-
+  ws.addEventListener('message', ({data}) => {
+    const options = JSON.parse(data);
+    if (options.type === 'start-ide' && options.data.status === 'ok') {
+      let ideInstallLoaderEl = document.body.getElementsByClassName('workspace-loader')[0];
+      ideInstallLoaderEl.style.display = 'none';
+      const agentEl = document.createElement('iframe');
+      agentEl.src = "/tty/<%= proxyKey %>/";
+      agentEl.classList = 'workspace';
+      ideInstallLoaderEl.parentNode.insertBefore(agentEl, ideInstallLoaderEl);
+    }
   });
 </script>
 </body>
