@@ -7,7 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>WebShell IDE</title>
     <style>
+
+        .hide {
+            opacity: 0;
+        }
+
         .loading-iframe {
+            opacity: 0;
             position: absolute;
             top: 0;
             left: 0;
@@ -16,6 +22,7 @@
             width: 100%;
             height: 100%;
             border: none;
+            background-color: #1e1e1e;
         }
 
         .workspace-loader {
@@ -43,8 +50,8 @@
 </head>
 <body>
 <iframe src="https://wx.cloudstudio.net/ws/embeded" class="workspace-loader"></iframe>
-<!--<iframe src="https://cs-res-1258344699.file.myqcloud.com/cloudstudio/vscode/3e54a6f80cbf72e76cc91bb32178e6b3ede84e3f/release-standalone/out/vs/code/browser/workbench/loading.html"-->
-<!--        class="loading-iframe"></iframe>-->
+<iframe src="https://cs-res-1258344699.file.myqcloud.com/cloudstudio/vscode/3e54a6f80cbf72e76cc91bb32178e6b3ede84e3f/release-standalone/out/vs/code/browser/workbench/loading.html"
+        class="loading-iframe hide"></iframe>
 <script>
   const ws = new WebSocket('ws://127.0.0.1:8000/ide?<%= queryParams %>');
   ws.addEventListener('open', () => {
@@ -53,11 +60,17 @@
   ws.addEventListener('message', ({data}) => {
     const options = JSON.parse(data);
     if (options.type === 'start-ide' && options.data.status === 'ok') {
+
+      // 安装动画隐藏
       let ideInstallLoaderEl = document.body.getElementsByClassName('workspace-loader')[0];
-      ideInstallLoaderEl.style.display = 'none';
+      ideInstallLoaderEl.classList.add('hide');
+
+      const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
+      loadingEl.classList.remove('hide');
+
       const agentEl = document.createElement('iframe');
       agentEl.src = "/tty/<%= proxyKey %>/";
-      agentEl.classList = 'workspace';
+      agentEl.classList = 'workspace hide';
       ideInstallLoaderEl.parentNode.insertBefore(agentEl, ideInstallLoaderEl);
 
       const config = {
@@ -81,6 +94,8 @@
         });
       });
       agentEl.onload = () => {
+        loadingEl.classList.add('hide');
+        agentEl.classList.remove('hide');
         observer.observe(agentEl.contentWindow.document.body, config);
       };
     }
