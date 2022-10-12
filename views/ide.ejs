@@ -59,6 +59,30 @@
       agentEl.src = "/tty/<%= proxyKey %>/";
       agentEl.classList = 'workspace';
       ideInstallLoaderEl.parentNode.insertBefore(agentEl, ideInstallLoaderEl);
+
+      const config = {
+        attributes: true,
+        attributeFilter: ['src'],
+        attributeOldValue: true,
+        characterData: false,
+        characterDataOldValue: false,
+        childList: false,
+        subtree: true
+      };
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach(function (mutation) {
+          const nodes = Array.from(mutation.addedNodes);
+          for (const node of nodes) {
+            if (node.matches && node.matches('[class*="monaco-workbench"]')) {
+              observer.disconnect();
+              return;
+            }
+          }
+        });
+      });
+      agentEl.onload = () => {
+        observer.observe(agentEl.contentWindow.document.body, config);
+      };
     }
   });
 </script>
