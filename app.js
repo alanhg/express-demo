@@ -17,7 +17,7 @@ app.set('trust proxy', 1); // trust first proxy
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 // mount the router on the app
 app.use('/', routes);
@@ -29,6 +29,6 @@ app.use('/', express.static(path.join(__dirname, '/static')));
 // log.use(app);
 // respond with "hello world" when a GET request is made to the homepage
 
-app.listen(conf.server.port, function () {
+app.listen(conf.server.port, '0.0.0.0', function () {
   console.log(`Example app listening on port http://127.0.0.1:${conf.server.port}!`);
 });
