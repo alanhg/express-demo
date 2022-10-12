@@ -13,7 +13,6 @@
         }
 
         .loading-iframe {
-            opacity: 0;
             position: absolute;
             top: 0;
             left: 0;
@@ -73,32 +72,14 @@
       agentEl.src = "/tty/<%= proxyKey %>/";
       agentEl.classList = 'workspace hide';
       ideInstallLoaderEl.parentNode.insertBefore(agentEl, ideInstallLoaderEl);
-
-      const config = {
-        attributes: true,
-        attributeFilter: ['src'],
-        attributeOldValue: true,
-        characterData: false,
-        characterDataOldValue: false,
-        childList: false,
-        subtree: true
-      };
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach(function (mutation) {
-          const nodes = Array.from(mutation.addedNodes);
-          for (const node of nodes) {
-            if (node.matches && node.matches('[class*="monaco-workbench"]')) {
-              observer.disconnect();
-              return;
-            }
-          }
-        });
-      });
-      agentEl.onload = () => {
-        loadingEl.classList.add('hide');
-        agentEl.classList.remove('hide');
-        observer.observe(agentEl.contentWindow.document.body, config);
-      };
+      let interval = setInterval(() => {
+        let editor = agentEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
+        if (editor) {
+          loadingEl.classList.add('hide');
+          agentEl.classList.remove('hide');
+          clearInterval(interval);
+        }
+      }, 100);
     }
   });
 </script>
