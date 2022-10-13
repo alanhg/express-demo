@@ -109,4 +109,5 @@ code-server配置文件位置在`~/.local/share/code-server`，与程序安装�
 https://coder.com/docs/code-server/latest/upgrade
 
 
-##
+## CDN
+只针对HTML文件进行静态资源替换，切换为CDN源，替换80%资源占比
