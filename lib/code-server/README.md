@@ -108,3 +108,8 @@ EOF
 code-server配置文件位置在`~/.local/share/code-server`，与程序安装位置不同，因此升级安装不会造成配置丢失等。
 https://coder.com/docs/code-server/latest/upgrade
 
+
+## CDN
+./stable-74b1f979648cc44d385a2286793c226e611f59e7/static/out/vs/loader.js
+./_static/src/browser/media/favicon.ico
+./_static/src/browser/media/favicon-dark-support.svg
