@@ -59,27 +59,31 @@
   });
   ws.addEventListener('message', ({data}) => {
     const options = JSON.parse(data);
-    if (options.type === 'start-ide' && options.data.status === 'ok') {
+    if (options.type === 'start-ide') {
+      if (options.data.status === 'success') {
 
-      // 安装动画隐藏
-      let ideInstallLoaderEl = document.body.getElementsByClassName('workspace-loader')[0];
-      ideInstallLoaderEl.classList.add('hide');
+        // 安装动画隐藏
+        let ideInstallLoaderEl = document.body.getElementsByClassName('workspace-loader')[0];
+        ideInstallLoaderEl.classList.add('hide');
 
-      const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
-      loadingEl.classList.remove('hide');
+        const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
+        loadingEl.classList.remove('hide');
 
-      const agentEl = document.createElement('iframe');
-      agentEl.src = "/tty/<%= proxyKey %>/";
-      agentEl.classList = 'workspace hide';
-      ideInstallLoaderEl.parentNode.insertBefore(agentEl, ideInstallLoaderEl);
-      let interval = setInterval(() => {
-        let editor = agentEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
-        if (editor) {
-          loadingEl.classList.add('hide');
-          agentEl.classList.remove('hide');
-          clearInterval(interval);
-        }
-      }, 100);
+        const agentEl = document.createElement('iframe');
+        agentEl.src = "/tty/<%= proxyKey %>/";
+        agentEl.classList = 'workspace hide';
+        ideInstallLoaderEl.parentNode.insertBefore(agentEl, ideInstallLoaderEl);
+        let interval = setInterval(() => {
+          let editor = agentEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
+          if (editor) {
+            loadingEl.classList.add('hide');
+            agentEl.classList.remove('hide');
+            clearInterval(interval);
+          }
+        }, 100);
+      } else {
+        alert('启动失败');
+      }
     }
   });
 </script>
