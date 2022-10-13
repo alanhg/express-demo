@@ -49,7 +49,8 @@
     </style>
 </head>
 <body>
-<iframe src="https://xxxx.ccccx" class="workspace-loader"></iframe>
+<!--<iframe src="https://wx.cloudstudio.net/ws/embeded" class="workspace-loader"></iframe>-->
+<iframe src="https://xxx.cc" class="workspace-loader"></iframe>
 <iframe src="https://cs-res-1258344699.file.myqcloud.com/cloudstudio/vscode/3e54a6f80cbf72e76cc91bb32178e6b3ede84e3f/release-standalone/out/vs/code/browser/workbench/loading.html"
         class="loading-iframe hide"></iframe>
 <script>
@@ -70,6 +71,7 @@
         loadingEl.classList.remove('hide');
 
         const agentEl = document.createElement('iframe');
+        //agentEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
         agentEl.src = "/tty/<%= proxyKey %>/";
         agentEl.classList = 'workspace hide';
         ideInstallLoaderEl.parentNode.insertBefore(agentEl, ideInstallLoaderEl);
