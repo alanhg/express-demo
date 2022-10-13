@@ -19,7 +19,7 @@ PATH="$ROOT_PATH/.local/bin:$PATH"
 code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans --extensions-dir $ROOT_PATH/.local/share/extensions
 
 # 个性化配置
-
+mkdir -p $ROOT_PATH/.local/share/User/
 cat << EOF >  $ROOT_PATH/.local/share/User/settings.json
 {"window.commandCenter": true,"window.menuBarVisibility": "classic"}
 EOF
@@ -37,7 +37,7 @@ After=network.target
 
 [Service]
 Type=exec
-ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --config $ROOT_PATH
+ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --config $ROOT_PATH/.config/config.yaml
 Restart=always
 #User=%i
 
