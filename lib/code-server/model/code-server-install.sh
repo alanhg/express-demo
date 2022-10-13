@@ -21,7 +21,7 @@ code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans --extensi
 # 个性化配置
 mkdir -p $ROOT_PATH/.local/share/User/
 cat << EOF >  $ROOT_PATH/.local/share/User/settings.json
-{"window.commandCenter": true,"window.menuBarVisibility": "classic"}
+{"window.commandCenter": true,"window.menuBarVisibility": "classic", "workbench.colorTheme": "Default Dark+"}
 EOF
 
 cat << EOF >  $ROOT_PATH/.local/share/User/argv.json
