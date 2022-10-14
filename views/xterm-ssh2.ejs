@@ -138,6 +138,27 @@
             width: 100%;
             display: none;
         }
+
+        .xterm-record-screen-addon {
+            position: absolute;
+            right: 10px;
+            width: 5px;
+            z-index: 2;
+            animation: rainbow 2s linear infinite;
+            background: linear-gradient(238deg, #fd8800, #fd008f, #9700fd, #003dfd, #05c7e6, #4bd58d);
+        }
+
+        @keyframes rainbow {
+            0% {
+                background-position: 0% 50%
+            }
+            50% {
+                background-position: 100% 50%
+            }
+            100% {
+                background-position: 0% 50%
+            }
+        }
     </style>
 </head>
 <body>
@@ -171,6 +192,12 @@
 
     event.target.innerText = event.target.dataset.start === 'true' ? 'log record start' : 'log record stop';
     event.target.dataset.start = event.target.dataset.start !== 'true';
+
+    if (event.target.dataset.start === 'true') {
+      window.recordScreenAddon.start();
+    } else {
+      window.recordScreenAddon.stop();
+    }
 
     fetch(`/ssh2-log?start=${event.target.dataset.start}&&recordTimestamp=${document.getElementById('record-timestamp').checked}`, {
       method: 'get',
@@ -250,6 +277,7 @@
 </script>
 <script type="module">
   import {SearchAddonBar} from '/js/search-addon-bar.js';
+  import {RecordScreenAddon} from '/js/record-screen-addon.js';
 
   var isFullscreen = false;
   term = new Terminal({
@@ -320,9 +348,14 @@
     searchAddon
   });
 
+  let recordScreenAddon = new RecordScreenAddon();
+
+  window.recordScreenAddon = recordScreenAddon;
+
   term.loadAddon(searchAddon);
   term.loadAddon(searchAddonBar);
   term.loadAddon(serializeAddon);
+  term.loadAddon(recordScreenAddon);
   term.loadAddon(new Unicode11Addon.Unicode11Addon());
   term.unicode.activeVersion = '11'
 
