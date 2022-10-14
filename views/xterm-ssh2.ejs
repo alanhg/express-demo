@@ -168,6 +168,7 @@
   }
 
   function recordLogStart(event) {
+
     event.target.innerText = event.target.dataset.start === 'true' ? 'log record start' : 'log record stop';
     event.target.dataset.start = event.target.dataset.start !== 'true';
 

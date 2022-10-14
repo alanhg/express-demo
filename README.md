@@ -2,12 +2,12 @@
 
 ### 简介
 
-本demo结合一些常用组件(如session/mysql等)构建一个简单的demo，方便做各种功能实验
+node项目下各种功能研发实验，提供Demo
 
 ### 功能点
 1. WebShell
     - 热键支持-Ctrl F全屏切换、⌘ F终端检索，⌘ K清屏、Ctrl C执行取消
-    - 终端会话录制
+    - 终端会话录制-日志功能
     - 全文检索
     - 文件编辑
 2. code-server-web代理
@@ -16,6 +16,10 @@
 ### code-server源码拉取
 
 ```shell
+
 git clone git@github.com:coder/code-server.git  --single-branch main
 
 ```
+
+## 终端会话录制
+清屏操作触发，录制日志中内容并不同步清除
