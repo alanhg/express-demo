@@ -30,7 +30,7 @@ https://github.com/coder/code-server/blob/main/docs/requirements.md
 ## 登录密码
 
 1. 默认启动后登录会有密码保护， cat ~/.config/code-server/config.yaml
-2. 除了密码登录，也可以通过设置做到免密登录
+2. 除了密码登录，也可以通过设置做到免密登录`code-server --auth none`
 
 ## 定制化
 
@@ -74,7 +74,6 @@ code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans
 workbench.web.main.css内联SVG，修改的话，需要源码修改
 
 ### favicon.ico
-
 
 
 ### app-name
