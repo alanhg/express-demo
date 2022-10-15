@@ -1,6 +1,6 @@
 # 安装code-server包，也可以使用官方脚本 https://raw.githubusercontent.com/coder/code-server/main/install.sh
 
-VERSION=3.12.0
+VERSION=4.7.1
 PORT=36000
 ROOT_PATH=~/.webshell/code-server
 
@@ -20,18 +20,18 @@ code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans --extensi
 
 # 个性化配置
 mkdir -p $ROOT_PATH/.local/share/User/
-#cat << EOF >  $ROOT_PATH/.local/share/User/settings.json
-#{
-#        "files.saveConflictResolution": "overwriteFileOnDisk",
-#        "workbench.colorTheme": "Default Dark+",
-#        "window.menuBarVisibility": "visible",
-#        "security.workspace.trust.enabled": false,
-#        "terminal.integrated.gpuAcceleration": "off",
-#        "files.eol": "\n",
-#        "editor.suggest.preview": true,
-#        "window.commandCenter": true
-#    }
-#EOF
+cat << EOF >  $ROOT_PATH/.local/share/User/settings.json
+{
+        "files.saveConflictResolution": "overwriteFileOnDisk",
+        "workbench.colorTheme": "Default Dark+",
+        "window.menuBarVisibility": "visible",
+        "security.workspace.trust.enabled": false,
+        "terminal.integrated.gpuAcceleration": "off",
+        "files.eol": "\n",
+        "editor.suggest.preview": true,
+        "window.commandCenter": true
+    }
+EOF
 
 cat << EOF >  $ROOT_PATH/.local/share/User/argv.json
 {"locale": "zh-cn"}
