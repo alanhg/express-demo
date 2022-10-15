@@ -1,6 +1,6 @@
 # 安装code-server包，也可以使用官方脚本 https://raw.githubusercontent.com/coder/code-server/main/install.sh
 
-VERSION=4.7.1
+VERSION=3.12.0
 PORT=36000
 ROOT_PATH=~/.webshell/code-server
 
