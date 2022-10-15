@@ -20,18 +20,18 @@ code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans --extensi
 
 # 个性化配置
 mkdir -p $ROOT_PATH/.local/share/User/
-cat << EOF >  $ROOT_PATH/.local/share/User/settings.json
-{
-        "files.saveConflictResolution": "overwriteFileOnDisk",
-        "workbench.colorTheme": "Default Dark+",
-        "window.menuBarVisibility": "visible",
-        "security.workspace.trust.enabled": false,
-        "terminal.integrated.gpuAcceleration": "off",
-        "files.eol": "\n",
-        "editor.suggest.preview": true,
-        "window.commandCenter": true
-    }
-EOF
+#cat << EOF >  $ROOT_PATH/.local/share/User/settings.json
+#{
+#        "files.saveConflictResolution": "overwriteFileOnDisk",
+#        "workbench.colorTheme": "Default Dark+",
+#        "window.menuBarVisibility": "visible",
+#        "security.workspace.trust.enabled": false,
+#        "terminal.integrated.gpuAcceleration": "off",
+#        "files.eol": "\n",
+#        "editor.suggest.preview": true,
+#        "window.commandCenter": true
+#    }
+#EOF
 
 cat << EOF >  $ROOT_PATH/.local/share/User/argv.json
 {"locale": "zh-cn"}
