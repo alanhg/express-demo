@@ -4,7 +4,7 @@ VERSION=4.7.1
 PORT=36000
 ROOT_PATH=~/.webshell/code-server
 
-mkdir -p $ROOT_PATH/.local/lib $ROOT_PATH/.local/bin
+mkdir -p $ROOT_PATH/.local/lib $ROOT_PATH/.local/bin $ROOT_PATH/.local/share/extensions
 
 curl -fL https://github.com/coder/code-server/releases/download/v$VERSION/code-server-$VERSION-linux-amd64.tar.gz \
   | tar -C $ROOT_PATH/.local/lib -xz
@@ -46,7 +46,7 @@ After=network.target
 
 [Service]
 Type=exec
-ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --config $ROOT_PATH/.config/config.yaml  --disable-update-check --locale=zh-cn
+ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --config $ROOT_PATH/.config/config.yaml  --disable-update-check
 Restart=always
 #User=%i
 
