@@ -1,4 +1,4 @@
-# 安装code-server包，也可以使用官方脚本 https://raw.githubusercontent.com/coder/code-server/main/install.sh
+# 安装code-server包，也可以使用官方脚本 curl -fsSL https://code-server.dev/install.sh | sh
 
 VERSION=4.7.1
 PORT=36000
@@ -46,7 +46,7 @@ After=network.target
 
 [Service]
 Type=exec
-ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --config $ROOT_PATH/.config/config.yaml
+ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --config $ROOT_PATH/.config/config.yaml  --disable-update-check --locale=zh-cn
 Restart=always
 #User=%i
 
