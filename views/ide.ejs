@@ -71,8 +71,8 @@
         loadingEl.classList.remove('hide');
 
         const agentEl = document.createElement('iframe');
-        agentEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
-        //agentEl.src = "/tty/<%= proxyKey %>/";
+        // agentEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
+        agentEl.src = "/tty/<%= proxyKey %>/";
         agentEl.classList = 'workspace hide';
         ideInstallLoaderEl.parentNode.insertBefore(agentEl, ideInstallLoaderEl);
         let interval = setInterval(() => {

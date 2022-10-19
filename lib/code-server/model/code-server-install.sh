@@ -21,7 +21,7 @@ tar zxvf $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-ha
 mv ./ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal $ROOT_PATH/.local/share/extensions/
 rm -rf $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz
 
-cat << EOF >  $ROOT_PATH/.local/share/extensions/languagepacks.json
+cat << EOF >  $ROOT_PATH/.local/share/languagepacks.json
 {
   "zh-cn": {
     "hash": "7e362a7c22d4de1987d4809ea0dadc08",
