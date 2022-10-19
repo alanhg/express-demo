@@ -16,7 +16,9 @@ ln -s $ROOT_PATH/.local/lib/code-server-$VERSION/bin/code-server $ROOT_PATH/.loc
 PATH="$ROOT_PATH/.local/bin:$PATH"
 
 # 预装插件
-#code-server --extensions-dir $ROOT_PATH/.local/share/extensions --locale zh-cn
+curl https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz > $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz
+
+tar zxvf $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz --remove-files
 
 # 个性化配置
 mkdir -p $ROOT_PATH/.local/share/User/
