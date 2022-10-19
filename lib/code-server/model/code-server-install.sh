@@ -3,7 +3,7 @@
 VERSION=4.7.1
 PORT=36000
 ROOT_PATH=~/.webshell/code-server
-
+# 安装主程序包
 mkdir -p $ROOT_PATH/.local/lib $ROOT_PATH/.local/bin $ROOT_PATH/.local/share/extensions
 
 curl -fL https://github.com/coder/code-server/releases/download/v$VERSION/code-server-$VERSION-linux-amd64.tar.gz \
@@ -130,7 +130,7 @@ cat << EOF >  $ROOT_PATH/.local/share/extensions/languagepacks.json
 EOF
 
 
-# 个性化配置
+# 编辑器主题配置
 mkdir -p $ROOT_PATH/.local/share/User/
 cat << EOF >  $ROOT_PATH/.local/share/User/settings.json
 {
@@ -144,11 +144,6 @@ cat << EOF >  $ROOT_PATH/.local/share/User/settings.json
         "window.commandCenter": true
     }
 EOF
-
-cat << EOF >  $ROOT_PATH/.local/share/User/argv.json
-{"locale": "zh-cn"}
-EOF
-
 
 # 服务化code-server
 cat > /usr/lib/systemd/system/webshell-code-server@.service << EOF
@@ -165,5 +160,3 @@ Restart=always
 [Install]
 WantedBy=default.target
 EOF
-
-# Now visit http://127.0.0.1:8080. Your password is in ~/.config/code-server/config.yaml
