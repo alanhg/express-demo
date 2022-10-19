@@ -19,7 +19,7 @@ PATH="$ROOT_PATH/.local/bin:$PATH"
 curl https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz > $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz
 tar zxvf $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz  --remove-files
 mv ./ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal $ROOT_PATH/.local/share/extensions/
-
+rm -rf $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz
 
 cat << EOF >  $ROOT_PATH/.local/share/extensions/languagepacks.json
 {
