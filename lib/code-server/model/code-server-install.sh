@@ -16,7 +16,7 @@ ln -s $ROOT_PATH/.local/lib/code-server-$VERSION/bin/code-server $ROOT_PATH/.loc
 PATH="$ROOT_PATH/.local/bin:$PATH"
 
 # 预装插件
-code-server --install-extension ms-ceintl.vscode-language-pack-zh-hans --extensions-dir $ROOT_PATH/.local/share/extensions
+#code-server --extensions-dir $ROOT_PATH/.local/share/extensions --locale zh-cn
 
 # 个性化配置
 mkdir -p $ROOT_PATH/.local/share/User/
