@@ -382,7 +382,7 @@
      * 由于开启zmodem会话时关闭了attach插件，因此这里WS直接发送取消命令
      */
     if (event.key === 'c' && event.ctrlKey) {
-      if (zsession && !zsession._aborted) {
+      if (zsession) {
         zsession.abort();
         term.writeln('');
       }
