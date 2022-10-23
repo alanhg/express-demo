@@ -11,7 +11,7 @@ node项目下各种功能研发实验，提供Demo
     - 全文检索
     - 文件编辑
 2. code-server-web代理
-   - 不需要直接开放web端口到外网，利用SSH隧道代理访问
+   - 不需要直接开放web端口到外网，利用SSH隧道代理访问内网web编辑器服务
 
 ### code-server源码拉取
 
