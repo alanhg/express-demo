@@ -276,8 +276,8 @@
   var socket, zsession, attachAddon, serializeAddon, term, clientRecordLogFlag, clientRecordLogBlobs = [], CurrentDir;
 </script>
 <script type="module">
-  import {SearchAddonBar} from '/js/search-addon-bar.js';
-  import {RecordScreenAddon} from '/js/record-screen-addon.js';
+  import { SearchAddonBar } from '/js/search-addon-bar.js';
+  import { RecordScreenAddon } from '/js/record-screen-addon.js';
 
   var isFullscreen = false;
   term = new Terminal({
@@ -430,28 +430,28 @@
   })
 
   socket = new WebSocket(`ws://127.0.0.1:8000/ws/webshell`);
+
+  term.zmodemRetract = () => {};
+
+  term.zmodemDetect = (detection) => {
+    zsession = detection.confirm();
+
+    var promise;
+
+    if (zsession.type === "receive") {
+      promise = handleDownloadSession(zsession);
+    } else {
+      promise = handleUploadSession(zsession);
+    }
+    promise.catch(console.error.bind(console)).then(() => {
+      zsession = null;
+    });
+  };
+
   term.zmodemAttach(socket, {
     noTerminalWriteOutsideSession: true,
   });
-  term.zmodemDetect = (detection) => {
 
-    function do_zmodem() {
-      zsession = detection.confirm();
-
-      var promise;
-
-      if (zsession.type === "receive") {
-        promise = handleReceiveSession(zsession);
-      } else {
-        promise = handleSendSession(zsession);
-      }
-      promise.catch(console.error.bind(console)).then(() => {
-        zsession = null;
-      });
-    }
-
-    do_zmodem();
-  };
   socket.addEventListener('close', () => {
     location.reload();
   });
@@ -506,14 +506,12 @@
   /**
    * SZ接受文件
    */
-  function handleReceiveSession(zsession) {
+  function handleDownloadSession(zsession) {
     zsession.on("offer", function (xfer) {
-      term.blur();
-      term.write('\x1b[2K\r'); // 清除活跃行内容
-      term.write('0%\r');
-
+      this.currentReceiveXfer = xfer;
       function on_form_submit() {
         const FILE_BUFFER = [];
+        term.write('\x1b[2K\r'); // 清除活跃行内容
         xfer.on("input", (payload) => {
           FILE_BUFFER.push(new Uint8Array(payload));
           term.write(getProgress(xfer) + '\r');
@@ -521,8 +519,8 @@
         xfer.accept().then(
           () => {
             term.write(`${xfer.get_details().name} download completed.\r`);
-            term.focus();
             term.write(`\r\n`);
+            // term.focus();
             _save_to_disk(xfer, FILE_BUFFER);
           },
           console.error.bind(console)
@@ -545,7 +543,7 @@
   /**
    * rz接收文件
    */
-  function handleSendSession(zsession) {
+  function handleUploadSession(zsession) {
     var file_el = document.getElementById("zm_files");
 
     file_el.click();
