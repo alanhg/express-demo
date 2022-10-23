@@ -49,10 +49,9 @@
     </style>
 </head>
 <body>
-<iframe src="https://wx.cloudstudio.net/ws/embeded" class="workspace-loader"></iframe>
-<!--<iframe src="https://wx.xxxx" class="workspace-loader"></iframe>-->
+<!--<iframe src="https://wx.cloudstudio.net/ws/embeded" class="workspace-loader"></iframe>-->
 <iframe src="https://cs-res-1258344699.file.myqcloud.com/cloudstudio/vscode/3e54a6f80cbf72e76cc91bb32178e6b3ede84e3f/release-standalone/out/vs/code/browser/workbench/loading.html"
-        class="loading-iframe hide"></iframe>
+        class="loading-iframe"></iframe>
 <script>
   const ws = new WebSocket('ws://127.0.0.1:8000/ide/<%= proxyKey %>?<%= queryParams %>');
   ws.addEventListener('open', () => {
@@ -63,18 +62,13 @@
     if (options.type === 'start-ide') {
       if (options.data.status === 'success') {
 
-        // 安装动画隐藏
-        let ideInstallLoaderEl = document.body.getElementsByClassName('workspace-loader')[0];
-        ideInstallLoaderEl.classList.add('hide');
-
         const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
-        loadingEl.classList.remove('hide');
 
         const agentEl = document.createElement('iframe');
         // agentEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
         agentEl.src = "/tty/<%= proxyKey %>/";
         agentEl.classList = 'workspace hide';
-        ideInstallLoaderEl.parentNode.insertBefore(agentEl, ideInstallLoaderEl);
+        loadingEl.parentNode.insertBefore(agentEl, loadingEl);
         let interval = setInterval(() => {
           let editor = agentEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
           if (editor) {
