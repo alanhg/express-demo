@@ -136,16 +136,16 @@
 <button onclick="onPrintBtnClick()">print something</button>
 <button onclick="onInfinitePrintBtnClick()">infinite print</button>
 <select onchange="onRenderTypeChange(event)">
-    <option value="dom">
+    <option selected value="dom">
         dom
     </option>
-    <option selected value="canvas">
+    <option  value="canvas">
         canvas
     </option>
 </select>
 <label for="webglFlag">
     WebGL2-based renderer
-    <input type="checkbox" id="webglFlag" onchange="webGLFlagChange(event)" checked/>
+    <input type="checkbox" id="webglFlag" onchange="webGLFlagChange(event)"/>
 </label>
 <code>
     <p>The function <code>selectAll()</code> highlights all the text in the
@@ -191,7 +191,7 @@
       white: '#a5a2a2',
       brightWhite: '#f7f7f7'
     },
-    rendererType: 'canvas', //  canvas,dom
+    rendererType: 'dom', //  canvas,dom
     minimumContrastRatio: 1,
     // 开启透明支持-支持CSS实现终端背景图设定
     allowTransparency: true
