@@ -145,7 +145,8 @@ cat << EOF >  $ROOT_PATH/.local/share/User/settings.json
     }
 EOF
 
-# 服务化code-server
+
+# 服务化code-server，非root用户操作有权限问题
 cat > /usr/lib/systemd/system/webshell-code-server@.service << EOF
 [Unit]
 Description=webshell-code-server
