@@ -101,6 +101,7 @@
     let index = 0;
     window.term.blur();
     window.term.writeln('');
+    window.term.clearSelection();
     const intervalId = setInterval(() => {
       window.term.write((index++) + '\r');
       if (index > 10000000) {
