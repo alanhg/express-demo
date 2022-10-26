@@ -582,13 +582,15 @@
           const chunkLength = Math.ceil(contentBuffers.byteLength / 1024);
 
           // 需要同步化执行循环操作
-          while (chunkIndex < chunkLength) {
+          while (true) {
+            if (chunkIndex >= chunkLength) {
+              break;
+            }
             const chunk = new Uint8Array(contentBuffers.slice(chunkIndex * 1024, (chunkIndex + 1) * 1024));
             await transfer.send(chunk);
             let progress = getProgress(transfer);
-            console.log(progress);
-            term.writeln(`\r${progress}${SPACER}`);
             chunkIndex = chunkIndex + 1;
+            term.write(`\r${progress}${SPACER}`);
           }
           term.write(`${transfer.get_details().name} upload completed.\r`);
           term.write('\r\n');
