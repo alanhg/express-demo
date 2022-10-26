@@ -147,7 +147,7 @@ EOF
 
 
 # 服务化code-server，非root用户操作有权限问题
-cat > /usr/lib/systemd/system/webshell-code-server@.service << EOF
+cat > /usr/lib/systemd/system/webshell-code-server.service << EOF
 [Unit]
 Description=webshell-code-server
 After=network.target
@@ -156,7 +156,6 @@ After=network.target
 Type=exec
 ExecStart=$ROOT_PATH/.local/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/.local/share --config $ROOT_PATH/.config/config.yaml  --disable-update-check --locale=zh-cn --extensions-dir=$ROOT_PATH/.local/share/extensions
 Restart=always
-#User=%i
 
 [Install]
 WantedBy=default.target
