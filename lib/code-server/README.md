@@ -86,7 +86,7 @@ workbench.web.main.css内联SVG，修改的话，需要源码修改
 ```shell
 # 服务化code-server，自定义端口,端口修改还有一个办法是 ~/.config/code-server/config.yaml修改缺省配置值
 
-cat > /usr/lib/systemd/system/code-server@.service << EOF
+cat > /usr/lib/systemd/system/code-server.service << EOF
 [Unit]
 Description=code-server
 After=network.target
@@ -101,6 +101,7 @@ User=%i
 WantedBy=default.target
 EOF
 ``` 
+服务创建需要root权限，但查看服务状态不需要
 
 ## Code-Server升级
 
