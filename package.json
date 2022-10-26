@@ -41,7 +41,7 @@
     "node-forge": "^1.2.1",
     "node-pty": "^0.10.1",
     "nodemon": "^2.0.19",
-    "nora-zmodemjs": "^1.1.1",
+    "zmodem.js": "latest",
     "passport": "^0.4.0",
     "query-string": "^6.10.1",
     "rimraf": "^3.0.2",

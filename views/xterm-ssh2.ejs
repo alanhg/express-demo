@@ -12,7 +12,7 @@
     <script src="/js/xterm-addon-search/lib/xterm-addon-search.js"></script>
     <script src="/js/xterm-addon-serialize/lib/xterm-addon-serialize.js"></script>
     <script src="/js/xterm-addon-unicode11/lib/xterm-addon-unicode11.js"></script>
-    <script src="/js/nora-zmodemjs/dist/zmodem.js"></script>
+    <script src="/js/zmodem.js/dist/zmodem.js"></script>
     <script src="/js/xterm/zmodem-browser.js"></script>
     <script src="/js/mousetrap.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
@@ -273,6 +273,7 @@
     </div>
 </div>
 <script>
+  const SPACER = '            ';
   var socket, zsession, attachAddon, serializeAddon, term, clientRecordLogFlag, clientRecordLogBlobs = [], CurrentDir;
 </script>
 <script type="module">
@@ -431,7 +432,8 @@
 
   socket = new WebSocket(`ws://127.0.0.1:8000/ws/webshell`);
 
-  term.zmodemRetract = () => {};
+  term.zmodemRetract = () => {
+  };
 
   term.zmodemDetect = (detection) => {
     zsession = detection.confirm();
@@ -509,6 +511,7 @@
   function handleDownloadSession(zsession) {
     zsession.on("offer", function (xfer) {
       this.currentReceiveXfer = xfer;
+
       function on_form_submit() {
         const FILE_BUFFER = [];
         term.write('\x1b[2K\r'); // 清除活跃行内容
@@ -544,54 +547,70 @@
    * rz接收文件
    */
   function handleUploadSession(zsession) {
-    var file_el = document.getElementById("zm_files");
+    const fileEl = document.getElementById("zm_files");
+    fileEl.click();
+    fileEl.onchange = async (_e) => {
+      const {files} = fileEl;
+      const batch = [];
+      let totalSize = 0;
+      for (let f = files.length - 1; f >= 0; f--) {
+        const fobj = files[f];
+        totalSize += fobj.size;
+        batch[f] = {
+          obj: fobj,
+          name: fobj.name,
+          size: fobj.size,
+          mode: 0o644,
+          files_remaining: files.length - f,
+          bytes_remaining: totalSize,
+        };
+      }
 
-    file_el.click();
-    var promise = new Promise((res) => {
-      file_el.onchange = function (e) {
+      for (const curb of batch) {
+        const file = curb.obj;
+        term.write('\x1b[2K\r');
+        const transfer = await zsession.send_offer(curb);
+        if (transfer) {
+          const contentBuffers = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = async function () {
+              resolve(reader.result);
+            };
+            reader.readAsArrayBuffer(file);
+          });
+          let chunkIndex = 0;
+          const chunkLength = Math.ceil(contentBuffers.byteLength / 1024);
 
-        var files_obj = file_el.files;
-
-        Zmodem.Browser.send_files(
-          zsession,
-          files_obj,
-          {
-            on_offer_response(obj, xfer) {
-              if (!xfer) {
-                term.write(`\n* The file ${obj.name} exists *\r`);
-              } else {
-                term.write('\x1b[2K\r'); // 清除活跃行内容
-                term.blur();
-                xfer.on('send_progress', percent => {
-                  // 上传中，发送进度给后台
-                  term.write(percent + '%\r', () => {
-                    console.log(percent + '%\r');
-                  });
-                });
-              }
-            },
-            on_progress(obj, xfer) {
-            },
-            on_file_complete(obj, xfer) {
-              term.write(`${xfer.get_details().name} upload completed.\r`);
-              term.focus();
-              term.write(`\r\n`);
-            },
+          // 需要同步化执行循环操作
+          while (chunkIndex < chunkLength) {
+            const chunk = new Uint8Array(contentBuffers.slice(chunkIndex * 1024, (chunkIndex + 1) * 1024));
+            await transfer.send(chunk);
+            let progress = getProgress(transfer);
+            console.log(progress);
+            term.writeln(`\r${progress}${SPACER}`);
+            chunkIndex = chunkIndex + 1;
           }
-        ).then().then(
-          zsession.close.bind(zsession),
-          console.error.bind(console)
-        ).then(() => {
-          res();
-        });
-      };
+          term.write(`${transfer.get_details().name} upload completed.\r`);
+          term.write('\r\n');
+          transfer.end();
+        } else {
+          transfer.cancel();
+          console.log('rejected by the other side');
+        }
+      }
+    };
+
+    // this.zsession.close.bind(zsession), console.error.bind(console);
+    const promise = new Promise((res) => {
+      zsession.on('session_end', () => {
+        res();
+      });
     });
 
     return promise;
   }
 
   function getProgress(xhr) {
-    console.log(xhr.get_offset());
     return (xhr.get_offset() * 100 / xhr.get_details().size).toFixed(2) + '%';
   }
 
