@@ -147,7 +147,7 @@ EOF
 
 
 # 服务化code-server，非root用户操作有权限问题
-cat > /usr/lib/systemd/system/webshell-code-server.service << EOF
+cat > /etc/systemd/system/webshell-code-server.service << EOF
 [Unit]
 Description=webshell-code-server
 After=network.target
