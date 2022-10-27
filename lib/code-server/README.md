@@ -111,4 +111,4 @@ https://coder.com/docs/code-server/latest/upgrade
 
 ## CDN
 1. 代理请求时只针对HTML文件进行静态资源替换，切换为CDN源，替换80%体积占比
-2. 直接包源码修改，见lib/vscode/out/vs/code/browser/workbench/workbench.html
+2. 直接包源码修改，见`lib/vscode/out/vs/code/browser/workbench/workbench.html`
