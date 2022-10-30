@@ -5,7 +5,7 @@
 export function stringToUint8Array(str) {
   const arr = [];
   for (let i = 0, j = str.length; i < j; ++i) {
-    arr.push(str.charCodeAt(i));
+    arr.push(str.codePointAt(i));
   }
   const tmpUint8Array = new Uint8Array(arr);
   return tmpUint8Array
@@ -35,4 +35,12 @@ export function stringToUint8Array2(str) {
 
 export function stringToUint8Array3(str) {
   return Uint8Array.from(str);
+}
+
+export function stringToUint8Array4(str) {
+  return new TextEncoder().encode(str);
+}
+
+export function uint8Array2String(buffer) {
+  return new TextDecoder().decode(buffer);
 }
