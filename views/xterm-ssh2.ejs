@@ -274,11 +274,14 @@
 </div>
 <script>
   const SPACER = '            ';
-  var socket, zsession, attachAddon, serializeAddon, term, clientRecordLogFlag, clientRecordLogBlobs = [], CurrentDir;
+  var socket, zsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
+    clientRecordLogBlobs = [], CurrentDir;
 </script>
 <script type="module">
   import { SearchAddonBar } from '/js/search-addon-bar.js';
   import { RecordScreenAddon } from '/js/record-screen-addon.js';
+
+  const textEncoder = new TextEncoder();
 
   var isFullscreen = false;
   term = new Terminal({
@@ -385,6 +388,7 @@
     if (event.key === 'c' && event.ctrlKey) {
       if (zsession) {
         zsession.abort();
+        zsessionCanceled = true;
         term.writeln('');
       }
       if (term.hasSelection()) {
@@ -439,7 +443,7 @@
     zsession = detection.confirm();
 
     var promise;
-
+    zsessionCanceled = false;
     if (zsession.type === "receive") {
       promise = handleDownloadSession(zsession);
     } else {
@@ -569,8 +573,8 @@
       for (const curb of batch) {
         const file = curb.obj;
         term.write('\x1b[2K\r');
-        const transfer = await zsession.send_offer(curb);
-        if (transfer) {
+        const xfer = await zsession.send_offer(curb);
+        if (xfer) {
           const contentBuffers = await new Promise((resolve) => {
             const reader = new FileReader();
             reader.onload = async function () {
@@ -583,20 +587,22 @@
 
           // 需要同步化执行循环操作
           while (true) {
-            if (chunkIndex >= chunkLength) {
+            if (zsessionCanceled || chunkIndex >= chunkLength) {
               break;
             }
             const chunk = new Uint8Array(contentBuffers.slice(chunkIndex * 1024, (chunkIndex + 1) * 1024));
-            await transfer.send(chunk);
-            let progress = getProgress(transfer);
+            await xfer.send(chunk);
+            showMessage(getProgress(xfer));
             chunkIndex = chunkIndex + 1;
-            term.write(`\r${progress}${SPACER}`);
           }
-          term.write(`${transfer.get_details().name} upload completed.\r`);
+          if (zsessionCanceled) {
+            showMessage(`${xfer.get_details().name} upload canceled.`);
+          } else {
+            showMessage(`${xfer.get_details().name} upload completed.`);
+          }
           term.write('\r\n');
-          transfer.end();
+          await xfer.end();
         } else {
-          transfer.cancel();
           console.log('rejected by the other side');
         }
       }
@@ -610,6 +616,13 @@
     });
 
     return promise;
+  }
+
+  function showMessage(msg, overwrite = false) {
+    term.write(textEncoder.encode(`\r${msg}${SPACER}`));
+    if (!overwrite) {
+      term.write(textEncoder.encode(`\r\n`));
+    }
   }
 
   function getProgress(xhr) {
