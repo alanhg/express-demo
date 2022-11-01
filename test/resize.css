@@ -1,0 +1,59 @@
+
+.vertical {
+    overflow: hidden;
+    background: #f5f5f5;
+    height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.resize-box-vertical {
+    position: relative;
+}
+.resize-box-bottom {
+    width: 100%;
+    padding: 20px;
+    overflow: hidden;
+    flex: 1;
+}
+.content {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    bottom: 20px;
+    right: 20px;
+    overflow-y: hidden;
+}
+.resize-bar {
+    width: 100%;
+    height: inherit;
+    opacity: 0;
+    overflow: scroll;
+    resize: vertical;
+    cursor: row-resize;
+    min-height: 100px;
+    max-height: 300px;
+}
+.resize_vertical {
+    resize: vertical;
+    cursor: row-resize;
+}
+
+.dividing-line-vertical {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    border-bottom: 1px solid #ddd;
+    pointer-events: none;
+}
+.vertical:hover ~ .dividing-line-vertical,
+.vertical:active ~ .dividing-line-vertical {
+    border-bottom: 1px dashed skyblue;
+}
+
+
+.resize_vertical::-webkit-scrollbar {
+    width: 100vw;
+    height: 20px;
+}
