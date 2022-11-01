@@ -4,14 +4,14 @@
 ## 基本原理
 1. SSH连通目标机器，用于执行命令
 2. SSH方式检测/安装/启动 code-server
-3. SSH方式启动目标机器代理服务，生成唯一识别代理服务的ID
-4. 根据ID，走代理访问code-server服务
+3. SSH方式启动目标机器代理服务
+4. 走HTTP代理访问code-server服务
 
 ## 好处
 
-1. 目标机器不需要对外开放code-server web端口
-2. 用户一键安装code-server
-3. 支持动态代理多台code-server，且可控，登录/安全均可走业务实现
+1. 目标机器不需要直接对外开放code-server web端口
+2. 一键脚本安装/运行code-server
+3. 动态代理多台code-server，服务可控/登录/安全均可走业务实现
 
 
 ## code-server宿主机硬件最低要求
@@ -81,7 +81,9 @@ workbench.web.main.css内联SVG，修改的话，需要源码修改
 目前没有设置支持，需要源码层面解决
 
 
-### 服务端口-名称
+### 后台运行
+
+服务形式启动问题是需要root用户权限来控制
 
 ```shell
 # 服务化code-server，自定义端口,端口修改还有一个办法是 ~/.config/code-server/config.yaml修改缺省配置值
