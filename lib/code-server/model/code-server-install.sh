@@ -132,8 +132,8 @@ EOF
 
 
 # 编辑器主题配置
-mkdir -p $ROOT_PATH/share/User/
-cat << EOF >  $ROOT_PATH/share/User/settings.json
+mkdir -p $CODE_SERVER_HOME_PATH/share/User/
+cat << EOF >  $CODE_SERVER_HOME_PATH/share/User/settings.json
 {
         "files.saveConflictResolution": "overwriteFileOnDisk",
         "workbench.colorTheme": "Default Dark+",
@@ -155,7 +155,7 @@ After=network.target
 
 [Service]
 Type=exec
-ExecStart=$ROOT_PATH/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$ROOT_PATH/share --config $ROOT_PATH/.config/config.yaml  --disable-update-check --locale=zh-cn --extensions-dir=$ROOT_PATH/share/extensions
+ExecStart=$CODE_SERVER_HOME_PATH/bin/code-server --bind-addr=127.0.0.1:$PORT --auth none --user-data-dir=$CODE_SERVER_HOME_PATH/share --config $CODE_SERVER_HOME_PATH/.config/config.yaml  --disable-update-check --locale=zh-cn --extensions-dir=$CODE_SERVER_HOME_PATH/share/extensions
 Restart=always
 
 [Install]
