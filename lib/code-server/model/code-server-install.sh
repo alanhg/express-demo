@@ -1,27 +1,28 @@
 # 安装code-server包，也可以使用官方脚本 curl -fsSL https://code-server.dev/install.sh | sh
 
-VERSION=4.7.1
-PORT=36000
-ROOT_PATH=$HOME/.webshell/code-server
+export CODE_SERVER_VERSION=4.7.1
+export CODE_SERVER_PORT=36000
+export CODE_SERVER_HOME_PATH=$HOME/.webshell/code-server
+
 # 安装主程序包
-mkdir -p $ROOT_PATH/.local/lib $ROOT_PATH/.local/bin $ROOT_PATH/.local/share/extensions
+mkdir -p $CODE_SERVER_HOME_PATH/.local/lib $CODE_SERVER_HOME_PATH/.local/bin $CODE_SERVER_HOME_PATH/.local/share/extensions
 
-curl -fL https://github.com/coder/code-server/releases/download/v$VERSION/code-server-$VERSION-linux-amd64.tar.gz \
-  | tar -C $ROOT_PATH/.local/lib -xz
+curl -fL https://github.com/coder/code-server/releases/download/v$CODE_SERVER_VERSION/code-server-$CODE_SERVER_VERSION-linux-amd64.tar.gz \
+  | tar -C $CODE_SERVER_HOME_PATH/.local/lib -xz
 
-mv $ROOT_PATH/.local/lib/code-server-$VERSION-linux-amd64 $ROOT_PATH/.local/lib/code-server-$VERSION
+mv $CODE_SERVER_HOME_PATH/.local/lib/code-server-$CODE_SERVER_VERSION-linux-amd64 $CODE_SERVER_HOME_PATH/.local/lib/code-server-$CODE_SERVER_VERSION
 
-ln -s $ROOT_PATH/.local/lib/code-server-$VERSION/bin/code-server $ROOT_PATH/.local/bin/code-server
+ln -s $CODE_SERVER_HOME_PATH/.local/lib/code-server-$CODE_SERVER_VERSION/bin/code-server $CODE_SERVER_HOME_PATH/.local/bin/code-server
 
-PATH="$ROOT_PATH/.local/bin:$PATH"
+PATH="$CODE_SERVER_HOME_PATH/.local/bin:$PATH"
 
 # 预装插件
-curl https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz > $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz
-tar zxvf $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz  --remove-files
-mv ./ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal $ROOT_PATH/.local/share/extensions/
-rm -rf $ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz
+curl https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz > $CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz
+tar zxvf $CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz  --remove-files
+mv ./ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal $CODE_SERVER_HOME_PATH/.local/share/extensions/
+rm -rf $CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz
 
-cat << EOF >  $ROOT_PATH/.local/share/languagepacks.json
+cat << EOF >  $CODE_SERVER_HOME_PATH/.local/share/languagepacks.json
 {
   "zh-cn": {
     "hash": "7e362a7c22d4de1987d4809ea0dadc08",
@@ -35,93 +36,93 @@ cat << EOF >  $ROOT_PATH/.local/share/languagepacks.json
       }
     ],
     "translations": {
-      "vscode": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/main.i18n.json",
-      "vscode.bat": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/bat.i18n.json",
-      "vscode.clojure": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/clojure.i18n.json",
-      "vscode.coffeescript": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/coffeescript.i18n.json",
-      "vscode.configuration-editing": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/configuration-editing.i18n.json",
-      "vscode.cpp": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/cpp.i18n.json",
-      "vscode.csharp": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/csharp.i18n.json",
-      "vscode.css-language-features": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/css-language-features.i18n.json",
-      "vscode.css": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/css.i18n.json",
-      "vscode.dart": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/dart.i18n.json",
-      "vscode.debug-auto-launch": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/debug-auto-launch.i18n.json",
-      "vscode.debug-server-ready": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/debug-server-ready.i18n.json",
-      "vscode.diff": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/diff.i18n.json",
-      "vscode.docker": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/docker.i18n.json",
-      "vscode.emmet": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/emmet.i18n.json",
-      "vscode.extension-editing": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/extension-editing.i18n.json",
-      "vscode.fsharp": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/fsharp.i18n.json",
-      "vscode.git-base": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/git-base.i18n.json",
-      "vscode.git": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/git.i18n.json",
-      "vscode.github-authentication": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/github-authentication.i18n.json",
-      "vscode.github": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/github.i18n.json",
-      "vscode.go": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/go.i18n.json",
-      "vscode.groovy": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/groovy.i18n.json",
-      "vscode.grunt": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/grunt.i18n.json",
-      "vscode.gulp": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/gulp.i18n.json",
-      "vscode.handlebars": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/handlebars.i18n.json",
-      "vscode.hlsl": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/hlsl.i18n.json",
-      "vscode.html-language-features": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/html-language-features.i18n.json",
-      "vscode.html": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/html.i18n.json",
-      "vscode.image-preview": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/image-preview.i18n.json",
-      "vscode.ini": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/ini.i18n.json",
-      "vscode.ipynb": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/ipynb.i18n.json",
-      "vscode.jake": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/jake.i18n.json",
-      "vscode.java": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/java.i18n.json",
-      "vscode.javascript": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/javascript.i18n.json",
-      "vscode.json-language-features": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/json-language-features.i18n.json",
-      "vscode.json": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/json.i18n.json",
-      "vscode.julia": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/julia.i18n.json",
-      "vscode.latex": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/latex.i18n.json",
-      "vscode.less": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/less.i18n.json",
-      "vscode.log": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/log.i18n.json",
-      "vscode.lua": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/lua.i18n.json",
-      "vscode.make": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/make.i18n.json",
-      "vscode.markdown-basics": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/markdown-basics.i18n.json",
-      "vscode.markdown-language-features": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/markdown-language-features.i18n.json",
-      "vscode.markdown-math": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/markdown-math.i18n.json",
-      "vscode.merge-conflict": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/merge-conflict.i18n.json",
-      "vscode.microsoft-authentication": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/microsoft-authentication.i18n.json",
-      "vscode.ms-vscode.js-debug": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/ms-vscode.js-debug.i18n.json",
-      "vscode.notebook-renderers": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/notebook-renderers.i18n.json",
-      "vscode.npm": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/npm.i18n.json",
-      "vscode.objective-c": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/objective-c.i18n.json",
-      "vscode.perl": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/perl.i18n.json",
-      "vscode.php-language-features": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/php-language-features.i18n.json",
-      "vscode.php": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/php.i18n.json",
-      "vscode.powershell": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/powershell.i18n.json",
-      "vscode.pug": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/pug.i18n.json",
-      "vscode.python": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/python.i18n.json",
-      "vscode.r": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/r.i18n.json",
-      "vscode.razor": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/razor.i18n.json",
-      "vscode.references-view": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/references-view.i18n.json",
-      "vscode.restructuredtext": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/restructuredtext.i18n.json",
-      "vscode.ruby": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/ruby.i18n.json",
-      "vscode.rust": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/rust.i18n.json",
-      "vscode.scss": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/scss.i18n.json",
-      "vscode.search-result": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/search-result.i18n.json",
-      "vscode.shaderlab": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/shaderlab.i18n.json",
-      "vscode.shellscript": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/shellscript.i18n.json",
-      "vscode.simple-browser": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/simple-browser.i18n.json",
-      "vscode.sql": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/sql.i18n.json",
-      "vscode.swift": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/swift.i18n.json",
-      "vscode.theme-abyss": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-abyss.i18n.json",
-      "vscode.theme-defaults": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-defaults.i18n.json",
-      "vscode.theme-kimbie-dark": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-kimbie-dark.i18n.json",
-      "vscode.theme-monokai-dimmed": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-monokai-dimmed.i18n.json",
-      "vscode.theme-monokai": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-monokai.i18n.json",
-      "vscode.theme-quietlight": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-quietlight.i18n.json",
-      "vscode.theme-red": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-red.i18n.json",
-      "vscode.theme-seti": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-seti.i18n.json",
-      "vscode.theme-solarized-dark": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-solarized-dark.i18n.json",
-      "vscode.theme-solarized-light": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-solarized-light.i18n.json",
-      "vscode.theme-tomorrow-night-blue": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-tomorrow-night-blue.i18n.json",
-      "vscode.typescript-basics": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/typescript-basics.i18n.json",
-      "vscode.typescript-language-features": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/typescript-language-features.i18n.json",
-      "vscode.vb": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/vb.i18n.json",
-      "vscode.xml": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/xml.i18n.json",
-      "vscode.yaml": "$ROOT_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/yaml.i18n.json"
+      "vscode": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/main.i18n.json",
+      "vscode.bat": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/bat.i18n.json",
+      "vscode.clojure": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/clojure.i18n.json",
+      "vscode.coffeescript": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/coffeescript.i18n.json",
+      "vscode.configuration-editing": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/configuration-editing.i18n.json",
+      "vscode.cpp": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/cpp.i18n.json",
+      "vscode.csharp": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/csharp.i18n.json",
+      "vscode.css-language-features": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/css-language-features.i18n.json",
+      "vscode.css": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/css.i18n.json",
+      "vscode.dart": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/dart.i18n.json",
+      "vscode.debug-auto-launch": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/debug-auto-launch.i18n.json",
+      "vscode.debug-server-ready": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/debug-server-ready.i18n.json",
+      "vscode.diff": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/diff.i18n.json",
+      "vscode.docker": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/docker.i18n.json",
+      "vscode.emmet": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/emmet.i18n.json",
+      "vscode.extension-editing": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/extension-editing.i18n.json",
+      "vscode.fsharp": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/fsharp.i18n.json",
+      "vscode.git-base": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/git-base.i18n.json",
+      "vscode.git": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/git.i18n.json",
+      "vscode.github-authentication": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/github-authentication.i18n.json",
+      "vscode.github": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/github.i18n.json",
+      "vscode.go": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/go.i18n.json",
+      "vscode.groovy": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/groovy.i18n.json",
+      "vscode.grunt": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/grunt.i18n.json",
+      "vscode.gulp": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/gulp.i18n.json",
+      "vscode.handlebars": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/handlebars.i18n.json",
+      "vscode.hlsl": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/hlsl.i18n.json",
+      "vscode.html-language-features": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/html-language-features.i18n.json",
+      "vscode.html": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/html.i18n.json",
+      "vscode.image-preview": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/image-preview.i18n.json",
+      "vscode.ini": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/ini.i18n.json",
+      "vscode.ipynb": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/ipynb.i18n.json",
+      "vscode.jake": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/jake.i18n.json",
+      "vscode.java": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/java.i18n.json",
+      "vscode.javascript": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/javascript.i18n.json",
+      "vscode.json-language-features": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/json-language-features.i18n.json",
+      "vscode.json": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/json.i18n.json",
+      "vscode.julia": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/julia.i18n.json",
+      "vscode.latex": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/latex.i18n.json",
+      "vscode.less": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/less.i18n.json",
+      "vscode.log": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/log.i18n.json",
+      "vscode.lua": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/lua.i18n.json",
+      "vscode.make": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/make.i18n.json",
+      "vscode.markdown-basics": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/markdown-basics.i18n.json",
+      "vscode.markdown-language-features": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/markdown-language-features.i18n.json",
+      "vscode.markdown-math": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/markdown-math.i18n.json",
+      "vscode.merge-conflict": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/merge-conflict.i18n.json",
+      "vscode.microsoft-authentication": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/microsoft-authentication.i18n.json",
+      "vscode.ms-vscode.js-debug": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/ms-vscode.js-debug.i18n.json",
+      "vscode.notebook-renderers": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/notebook-renderers.i18n.json",
+      "vscode.npm": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/npm.i18n.json",
+      "vscode.objective-c": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/objective-c.i18n.json",
+      "vscode.perl": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/perl.i18n.json",
+      "vscode.php-language-features": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/php-language-features.i18n.json",
+      "vscode.php": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/php.i18n.json",
+      "vscode.powershell": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/powershell.i18n.json",
+      "vscode.pug": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/pug.i18n.json",
+      "vscode.python": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/python.i18n.json",
+      "vscode.r": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/r.i18n.json",
+      "vscode.razor": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/razor.i18n.json",
+      "vscode.references-view": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/references-view.i18n.json",
+      "vscode.restructuredtext": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/restructuredtext.i18n.json",
+      "vscode.ruby": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/ruby.i18n.json",
+      "vscode.rust": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/rust.i18n.json",
+      "vscode.scss": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/scss.i18n.json",
+      "vscode.search-result": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/search-result.i18n.json",
+      "vscode.shaderlab": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/shaderlab.i18n.json",
+      "vscode.shellscript": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/shellscript.i18n.json",
+      "vscode.simple-browser": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/simple-browser.i18n.json",
+      "vscode.sql": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/sql.i18n.json",
+      "vscode.swift": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/swift.i18n.json",
+      "vscode.theme-abyss": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-abyss.i18n.json",
+      "vscode.theme-defaults": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-defaults.i18n.json",
+      "vscode.theme-kimbie-dark": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-kimbie-dark.i18n.json",
+      "vscode.theme-monokai-dimmed": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-monokai-dimmed.i18n.json",
+      "vscode.theme-monokai": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-monokai.i18n.json",
+      "vscode.theme-quietlight": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-quietlight.i18n.json",
+      "vscode.theme-red": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-red.i18n.json",
+      "vscode.theme-seti": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-seti.i18n.json",
+      "vscode.theme-solarized-dark": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-solarized-dark.i18n.json",
+      "vscode.theme-solarized-light": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-solarized-light.i18n.json",
+      "vscode.theme-tomorrow-night-blue": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/theme-tomorrow-night-blue.i18n.json",
+      "vscode.typescript-basics": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/typescript-basics.i18n.json",
+      "vscode.typescript-language-features": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/typescript-language-features.i18n.json",
+      "vscode.vb": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/vb.i18n.json",
+      "vscode.xml": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/xml.i18n.json",
+      "vscode.yaml": "$CODE_SERVER_HOME_PATH/.local/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/extensions/yaml.i18n.json"
     },
     "label": "中文(简体)"
   }
