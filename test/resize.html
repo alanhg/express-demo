@@ -27,8 +27,8 @@
         e,
         offsetLeft: element.offsetLeft,
         offsetTop: element.offsetTop,
-        firstHeight: first.offsetHeight,
-        secondHeight: second.offsetHeight
+        firstHeight: firstEl.offsetHeight,
+        secondHeight: secondEl.offsetHeight
       };
 
       document.onmousemove = onMouseMove;
@@ -51,8 +51,8 @@
           md.secondHeight);
 
         element.style.top = md.offsetTop + delta.x + "px";
-        first.style.height = (md.firstHeight + delta.x) + "px";
-        second.style.height = (md.secondHeight - delta.x) + "px";
+        firstEl.style.height = (md.firstHeight + delta.x) + "px";
+        secondEl.style.height = (md.secondHeight - delta.x) + "px";
       }
     }
   }
