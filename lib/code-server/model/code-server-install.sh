@@ -2,7 +2,7 @@
 
 VERSION=4.7.1
 PORT=36000
-ROOT_PATH=~/.webshell/code-server
+ROOT_PATH=$HOME/.webshell/code-server
 # 安装主程序包
 mkdir -p $ROOT_PATH/.local/lib $ROOT_PATH/.local/bin $ROOT_PATH/.local/share/extensions
 
