@@ -130,22 +130,8 @@ cat << EOF >  $CODE_SERVER_HOME_PATH/share/languagepacks.json
 
 EOF
 
-
 # 编辑器主题配置
-mkdir -p $CODE_SERVER_HOME_PATH/share/User/
-cat << EOF >  $CODE_SERVER_HOME_PATH/share/User/settings.json
-{
-        "files.saveConflictResolution": "overwriteFileOnDisk",
-        "workbench.colorTheme": "Default Dark+",
-        "window.menuBarVisibility": "visible",
-        "security.workspace.trust.enabled": false,
-        "terminal.integrated.gpuAcceleration": "off",
-        "files.eol": "\n",
-        "editor.suggest.preview": true,
-        "window.commandCenter": true
-    }
-EOF
-
+curl https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/settings.json >  $CODE_SERVER_HOME_PATH/share/User/settings.json
 
 # 服务化code-server，非root用户操作有权限问题
 cat > /etc/systemd/system/webshell-code-server.service << EOF

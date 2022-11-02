@@ -1,0 +1,10 @@
+{
+  "files.saveConflictResolution": "overwriteFileOnDisk",
+  "workbench.colorTheme": "Default Dark+",
+  "window.menuBarVisibility": "visible",
+  "security.workspace.trust.enabled": false,
+  "terminal.integrated.gpuAcceleration": "off",
+  "files.eol": "\n",
+  "editor.suggest.preview": true,
+  "window.commandCenter": true
+}
