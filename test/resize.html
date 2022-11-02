@@ -6,9 +6,8 @@
 <body>
 
 <div class="splitter">
-    <div id="first">
-        hello first
-    </div>
+    <iframe src="https://www.runoob.com/react/react-tutorial.html" id="first">
+    </iframe>
     <div id="separator"></div>
     <div id="second">
         hello world
@@ -16,25 +15,40 @@
 </div>
 <script>
 
+  function bindIFrameMousemove(iframe) {
+    iframe.contentWindow.document.addEventListener('mousemove', function (event) {
+      var clRect = iframe.getBoundingClientRect();
+      var evt = new CustomEvent('mousemove', {bubbles: true, cancelable: false});
+
+      evt.clientX = event.clientX + clRect.left;
+      evt.clientY = event.clientY + clRect.top;
+
+      iframe.dispatchEvent(evt);
+    });
+  };
+
+  function bindIFrameMouseup(iframe) {
+    iframe.contentWindow.document.addEventListener('mouseup', function (event) {
+      var clRect = iframe.getBoundingClientRect();
+      var evt = new CustomEvent('mouseup', {bubbles: true, cancelable: false});
+
+      evt.clientX = event.clientX + clRect.left;
+      evt.clientY = event.clientY + clRect.top;
+
+      iframe.dispatchEvent(evt);
+    });
+  };
+
+
   // A function is used for dragging and moving
   function dragElement(element, direction, firstEl, secondEl) {
     let md; // remember mouse down info
 
     element.onmousedown = onMouseDown;
 
-    function onMouseDown(e) {
-      md = {
-        e,
-        offsetLeft: element.offsetLeft,
-        offsetTop: element.offsetTop,
-        firstHeight: firstEl.offsetHeight,
-        secondHeight: secondEl.offsetHeight
-      };
-
-      document.onmousemove = onMouseMove;
-      document.onmouseup = () => {
-        document.onmousemove = document.onmouseup = null;
-      }
+    function onmouseup() {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onmouseup);
     }
 
     function onMouseMove(e) {
@@ -52,11 +66,29 @@
 
         element.style.top = md.offsetTop + delta.x + "px";
         firstEl.style.height = (md.firstHeight + delta.x) + "px";
-        secondEl.style.height = (md.secondHeight - delta.x) + "px";
       }
     }
-  }
 
+    function onMouseDown(e) {
+      md = {
+        e,
+        offsetLeft: element.offsetLeft,
+        offsetTop: element.offsetTop,
+        firstHeight: firstEl.offsetHeight,
+        secondHeight: secondEl.offsetHeight
+      };
+
+      document.addEventListener('mouseup', onmouseup);
+      document.addEventListener('mousemove', onMouseMove);
+
+      [firstEl, secondEl].forEach(function (el) {
+        if (el.tagName === 'IFRAME') {
+          bindIFrameMousemove(el);
+          bindIFrameMouseup(el);
+        }
+      });
+    }
+  }
 
   dragElement(document.getElementById("separator"), "vertical", document.getElementById("first"),
     document.getElementById("second"));

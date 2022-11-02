@@ -26,11 +26,24 @@ body {
     width: 100%;
     min-height: 50px;
     height: 200px;
+    overflow: hidden;
+    position: relative;
 }
 
 #second {
     background-color: #eee;
     width: 100%;
-    min-height: 200px;
+    min-height: 100px;
     flex: 2;
+    overflow: hidden;
+}
+
+iframe {
+    border: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
