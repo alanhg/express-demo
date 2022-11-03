@@ -21,7 +21,7 @@
 
   mkdir -p $CODE_SERVER_DIR/lib $CODE_SERVER_DIR/bin $CODE_SERVER_DIR/share/extensions
 
-  curl -fL https://github.com/coder/code-server/releases/download/v4.7.1/code-server-$CODE_SERVER_VERSION-linux-amd64.tar.gz \
+  curl -fL https://github.com/coder/code-server/releases/download/v4.7.1/code-server-4.7.1-linux-amd64.tar.gz \
     | tar -C $CODE_SERVER_DIR/lib -xz
 
   mv $CODE_SERVER_DIR/lib/code-server-4.7.1-linux-amd64 $CODE_SERVER_DIR/lib/code-server-4.7.1
