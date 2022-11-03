@@ -80,7 +80,7 @@ fi
 #    echo '3. install supervisor skipped'
       return
   fi
-  sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/install-package-supervisor.sh)"
+  sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/install-package-supervisor.sh)"
 }
 
 
@@ -90,7 +90,7 @@ fi
 #    echo '4. init supervisor settings skipped'
       return
   fi
-  curl -fL https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/supervisord-conf.tar.gz \
+  curl -fL https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/supervisord-conf.tar.gz \
     | tar -C $CODE_SERVER_DIR -xz
 }
 
