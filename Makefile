@@ -1,2 +1,2 @@
  supervisord:
-	tar zcvf lib/code-server/model/supervisord-conf.tar.gz lib/code-server/model/supervisord-conf
+	cd lib/code-server/model && tar zcvf supervisord-conf.tar.gz supervisord-conf
