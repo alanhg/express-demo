@@ -21,7 +21,7 @@
 
   mkdir -p $CODE_SERVER_DIR/lib $CODE_SERVER_DIR/bin $CODE_SERVER_DIR/share/extensions
 
-  curl -fLS https://github.com/coder/code-server/releases/download/v4.7.1/code-server-4.7.1-linux-amd64.tar.gz \
+  curl -fLsS https://github.com/coder/code-server/releases/download/v4.7.1/code-server-4.7.1-linux-amd64.tar.gz \
     | tar -C $CODE_SERVER_DIR/lib -xz
 
   mv $CODE_SERVER_DIR/lib/code-server-4.7.1-linux-amd64 $CODE_SERVER_DIR/lib/code-server-4.7.1
@@ -36,7 +36,7 @@
 #    echo '1. install extensions skipped'
      return
   fi
-  curl -fLS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz \
+  curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz \
   | tar -C $CODE_SERVER_DIR/share/extensions -xz
 }
 
@@ -67,7 +67,7 @@ settings_json=$CODE_SERVER_DIR/share/User/settings.json
 if [ ! -e $settings_json ]
 then
  mkdir -p $CODE_SERVER_DIR/share/User/
-    curl -S https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/default-settings.json >  $CODE_SERVER_DIR/share/User/settings.json
+    curl -sS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/default-settings.json >  $CODE_SERVER_DIR/share/User/settings.json
 fi
 #  echo '2. init user settings skipped'
 }
@@ -80,7 +80,7 @@ fi
 #    echo '3. install supervisor skipped'
       return
   fi
-  sudo sh -c "$(curl -fSL https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/install-package-supervisor.sh)"
+  sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/install-package-supervisor.sh)"
 }
 
 
@@ -90,7 +90,7 @@ fi
 #    echo '4. init supervisor settings skipped'
       return
   fi
-  curl -fLS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/supervisord-conf.tar.gz \
+  curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/supervisord-conf.tar.gz \
     | tar -C $CODE_SERVER_DIR -xz
 }
 
