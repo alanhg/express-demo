@@ -367,6 +367,15 @@
     if (event.type !== 'keydown') {
       return;
     }
+
+    if (['ArrowLeft', 'ArrowRight'].indexOf(event.key) > -1 && event.ctrlKey && event.shiftKey) {
+      console.log('左右tab切换-tab');
+      return false;
+    }
+    if (['ArrowLeft', 'ArrowRight'].indexOf(event.key) > -1 && event.shiftKey) {
+      console.log('左右tab切换-window');
+      return false;
+    }
     // alternate screen模式比如vim模式下不开启终端检索
     if (event.key === 'f' && (event.metaKey || event.ctrlKey) && term.buffer.active.type === 'normal') {
       event.preventDefault();
