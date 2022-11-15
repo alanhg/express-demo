@@ -57,29 +57,33 @@
   ws.addEventListener('open', () => {
 
   });
+  let startingOutput = '';
   ws.addEventListener('message', ({data}) => {
     const options = JSON.parse(data);
     if (options.type === 'start-ide') {
-      if (options.data.status === 'success') {
-
-        const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
-
-        const agentEl = document.createElement('iframe');
-        agentEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
-        agentEl.host = "<%= host %>";
-        agentEl.username = "<%= username %>/";
-        agentEl.classList = 'workspace hide';
-        loadingEl.parentNode.insertBefore(agentEl, loadingEl);
-        let interval = setInterval(() => {
-          let editor = agentEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
-          if (editor) {
-            loadingEl.classList.add('hide');
-            agentEl.classList.remove('hide');
-            clearInterval(interval);
-          }
-        }, 100);
-      } else {
-        alert('启动失败');
+      if (options.data.status === 'starting') {
+        // 安装步骤
+        startingOutput = `${startingOutput + options.data.message}`;
+      } else if (options.data.status === 'done') {
+        if (!startingOutput.match('init success')) {
+          alert('启动失败');
+        } else {
+          const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
+          const agentEl = document.createElement('iframe');
+          agentEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
+          agentEl.host = "<%= host %>";
+          agentEl.username = "<%= username %>/";
+          agentEl.classList = 'workspace hide';
+          loadingEl.parentNode.insertBefore(agentEl, loadingEl);
+          let interval = setInterval(() => {
+            let editor = agentEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
+            if (editor) {
+              loadingEl.classList.add('hide');
+              agentEl.classList.remove('hide');
+              clearInterval(interval);
+            }
+          }, 100);
+        }
       }
     }
   });
