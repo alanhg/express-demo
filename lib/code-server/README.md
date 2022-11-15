@@ -9,7 +9,7 @@
 
 ## 好处
 
-1. 目标机器不需要直接对外开放code-server web端口
+1. 目标机器不需要直接对外开放code-server web端口，比如`8080`
 2. 一键脚本安装/运行code-server
 3. 动态代理多台code-server，服务可控/登录/安全均可走业务实现
 
@@ -83,6 +83,8 @@ workbench.web.main.css内联SVG，修改的话，需要源码修改
 
 ### 后台运行
 
+#### 系统服务
+
 服务形式启动问题是需要root用户权限来控制
 
 ```shell
@@ -102,8 +104,16 @@ User=%i
 [Install]
 WantedBy=default.target
 EOF
-``` 
+```
 服务创建需要root权限，但查看服务状态不需要
+
+#### supervisord
+
+
+
+#### 主题
+
+
 
 ## Code-Server升级
 
