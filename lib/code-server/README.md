@@ -112,8 +112,11 @@ EOF
 
 
 #### 主题
+配置该值即可。
 
-
+```
+"workbench.colorTheme": "Default Dark+"
+```
 
 ## Code-Server升级
 
