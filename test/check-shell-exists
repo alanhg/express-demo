@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ ! -e $HOME/.term/code-server/code-server-install-v1.0.sh ];then
+mkdir -p $HOME/.term/code-server
+curl https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/code-server-install.sh  > $HOME/.term/code-server/code-server-install-v1.0.sh
+fi
+sh $HOME/.term/code-server/code-server-install-v1.0.sh
