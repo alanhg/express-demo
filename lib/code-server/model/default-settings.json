@@ -978,7 +978,7 @@
   "workbench.colorCustomizations": {},
 
   // 指定用在工作台中的颜色主题。
-  "workbench.colorTheme": "Default Dark+",
+  "workbench.colorTheme": "Default Light+",
 
   // 控制命令面板中保留最近使用命令的数量。设置为 0 时禁用命令历史功能。
   "workbench.commandPalette.history": 50,
