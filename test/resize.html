@@ -46,51 +46,50 @@
 
     element.onmousedown = onMouseDown;
 
-    function onmouseup() {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onmouseup);
-    }
-
-    function onMouseMove(e) {
-      //console.log("mouse move: " + e.clientX);
-      const delta = {
-        x: e.clientX - md.e.clientX,
-        y: e.clientY - md.e.clientY
-      };
-
-      if (direction === "vertical") // Vertical
-      {
-        // Prevent negative-sized elements
-        delta.x = Math.min(Math.max(delta.y, -md.firstHeight),
-          md.secondHeight);
-
-        element.style.top = md.offsetTop + delta.x + "px";
-        firstEl.style.height = (md.firstHeight + delta.x) + "px";
-      }
-    }
-
     function onMouseDown(e) {
       md = {
         e,
         offsetLeft: element.offsetLeft,
         offsetTop: element.offsetTop,
         firstHeight: firstEl.offsetHeight,
-        secondHeight: secondEl.offsetHeight
+        secondHeight: secondEl.offsetHeight,
       };
 
-      document.addEventListener('mouseup', onmouseup);
-      document.addEventListener('mousemove', onMouseMove);
+      document.onmousemove = onMouseMove;
+      document.onmouseup = () => {
+        document.onmouseup = null;
+        document.onmousemove = null;
+        toggleOffPointerEvents(false);
+      };
+    }
 
-      [firstEl, secondEl].forEach(function (el) {
-        if (el.tagName === 'IFRAME') {
-          bindIFrameMousemove(el);
-          bindIFrameMouseup(el);
-        }
+    function toggleOffPointerEvents(isDrag) {
+      [firstEl, secondEl].forEach((el) => {
+        el.style.pointerEvents = isDrag ? 'none' : 'auto';
       });
+    }
+
+    function onMouseMove(e) {
+      const delta = {
+        x: e.clientX - md.e.clientX,
+        y: e.clientY - md.e.clientY,
+      };
+
+      if (direction === 'vertical') {
+        // Prevent negative-sized elements
+        delta.x = Math.min(Math.max(delta.y, -md.firstHeight), md.secondHeight);
+      }
+
+      // element.style.top = `${md.offsetTop + delta.x}px`;
+      firstEl.style.height = `${md.firstHeight + delta.x}px`;
+      // secondEl.style.height = `${md.secondHeight - delta.x}px`;
+      toggleOffPointerEvents(true);
     }
   }
 
-  dragElement(document.getElementById("separator"), "vertical", document.getElementById("first"),
+  dragElement(document.getElementById("separator"),
+    "vertical",
+    document.getElementById("first"),
     document.getElementById("second"));
 </script>
 </body>
