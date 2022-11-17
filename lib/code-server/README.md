@@ -127,3 +127,8 @@ https://coder.com/docs/code-server/latest/upgrade
 ## CDN
 1. 代理请求时只针对HTML文件进行静态资源替换，切换为CDN源，替换80%体积占比
 2. 直接包源码修改，见`lib/vscode/out/vs/code/browser/workbench/workbench.html`
+
+## 加载速度
+
+1. 测试发现加载出页面内容需要3s-6s
+2. 主要速度问题取决于WebSocket响应速度
