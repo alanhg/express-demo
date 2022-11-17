@@ -11,7 +11,7 @@
 }
 
 
-# 瀹夎涓荤▼搴忓寘
+# 安装主程序包
  install_code_server(){
   echo '0. install code-server'
 
