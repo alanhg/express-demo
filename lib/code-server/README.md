@@ -5,7 +5,7 @@
 1. SSH连通目标机器，用于执行命令
 2. SSH方式检测/安装/启动 code-server
 3. SSH方式启动目标机器代理服务
-4. 走HTTP代理访问code-server服务
+4. 走HTTP代理访问内网code-server-web服务
 
 ## 好处
 

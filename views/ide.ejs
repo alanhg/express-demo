@@ -75,12 +75,14 @@
           agentEl.username = "<%= username %>/";
           agentEl.classList = 'workspace hide';
           loadingEl.parentNode.insertBefore(agentEl, loadingEl);
+          console.time('加载编辑器耗时');
           let interval = setInterval(() => {
             let editor = agentEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
             if (editor) {
               loadingEl.classList.add('hide');
               agentEl.classList.remove('hide');
               clearInterval(interval);
+              console.timeEnd('加载编辑器耗时');
             }
           }, 100);
         }

@@ -504,8 +504,8 @@
          * ?folder=/home
          */
         const codeServerWeb = (`/ide/${options.proxyKey}?folder=/home&host=${options.host}`);
-        // location.href = codeServerWeb;
-        window.open(codeServerWeb, '_blank');
+        location.href = codeServerWeb;
+        // window.open(codeServerWeb, '_blank');
         console.log(`访问地址：${window.location.protocol}//${window.location.host}${codeServerWeb}`);
       } else {
         term.write(evt.data.toString());
