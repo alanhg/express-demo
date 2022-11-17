@@ -16,7 +16,7 @@
   echo '0. install code-server'
 
   if which $CODE_SERVER_DIR/bin/code-server >/dev/null; then
-#    echo '0. install code-server skipped'
+    echo "0. install code-server-$CODE_SERVER_VERSION installed"
      return
   fi
 
