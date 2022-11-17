@@ -1,6 +1,7 @@
 
  init_environment_variables(){
   export CODE_SERVER_PORT=36001
+  export CODE_SERVER_VERSION=4.7.1
   export CODE_SERVER_DIR=$HOME/.term/code-server
   export BIND_ADDR=127.0.0.1:$CODE_SERVER_PORT
   export USER_DATA_PATH=$CODE_SERVER_DIR/share
@@ -21,12 +22,12 @@
 
   mkdir -p $CODE_SERVER_DIR/lib $CODE_SERVER_DIR/bin $CODE_SERVER_DIR/share/extensions
 
-  curl -fLsS https://github.com/coder/code-server/releases/download/v4.7.1/code-server-4.7.1-linux-amd64.tar.gz \
+  curl -fLsS https://github.com/coder/code-server/releases/download/v$CODE_SERVER_VERSION/code-server-$CODE_SERVER_VERSION-linux-amd64.tar.gz \
     | tar -C $CODE_SERVER_DIR/lib -xz
 
-  mv $CODE_SERVER_DIR/lib/code-server-4.7.1-linux-amd64 $CODE_SERVER_DIR/lib/code-server-4.7.1
+  mv $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION-linux-amd64 $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION
 
-  ln -s $CODE_SERVER_DIR/lib/code-server-4.7.1/bin/code-server $CODE_SERVER_DIR/bin/code-server
+  ln -s $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION/bin/code-server $CODE_SERVER_DIR/bin/code-server
 }
 
 # 瀹夎鎻掍欢
