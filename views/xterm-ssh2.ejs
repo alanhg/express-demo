@@ -490,6 +490,7 @@
       const currenDirArr = data.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
       if (currenDirArr?.length >= 3) {
         CurrentDir = currenDirArr[2];
+        terminalCurrentDirRecord[window.term.getcur]
       }
       term.write(data);
     } else if (typeof evt.data === 'string') {
@@ -914,9 +915,9 @@
         'download file', // title
         function (key, opt) {
           const filename = window.term.getSelection();
+          const selectionPosition = window.term.getSelectionPosition();
+          console.log(filename, selectionPosition);
           typeMode = 'download-file';
-
-
           sftpSocket.send('stat-file', {
             path: joinPath(CurrentDir, filename)
           }).once('stat-file', (data) => {

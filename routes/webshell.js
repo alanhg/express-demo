@@ -13,7 +13,9 @@ let logStartFlag = false;
 let shellLog;
 
 const connectOpts = {
-  host: process.env.host, port: 22, username: process.env.username || 'root', password: process.env.password
+  host: process.env.host, port: 22, username: process.env.username || 'root', password: process.env.password,
+  keepaliveInterval: 30000,
+  keepaliveCountMax: 200,
 };
 
 router.ws('/ws/webshell', function (ws, res) {
