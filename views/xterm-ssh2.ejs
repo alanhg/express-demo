@@ -450,7 +450,9 @@
       data
     }))
   })
-
+  term.onLineFeed(() => {
+    console.log("执行换行");
+  });
   socket = new WebSocket(`ws://${location.hostname}:${location.port}/ws/webshell`);
 
   term.zmodemRetract = () => {
