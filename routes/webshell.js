@@ -3,12 +3,11 @@
  */
 const express = require("express");
 const router = express.Router();
-const SshFtpClient = require("../lib/ssh-ftp");
 const SshClient = require("../lib/webshell-ssh");
 const ShellLog = require("../lib/shell-log");
-const Stream = require("stream");
 const codeServerProxyRouter = require('../lib/code-server/route/agent-route');
 const ideRouter = require('../lib/code-server/route/ide');
+const SftpClient = require("../lib/sftp-client");
 
 let logStartFlag = false;
 let shellLog;
@@ -31,54 +30,9 @@ router.ws('/ws/webshell', function (ws, res) {
   });
 });
 
-router.ws('/ws/sftp', function (ws, res) {
-  const sshClient = new SshFtpClient();
-  sshClient.connect(connectOpts);
-  sshClient.on('connected', () => {
-    ws.send(JSON.stringify({
-      type: 'connected'
-    }));
-  });
-  ws.on('message', function (msg) {
-    const options = JSON.parse(msg);
-    if (options.type === 'list') {
-      sshClient.list(options.path).then(res => {
-        ws.send(JSON.stringify({
-          type: 'list', path: options.path, data: res
-        }))
-      })
-    }
-    if (options.type === 'get-file') {
-      const dst = new Throttle();
-      sshClient.get(options.path, dst);
-      dst.on('data', (chunk) => {
-        ws.send(chunk);
-      })
-    }
-
-    if (options.type === 'download-file') {
-      const dst = new Throttle();
-      sshClient.get(options.path, dst);
-      dst.on('data', (chunk) => {
-        ws.send(chunk);
-      })
-    }
-
-    if (options.type === 'put-file') {
-      const readerStream = Stream.Readable.from([options.data]);
-      try {
-        sshClient.put(readerStream, options.path).then(res => {
-          ws.send(JSON.stringify({
-            type: 'put-file', path: options.path,
-          }))
-        }).catch(e => {
-          console.error(e);
-        }).finally(() => {
-        })
-      } catch (e) {
-      }
-    }
-  });
+router.ws('/ws/sftp', function (ws, req) {
+  const client = new SftpClient(ws);
+  client.connect(connectOpts);
 });
 
 router.get('/ssh2-log', (req, res) => {
@@ -107,11 +61,4 @@ router.use('/tty', codeServerProxyRouter)
 router.use('/ide', ideRouter)
 
 module.exports = router;
-
-class Throttle extends Stream.Transform {
-  _transform(buf, enc, next) {
-    this.push(buf)
-    next()
-  }
-}
 

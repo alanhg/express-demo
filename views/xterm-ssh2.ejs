@@ -20,7 +20,7 @@
     <script src="/js/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/js/jquery.ztree.all.min.js"></script>
     <script src="/js/contextMenu.js"></script>
-
+    <script src="/js/events.js"></script>
     <!--    <script src="/js/jquery-contextmenu/dist/jquery.ui.position.js"></script>-->
 
     <style>
@@ -276,6 +276,13 @@
   const SPACER = '            ';
   var socket, zsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
     clientRecordLogBlobs = [], CurrentDir;
+  function parseData(evt) {
+    try {
+      return JSON.parse(evt.data);
+    } catch {
+      return evt.data;
+    }
+  }
 </script>
 <script type="module">
   import { SearchAddonBar } from '/js/search-addon-bar.js';
@@ -770,13 +777,17 @@
   }
 </script>
 
-<script>
+<script type="module">
+
+
   function joinPath(l, r) {
     return `${l}/${r}`.replace(/\/{2,}/g, '/');
   }
 
+  import SftpClient from '/js/sftp-client.js';
+
+  const sftpSocket = new SftpClient(`ws://127.0.0.1:8000/ws/sftp`);
   // 树JS文档 https://github.com/daweilv/treejs
-  const sftpSocket = new WebSocket(`ws://127.0.0.1:8000/ws/sftp`);
   const rootPath = '/home/lighthouse';
   let typeMode;
 
@@ -799,19 +810,15 @@
   function myOnClick(event, treeId, treeNode) {
     typeMode = 'get-file';
     if (treeNode.type === '-') {
-      sftpSocket.send(JSON.stringify({
-        type: 'get-file',
-        path: treeNode.id
-      }));
+      sftpSocket.send('get-file', {path: treeNode.id});
     }
     zTreeNodeSelectedId = treeNode.id;
   }
 
   function zTreeOnExpand(event, treeId, treeNode) {
-    sftpSocket.send(JSON.stringify({
-      type: 'list',
+    sftpSocket.send('list', {
       path: treeNode.id
-    }));
+    });
   }
 
   $(document).ready(function () {
@@ -830,54 +837,37 @@
     ]);
   });
 
-  function parseData(evt) {
-    try {
-      return JSON.parse(evt.data);
-    } catch {
-      return evt.data;
-    }
-  }
 
-
-  sftpSocket.onopen = function () {
-
-  }
-  sftpSocket.onmessage = function (evt) {
-    if (typeMode === 'get-file' && evt.data instanceof Blob) {
-      evt.data.text().then((value) => {
+  sftpSocket.on('binary-data', (data) => {
+    if (typeMode === 'get-file') {
+      data.text().then((value) => {
         codeEditor.getModel().setValue(value);
       })
-      console.log(evt.data.toString());
+      console.log(data.toString());
+    } else if (typeMode === 'download-file') {
+      saveFile(data, window.term.getSelection());
       return;
     }
+  });
 
-    if (typeMode === 'download-file' && evt.data instanceof Blob) {
-      saveFile(evt.data, window.term.getSelection());
-      return;
-    }
-
-    const opts = JSON.parse(evt.data)
-    if (opts.type === 'connected') {
-      sftpSocket.send(JSON.stringify({
-        type: 'list',
-        path: rootPath
-      }));
-    }
-    if (opts.type === 'list') {
-      const parentNode = zTreeObj.getNodeByParam('id', opts.path, null);
-      zTreeObj.removeChildNodes(parentNode);
-      zTreeObj.addNodes(parentNode, opts.data.map(item => ({
-        id: joinPath(opts.path, item.name),
-        name: item.name,
-        children: item.type === 'd' ? [] : null,
-        type: item.type
-      })));
-    }
-    if (opts.type === 'put-file') {
-      alert(`${zTreeNodeSelectedId} saved!`);
-    }
-  }
-
+  sftpSocket.on('connected', () => {
+    sftpSocket.send('list', {
+      path: rootPath
+    });
+  });
+  sftpSocket.on('list', (data) => {
+    const parentNode = zTreeObj.getNodeByParam('id', data.path, null);
+    zTreeObj.removeChildNodes(parentNode);
+    zTreeObj.addNodes(parentNode, data.data.map(item => ({
+      id: joinPath(data.path, item.name),
+      name: item.name,
+      children: item.type === 'd' ? [] : null,
+      type: item.type
+    })));
+  });
+  sftpSocket.on('put-file', () => {
+    alert(`${zTreeNodeSelectedId} saved!`);
+  });
 
   // require is provided by loader.min.js.
   require.config({paths: {'vs': 'https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs'}});
@@ -896,11 +886,10 @@
     // console.log(actions);
 
     codeEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
-      sftpSocket.send(JSON.stringify({
-        type: 'put-file',
+      sftpSocket.send('put-file', {
         path: zTreeNodeSelectedId,
         data: codeEditor.getValue()
-      }));
+      });
     });
   });
 
@@ -921,14 +910,13 @@
   $('#terminal-container').contextmenu(function (e) {
     const menu = [
       [
-        'download file', //title
+        'download file', // title
         function (key, opt) {
           const filename = window.term.getSelection();
           typeMode = 'download-file';
-          sftpSocket.send(JSON.stringify({
-            type: 'download-file',
+          sftpSocket.send('download-file', {
             path: joinPath(CurrentDir, filename)
-          }));
+          });
         }
       ],
     ];
