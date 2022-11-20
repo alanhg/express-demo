@@ -277,6 +277,8 @@
   var socket, zsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
     clientRecordLogBlobs = [], CurrentDir = '/root';
 
+  const CurrentDirRecord = [];
+
   function parseData(evt) {
     try {
       return JSON.parse(evt.data);
@@ -452,6 +454,9 @@
   })
   term.onLineFeed(() => {
     console.log("执行换行");
+    console.log(term.buffer.active.cursorX, term.buffer.active.cursorY);
+    CurrentDirRecord[term.buffer.active.cursorY] = CurrentDir; // 当前得到的目录根据行进行记录
+    console.log(CurrentDirRecord);
   });
   socket = new WebSocket(`ws://${location.hostname}:${location.port}/ws/webshell`);
 
@@ -919,14 +924,15 @@
           const selectionPosition = window.term.getSelectionPosition();
           console.log(filename, selectionPosition);
           typeMode = 'download-file';
+          const cwd = CurrentDirRecord[selectionPosition.startRow] || CurrentDir;
           sftpSocket.send('stat-file', {
-            path: joinPath(CurrentDir, filename)
+            path: joinPath(cwd, filename)
           }).once('stat-file', (data) => {
             if (data.error) {
               alert(data.error.message);
             } else if (data.data.isFile) {
               sftpSocket.send('download-file', {
-                path: joinPath(CurrentDir, filename)
+                path: joinPath(cwd, filename)
               });
             } else {
               alert('not file, can not download!');
