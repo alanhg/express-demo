@@ -275,7 +275,8 @@
 <script>
   const SPACER = '            ';
   var socket, zsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
-    clientRecordLogBlobs = [], CurrentDir;
+    clientRecordLogBlobs = [], CurrentDir = '/root';
+
   function parseData(evt) {
     try {
       return JSON.parse(evt.data);
