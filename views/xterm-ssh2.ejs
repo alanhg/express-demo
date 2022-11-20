@@ -490,7 +490,6 @@
       const currenDirArr = data.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
       if (currenDirArr?.length >= 3) {
         CurrentDir = currenDirArr[2];
-        terminalCurrentDirRecord[window.term.getcur]
       }
       term.write(data);
     } else if (typeof evt.data === 'string') {
