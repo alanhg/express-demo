@@ -915,8 +915,20 @@
         function (key, opt) {
           const filename = window.term.getSelection();
           typeMode = 'download-file';
-          sftpSocket.send('download-file', {
+
+
+          sftpSocket.send('stat-file', {
             path: joinPath(CurrentDir, filename)
+          }).once('stat-file', (data) => {
+            if (data.error) {
+              alert(data.error.message);
+            } else if (data.data.isFile) {
+              sftpSocket.send('download-file', {
+                path: joinPath(CurrentDir, filename)
+              });
+            } else {
+              alert('not file, can not download!');
+            }
           });
         }
       ],

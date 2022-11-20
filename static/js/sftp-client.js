@@ -18,6 +18,7 @@ class SftpClient extends EventEmitter {
 
   send(type, data) {
     this.socket.send(JSON.stringify({type, data}));
+    return this;
   }
 }
 
