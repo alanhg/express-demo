@@ -1,7 +1,7 @@
 > 目标机器一键安装code-server,同时代理穿透访问web
 
-
 ## 基本原理
+
 1. SSH连通目标机器，用于执行命令
 2. SSH方式检测/安装/启动 code-server
 3. SSH方式启动目标机器代理服务
@@ -36,14 +36,13 @@ https://github.com/coder/code-server/blob/main/docs/requirements.md
 
 定制化有几个方法，用于解决特定问题。
 
-1. code-server启动配置文件
+1. code-server启动配置文件/启动脚本
    ~/.config/code-server/config.yaml
-2. 用户设置配置文件
+2. 编辑器URL可以携带一些状态参数，比如folder
+3. 用户设置配置文件
    ~/.local/share/code-server/User/settings.json
-3. 缺省配置文件，需要源码修改
-   defaultSettings.json
 4. CSS/JS源码修改
-5. code-server拓展
+5. code-server拓展插件
 
 ### 菜单栏
 
@@ -111,7 +110,13 @@ EOF
 
 
 
-#### 主题
+### URL可携带参数
+
+- folder
+- workspace
+
+### 主题
+
 配置该值即可。
 
 ```
@@ -132,3 +137,4 @@ https://coder.com/docs/code-server/latest/upgrade
 
 1. 测试发现加载出页面内容需要3s-6s
 2. 主要速度问题取决于WebSocket响应速度
+
