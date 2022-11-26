@@ -13,7 +13,6 @@
     <script src="/js/xterm-addon-serialize/lib/xterm-addon-serialize.js"></script>
     <script src="/js/xterm-addon-unicode11/lib/xterm-addon-unicode11.js"></script>
     <script src="/js/zmodem.js/dist/zmodem.js"></script>
-    <script src="/js/xterm/zmodem-browser.js"></script>
     <script src="/js/mousetrap.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
 
@@ -21,7 +20,6 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/js/jquery.ztree.all.min.js"></script>
     <script src="/js/contextMenu.js"></script>
     <script src="/js/events.js"></script>
-    <!--    <script src="/js/jquery-contextmenu/dist/jquery.ui.position.js"></script>-->
 
     <style>
         body {
@@ -271,7 +269,11 @@
 
         </div>
     </div>
+
 </div>
+<footer>
+
+</footer>
 <script>
   const SPACER = '            ';
   var socket, zsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
@@ -340,6 +342,29 @@
   /**
    * 终端会话连接与zsession
    */
+  let isZsession = false;
+  let zsentry = new Zmodem.Sentry({
+    to_terminal: function _to_terminal(data) {
+      if (!isZsession) {
+        term.write(data);
+      }
+    },
+
+    sender: (data) => socket.send(data),
+
+    on_retract: function _on_retract() {
+      console.log('transfer cancelled');
+    },
+
+    on_detect: function _on_detect(detection) {
+      isZsession = true;
+      try {
+        processZSession(detection);
+      } catch {
+        isZsession = false;
+      }
+    },
+  });
 
   term.onSelectionChange(() => {
     // const selectionMaskEl = term.element.getElementsByClassName('xterm-selection')[0].children[0];
@@ -460,12 +485,8 @@
   });
   socket = new WebSocket(`ws://${location.hostname}:${location.port}/ws/webshell`);
 
-  term.zmodemRetract = () => {
-  };
-
-  term.zmodemDetect = (detection) => {
+  function processZSession(detection) {
     zsession = detection.confirm();
-
     var promise;
     zsessionCanceled = false;
     if (zsession.type === "receive") {
@@ -476,11 +497,22 @@
     promise.catch(console.error.bind(console)).then(() => {
       zsession = null;
     });
-  };
+  }
 
-  term.zmodemAttach(socket, {
-    noTerminalWriteOutsideSession: true,
-  });
+  function feedFromSession(data) {
+    const chunkSize = 1024;
+    for (let i = 0; i <= Math.floor(data.length / chunkSize); i++) {
+      try {
+        zsentry.consume(data.slice(i * chunkSize, (i + 1) * chunkSize));
+      } catch (e) {
+        isZsession = false
+        return
+      }
+    }
+    if (!isZsession) {
+      term.write(data)
+    }
+  }
 
   socket.addEventListener('close', () => {
     location.reload();
@@ -489,17 +521,7 @@
   });
 
   socket.addEventListener('message', (evt) => {
-    if (evt.data instanceof ArrayBuffer) {
-      let data = Decodeuint8arr(evt.data);
-      if (clientRecordLogFlag) {
-        clientRecordLogBlobs.push(evt.data);
-      }
-      const currenDirArr = data.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
-      if (currenDirArr?.length >= 3) {
-        CurrentDir = currenDirArr[2];
-      }
-      term.write(data);
-    } else if (typeof evt.data === 'string') {
+    if (typeof evt.data === 'string') {
       const options = parseData(evt);
       if (options.type === 'search') {
         if (options.data.length) {
@@ -525,9 +547,23 @@
       } else {
         term.write(evt.data.toString());
       }
+    } else {
+      feedFromSession(evt.data);
+      if (!isZsession) {
+        const data = evt.data;
+        data.text().then((dataStr) => {
+          if (clientRecordLogFlag) {
+            clientRecordLogBlobs.push(dataStr);
+          }
+          const currenDirArr = dataStr.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
+          if (currenDirArr?.length >= 3) {
+            CurrentDir = currenDirArr[2];
+          }
+          term.write(dataStr);
+        });
+      }
     }
   });
-
 
   function _save_to_disk(xfer, buffer) {
     return Zmodem.Browser.save_to_disk(buffer, xfer.get_details().name);
@@ -768,25 +804,9 @@
     }));
   }
 
-  function updateSearchResult(result = [], keyword) {
-    const elementsByClassNameElement = document.getElementsByClassName('search-result')[0];
-    if (result.length === 0) {
-      elementsByClassNameElement.innerHTML = `无相关内容`;
-      return;
-    }
-    elementsByClassNameElement.innerHTML = `<ul>${
-      result.map(item => `<li><a data-path='${item[0]}' data-row='${item[1]}' data-keyword='${keyword}'>${item[0]};${item[1]};${item[2]}</a></li>`).join('')
-    }</ul>`;
-    elementsByClassNameElement.addEventListener('click', (event) => {
-      if (event.target.tagName === 'A') {
-        searchResultItemOnClick(event);
-      }
-    });
-  }
 </script>
 
 <script type="module">
-
 
   function joinPath(l, r) {
     return `${l}/${r}`.replace(/\/{2,}/g, '/');
