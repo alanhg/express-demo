@@ -350,17 +350,19 @@
       }
     },
 
-    sender: (data) => socket.send(data),
-
-    on_retract: function _on_retract() {
-      console.log('transfer cancelled');
+    sender: (data) => {
+      socket.send(new Uint8Array(data));
     },
 
-    on_detect: function _on_detect(detection) {
+    on_retract: function _on_retract() {
+      term.write('\rtransfer cancelled\r\n');
+    },
+
+    on_detect: async function _on_detect(detection) {
       isZsession = true;
       try {
-        processZSession(detection);
-      } catch {
+        await processZSession(detection);
+      } finally {
         isZsession = false;
       }
     },
@@ -479,13 +481,13 @@
   })
   term.onLineFeed(() => {
     console.log("执行换行");
-    console.log(term.buffer.active.cursorX, term.buffer.active.cursorY);
     CurrentDirRecord[term.buffer.active.cursorY] = CurrentDir; // 当前得到的目录根据行进行记录
-    console.log(CurrentDirRecord);
   });
   socket = new WebSocket(`ws://${location.hostname}:${location.port}/ws/webshell`);
+  socket.binaryType = 'arraybuffer';
 
-  function processZSession(detection) {
+
+  async function processZSession(detection) {
     zsession = detection.confirm();
     var promise;
     zsessionCanceled = false;
@@ -494,23 +496,33 @@
     } else {
       promise = handleUploadSession(zsession);
     }
-    promise.catch(console.error.bind(console)).then(() => {
-      zsession = null;
-    });
+    try {
+      await promise;
+    } catch (e) {
+      console.error(e);
+    }
+    zsession = null;
   }
 
-  function feedFromSession(data) {
+  function feedFromSession(buffer) {
     const chunkSize = 1024;
-    for (let i = 0; i <= Math.floor(data.length / chunkSize); i++) {
+    for (let i = 0; i <= Math.floor(buffer.byteLength / chunkSize); i++) {
       try {
-        zsentry.consume(data.slice(i * chunkSize, (i + 1) * chunkSize));
+        zsentry.consume(buffer.slice(i * chunkSize, (i + 1) * chunkSize));
       } catch (e) {
         isZsession = false
         return
       }
     }
     if (!isZsession) {
-      term.write(data)
+      const dataStr = Uint8ArrayToString(new Uint8Array(buffer));
+      if (clientRecordLogFlag) {
+        clientRecordLogBlobs.push(dataStr);
+      }
+      const currenDirArr = dataStr.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
+      if (currenDirArr?.length >= 3) {
+        CurrentDir = currenDirArr[2];
+      }
     }
   }
 
@@ -545,23 +557,10 @@
         // window.open(codeServerWeb, '_blank');
         console.log(`访问地址：${window.location.protocol}//${window.location.host}${codeServerWeb}`);
       } else {
-        term.write(evt.data.toString());
+        term.write(evt.data);
       }
     } else {
       feedFromSession(evt.data);
-      if (!isZsession) {
-        const data = evt.data;
-        data.text().then((dataStr) => {
-          if (clientRecordLogFlag) {
-            clientRecordLogBlobs.push(dataStr);
-          }
-          const currenDirArr = dataStr.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
-          if (currenDirArr?.length >= 3) {
-            CurrentDir = currenDirArr[2];
-          }
-          term.write(dataStr);
-        });
-      }
     }
   });
 
@@ -581,18 +580,16 @@
         term.write('\x1b[2K\r'); // 清除活跃行内容
         xfer.on("input", (payload) => {
           FILE_BUFFER.push(new Uint8Array(payload));
-          term.write(getProgress(xfer) + '\r');
+          showMessage(getProgress(xfer), true);
         });
         xfer.accept().then(
           () => {
-            term.write(`${xfer.get_details().name} download completed.\r`);
-            term.write(`\r\n`);
+            showMessage(`${xfer.get_details().name} download completed.`);
             // term.focus();
             _save_to_disk(xfer, FILE_BUFFER);
           },
           console.error.bind(console)
         );
-        //END
       }
 
       on_form_submit();
@@ -652,7 +649,7 @@
             }
             const chunk = new Uint8Array(contentBuffers.slice(chunkIndex * 1024, (chunkIndex + 1) * 1024));
             await xfer.send(chunk);
-            showMessage(getProgress(xfer));
+            showMessage(getProgress(xfer), true);
             chunkIndex = chunkIndex + 1;
           }
           if (zsessionCanceled) {
@@ -660,22 +657,14 @@
           } else {
             showMessage(`${xfer.get_details().name} upload completed.`);
           }
-          term.write('\r\n');
           await xfer.end();
+          term.write('\r\n');
         } else {
           console.log('rejected by the other side');
         }
       }
+      await zsession.close()
     };
-
-    // this.zsession.close.bind(zsession), console.error.bind(console);
-    const promise = new Promise((res) => {
-      zsession.on('session_end', () => {
-        res();
-      });
-    });
-
-    return promise;
   }
 
   function showMessage(msg, overwrite = false) {
@@ -802,6 +791,16 @@
       type: 'get-file',
       path: event.target.dataset.path
     }));
+  }
+
+
+  function Uint8ArrayToString(fileData) {
+    let dataString = "";
+    for (let i = 0; i < fileData.length; i++) {
+      dataString += String.fromCharCode(fileData[i]);
+    }
+
+    return dataString
   }
 
 </script>
