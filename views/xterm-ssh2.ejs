@@ -568,6 +568,9 @@
     return Zmodem.Browser.save_to_disk(buffer, xfer.get_details().name);
   }
 
+
+
+
   /**
    * SZ接受文件
    */
@@ -602,6 +605,18 @@
     });
     zsession.start();
     return promise;
+  }
+
+  function debounce(fn, wait = 300) {
+    let timeId;
+    return function () {
+      if (timeId) {
+        clearTimeout(timeId);
+      }
+      timeId = setTimeout(() => {
+        fn.apply(this, arguments);
+      }, wait);
+    };
   }
 
   /**
