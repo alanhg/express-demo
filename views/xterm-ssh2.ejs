@@ -433,10 +433,10 @@
      */
     if (event.key === 'c' && event.ctrlKey) {
       if (zsession) {
-        zsession.abort();
         zsessionCanceled = true;
-        term.writeln('');
+        console.log('zsessionCanceled', zsessionCanceled);
       }
+      term.writeln('');
       if (term.hasSelection()) {
         console.log('CV？');
       } else {
@@ -569,8 +569,6 @@
   }
 
 
-
-
   /**
    * SZ接受文件
    */
@@ -582,6 +580,9 @@
         const FILE_BUFFER = [];
         term.write('\x1b[2K\r'); // 清除活跃行内容
         xfer.on("input", (payload) => {
+          if (zsessionCanceled) {
+            return;
+          }
           FILE_BUFFER.push(new Uint8Array(payload));
           showMessage(getProgress(xfer), true);
         });
@@ -593,6 +594,9 @@
           },
           console.error.bind(console)
         );
+        if (zsessionCanceled) {
+          showMessage(`${xfer.get_details().name} download canceled.`);
+        }
       }
 
       on_form_submit();
@@ -659,6 +663,7 @@
 
           // 需要同步化执行循环操作
           while (true) {
+            console.log('handleUploadSession', zsessionCanceled);
             if (zsessionCanceled || chunkIndex >= chunkLength) {
               break;
             }
