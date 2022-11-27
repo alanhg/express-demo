@@ -332,7 +332,7 @@
       white: '#a5a2a2',
       brightWhite: '#f7f7f7'
     },
-    rendererType: 'dom', //  canvas,dom
+    rendererType: 'canvas', //  canvas,dom
     minimumContrastRatio: 1,
     // 开启透明支持-支持CSS实现终端背景图设定
     allowTransparency: true,
@@ -663,12 +663,12 @@
 
           // 需要同步化执行循环操作
           while (true) {
-            console.log('handleUploadSession', zsessionCanceled);
             if (zsessionCanceled || chunkIndex >= chunkLength) {
               break;
             }
             const chunk = new Uint8Array(contentBuffers.slice(chunkIndex * 1024, (chunkIndex + 1) * 1024));
             await xfer.send(chunk);
+            console.log('getProgress(xfer)',getProgress(xfer));
             showMessage(getProgress(xfer), true);
             chunkIndex = chunkIndex + 1;
           }
