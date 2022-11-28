@@ -8,5 +8,13 @@ function stringToUint8Array(str) {
   return tmpUint8Array
 }
 
-console.log(stringToUint8Array('你'));
-console.log(Buffer.from('你'));
+
+const res = {
+  message: '123',
+  error: 'some wrong'
+}
+if ('error' in res) {
+  console.log('Class: , Function: , Line 17, Param: ', res);
+} else {
+  console.log('Class: , Function: , Line 18, Param: ', res);
+}
