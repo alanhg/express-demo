@@ -9,12 +9,8 @@ function stringToUint8Array(str) {
 }
 
 
-const res = {
-  message: '123',
-  error: 'some wrong'
-}
-if ('error' in res) {
-  console.log('Class: , Function: , Line 17, Param: ', res);
-} else {
-  console.log('Class: , Function: , Line 18, Param: ', res);
-}
+const contacts = new Map()
+contacts.set('Jessie', {phone: "213-555-1234", address: "123 N 1st Ave"});
+
+
+console.log(JSON.stringify(Object.fromEntries(contacts)))
