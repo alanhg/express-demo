@@ -276,7 +276,7 @@
 </footer>
 <script>
   const SPACER = '            ';
-  var socket, zsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
+  var socket, activeZsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
     clientRecordLogBlobs = [], CurrentDir = '/root';
 
   const CurrentDirRecord = [];
@@ -364,6 +364,7 @@
         await processZSession(detection);
       } finally {
         isZsession = false;
+        console.log(isZsession);
       }
     },
   });
@@ -432,7 +433,7 @@
      * 由于开启zmodem会话时关闭了attach插件，因此这里WS直接发送取消命令
      */
     if (event.key === 'c' && event.ctrlKey) {
-      if (zsession) {
+      if (activeZsession) {
         zsessionCanceled = true;
         console.log('zsessionCanceled', zsessionCanceled);
       }
@@ -488,20 +489,19 @@
 
 
   async function processZSession(detection) {
-    zsession = detection.confirm();
+    activeZsession = detection.confirm();
     var promise;
     zsessionCanceled = false;
-    if (zsession.type === "receive") {
-      promise = handleDownloadSession(zsession);
+    if (activeZsession.type === "send") {
+      promise = handleUploadSession(activeZsession);
     } else {
-      promise = handleUploadSession(zsession);
+      promise = handleDownloadSession(activeZsession);
     }
     try {
       await promise;
     } catch (e) {
       console.error(e);
     }
-    zsession = null;
   }
 
   function feedFromSession(buffer) {
@@ -511,7 +511,7 @@
         zsentry.consume(buffer.slice(i * chunkSize, (i + 1) * chunkSize));
       } catch (e) {
         isZsession = false
-        return
+        activeZsession && activeZsession.abort()
       }
     }
     if (!isZsession) {
@@ -601,14 +601,13 @@
 
       on_form_submit();
     });
-
-    var promise = new Promise((res) => {
-      zsession.on("session_end", () => {
-        res();
+    zsession.start();
+    return new Promise((resolve) => {
+      activeZsession.on("session_end", () => {
+        activeZsession = null;
+        resolve();
       });
     });
-    zsession.start();
-    return promise;
   }
 
   function debounce(fn, wait = 300) {
@@ -668,7 +667,7 @@
             }
             const chunk = new Uint8Array(contentBuffers.slice(chunkIndex * 1024, (chunkIndex + 1) * 1024));
             await xfer.send(chunk);
-            console.log('getProgress(xfer)',getProgress(xfer));
+            console.log('getProgress(xfer)', getProgress(xfer));
             showMessage(getProgress(xfer), true);
             chunkIndex = chunkIndex + 1;
           }
