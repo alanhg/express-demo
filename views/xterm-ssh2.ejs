@@ -583,8 +583,6 @@
    */
   function handleDownloadSession(zsession) {
     zsession.on("offer", function (xfer) {
-      this.currentReceiveXfer = xfer;
-
       async function on_form_submit() {
         const FILE_BUFFER = [];
         term.write('\x1b[2K\r'); // 清除活跃行内容
@@ -698,6 +696,7 @@
       activeZsession = null;
       await zsession.close()
     };
+    return Promise.resolve();
   }
 
   function showMessage(msg, overwrite = false) {
