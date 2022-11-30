@@ -678,6 +678,7 @@
             if (zsessionCanceled || chunkIndex >= chunkLength) {
               break;
             }
+            await new Promise(resolve => window.setTimeout(resolve, 10));
             const chunk = new Uint8Array(contentBuffers.slice(chunkIndex * 1024, (chunkIndex + 1) * 1024));
             await xfer.send(chunk);
             console.log('getProgress(xfer)', getProgress(xfer));
@@ -694,6 +695,7 @@
           console.log('rejected by the other side');
         }
       }
+      activeZsession = null;
       await zsession.close()
     };
   }
