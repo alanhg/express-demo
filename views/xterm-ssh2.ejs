@@ -434,7 +434,16 @@
      */
     if (event.key === 'c' && event.ctrlKey) {
       if (activeZsession) {
-        zsessionCanceled = true;
+        if (activeZsession.type === 'send') {
+          zsessionCanceled = true;
+        } else {
+          try {
+            activeZsession._skip();
+          } catch {
+
+          }
+          zsessionCanceled = true;
+        }
         console.log('zsessionCanceled', zsessionCanceled);
       }
       term.writeln('');
@@ -576,26 +585,30 @@
     zsession.on("offer", function (xfer) {
       this.currentReceiveXfer = xfer;
 
-      function on_form_submit() {
+      async function on_form_submit() {
         const FILE_BUFFER = [];
         term.write('\x1b[2K\r'); // 清除活跃行内容
-        xfer.on("input", (payload) => {
-          if (zsessionCanceled) {
-            return;
-          }
-          FILE_BUFFER.push(new Uint8Array(payload));
-          showMessage(getProgress(xfer), true);
-        });
-        xfer.accept().then(
-          () => {
-            showMessage(`${xfer.get_details().name} download completed.`);
-            // term.focus();
-            _save_to_disk(xfer, FILE_BUFFER);
-          },
-          console.error.bind(console)
-        );
+        await new Promise(resolve => {
+          xfer.on("input", (payload) => {
+            if (zsessionCanceled) {
+              resolve();
+              return;
+            }
+            FILE_BUFFER.push(new Uint8Array(payload));
+            showMessage(getProgress(xfer), true);
+          });
+          xfer.accept().then(
+            () => {
+              showMessage(`${xfer.get_details().name} download completed.`);
+              // term.focus();
+              resolve();
+              _save_to_disk(xfer, FILE_BUFFER);
+            },
+            console.error.bind(console)
+          )
+        })
         if (zsessionCanceled) {
-          showMessage(`${xfer.get_details().name} download canceled.`);
+          showMessage(`${xfer.get_details().name} download canceled.`, true);
         }
       }
 
