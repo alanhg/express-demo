@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+
+<button onclick="downloadEmptyFile()">
+    download empty file
+</button>
+
+
+<script>
+  function downloadEmptyFile() {
+    const blob = new Blob([], {
+      type: 'application/octet-stream',
+    });
+    const downloadLink = document.createElement('a');
+    document.body.appendChild(downloadLink);
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.target = '_self';
+    downloadLink.download = 'empty.txt';
+    downloadLink.click();
+  }
+
+</script>
+</body>
+</html>
