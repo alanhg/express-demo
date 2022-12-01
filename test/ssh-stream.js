@@ -49,7 +49,7 @@ class Throttle extends Stream.Transform {
   }
 }
 
-const writableStream = new Throttle({chunkSize: 66 * 1024});
+const writableStream = new Throttle({chunkSize: 2});
 
 writableStream.on('data', data => {
   console.log(data.toString());
@@ -60,10 +60,11 @@ writableStream.on('end', () => {
   console.log('🎉done');
 })
 
-Array.from({length: 1309614}).forEach((_, index) => {
-  writableStream.write(Buffer.from('1'));
-});
-
+writableStream.write(Buffer.from('1'));
+writableStream.write(Buffer.from('2'));
+writableStream.write(Buffer.from('3'));
+writableStream.write(Buffer.from('4'));
+writableStream.write(Buffer.from('5'));
 writableStream.end();
 // const dataStr = BSON.serialize({a: Buffer.from('112323')});
 // const dataParsed = BSON.deserialize(dataStr);
