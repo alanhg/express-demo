@@ -17,6 +17,9 @@ let bufferLength = 5;
 let offset = 0;
 
 
+/**
+ * 限制是写入的buf小于chunksize
+ */
 class Throttle extends Stream.Transform {
   constructor(opts = {}) {
     super(opts);
@@ -46,7 +49,7 @@ class Throttle extends Stream.Transform {
   }
 }
 
-const writableStream = new Throttle({chunkSize: 100});
+const writableStream = new Throttle({chunkSize: 66 * 1024});
 
 writableStream.on('data', data => {
   console.log(data.toString());
@@ -57,16 +60,11 @@ writableStream.on('end', () => {
   console.log('🎉done');
 })
 
-let interval = setInterval(() => {
-  // 接收前端binaryData
-  const buf = Buffer.from(offset.toString(), "utf-8");
-  writableStream.write(Buffer.from([104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]));
-  offset = offset + buf.byteLength;
-  if ((offset + buf.byteLength) > bufferLength) {
-    clearInterval(interval);
-    writableStream.end();
-  }
-}, 1000);
+Array.from({length: 1309614}).forEach((_, index) => {
+  writableStream.write(Buffer.from('1'));
+});
+
+writableStream.end();
 // const dataStr = BSON.serialize({a: Buffer.from('112323')});
 // const dataParsed = BSON.deserialize(dataStr);
 // // console.log('Class: , Function: , Line 51, Param: ', dataParsed.a.buffer);
