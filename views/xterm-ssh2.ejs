@@ -690,7 +690,7 @@
           }
           await xfer.end();
         } else {
-          console.log('rejected by the other side');
+          showMessage(`${xfer.get_details().name} rejected.`);
         }
       }
       activeZsession = null;

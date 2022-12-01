@@ -4,6 +4,7 @@ const zEnd = '**\x18B0800000000022d\r';
 const zAbort = '\x18\x18\x18\x18\x18';
 
 const BSON = require('bson');
+const fs = require('fs');
 const szStartBuffer = Buffer.from(szStart);
 
 const zEndBuffer = Buffer.from(zEnd);
@@ -49,23 +50,31 @@ class Throttle extends Stream.Transform {
   }
 }
 
-const writableStream = new Throttle({chunkSize: 2});
+const writableStream = new Throttle({chunkSize:66 * 1024 });
 
 writableStream.on('data', data => {
-  console.log(data.toString());
+  console.log(1);
 })
 
 // 所有数据均已读完
-writableStream.on('end', () => {
+writableStream.on('end', (data) => {
   console.log('🎉done');
 })
 
-writableStream.write(Buffer.from('1'));
-writableStream.write(Buffer.from('2'));
-writableStream.write(Buffer.from('3'));
-writableStream.write(Buffer.from('4'));
-writableStream.write(Buffer.from('5'));
-writableStream.end();
+
+const readStream = fs.createReadStream(path.join(__dirname, '1637038030269603 (1).mp4'), {
+  highWaterMark: 3175, encoding: 'binary'
+});
+
+
+readStream.on('data', (buf) => {
+  writableStream.write(buf);
+})
+
+readStream.on('end', () => {
+  writableStream.end();
+});
+
 // const dataStr = BSON.serialize({a: Buffer.from('112323')});
 // const dataParsed = BSON.deserialize(dataStr);
 // // console.log('Class: , Function: , Line 51, Param: ', dataParsed.a.buffer);
