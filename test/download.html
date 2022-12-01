@@ -10,11 +10,10 @@
 <body>
 
 
-<button onclick="downloadEmptyFile()">
+<button onclick="downloadEmptyFile2()">
     download empty file
 </button>
-
-
+<script src="https://cdn.bootcdn.net/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
   function downloadEmptyFile() {
     const blob = new Blob([], {
@@ -26,6 +25,13 @@
     downloadLink.target = '_self';
     downloadLink.download = 'empty.txt';
     downloadLink.click();
+  }
+
+  function downloadEmptyFile2() {
+    const blob = new Blob([], {
+      type: 'application/octet-stream',
+    });
+    saveAs(blob, "empty.txt");
   }
 
 </script>
