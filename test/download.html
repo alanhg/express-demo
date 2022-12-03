@@ -8,7 +8,12 @@
     <title>Document</title>
 </head>
 <body>
-
+<input type="file" id="zm_files" style="display: none">
+click here
+</input>
+<button onclick="addWatch()">
+    add watch
+</button>
 
 <button onclick="downloadEmptyFile2()">
     download empty file
@@ -34,6 +39,14 @@
     saveAs(blob, "empty.txt");
   }
 
+  function addWatch() {
+    const a = document.getElementById('zm_files');
+    a.onchange = function (e) {
+      console.log(1);
+      // a.onchange = null;
+    };
+    a.click();
+  }
 </script>
 </body>
 </html>
