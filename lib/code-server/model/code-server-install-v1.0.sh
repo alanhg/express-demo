@@ -61,7 +61,7 @@ cat <<EOF >  $CODE_SERVER_DIR/share/languagepacks.json
     "translations": {
       "vscode": "$CODE_SERVER_DIR/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal/translations/main.i18n.json"
     },
-    "label": "涓枃(绠€浣�)"
+    "label": "中文(简体)"
   }
 }
 EOF
