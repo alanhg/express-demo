@@ -115,7 +115,7 @@ fi
       echo '7. init success'
       return
     else
-      echo '7. init failed'
+      echo "7. init failed: $client_status"
       return
   fi
 }
