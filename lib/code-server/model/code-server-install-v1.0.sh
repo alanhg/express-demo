@@ -90,13 +90,9 @@ fi
   # $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server
   client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl restart code-server)
 
-if test "${client_status#*RUNNING}" != "$client_status"; then
+if test -n "${client_status#*RUNNING}" -o -z "${client_status#*running}"; then
   echo "6. init success: $client_status"
-elif test "${client_status#*running}" != "$client_status"; then
-  echo "6. init success: $client_status"
-elif test "${client_status#*STARTED}" != "$client_status"; then
-  echo "6. init success: $client_status"
-elif test "${client_status#*started}" != "$client_status"; then
+elif test -n "${client_status#*STARTED}" -o -z "${client_status#*started}"; then
   echo "6. init success: $client_status"
 else
   echo "6. init failed: $client_status"
