@@ -1,7 +1,7 @@
 
  init_environment_variables(){
   export CODE_SERVER_PORT=36001
-  export CODE_SERVER_VERSION=4.8.3
+  export CODE_SERVER_VERSION=4.7.1
   export CODE_SERVER_DIR=$HOME/.term/code-server
   export BIND_ADDR=127.0.0.1:$CODE_SERVER_PORT
   export USER_DATA_PATH=$CODE_SERVER_DIR/share
