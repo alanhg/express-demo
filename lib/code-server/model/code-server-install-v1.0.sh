@@ -24,7 +24,7 @@
         | tar -C $CODE_SERVER_DIR/lib -xz
     mv $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION-linux-amd64 $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION
   fi
-  ln -s $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION/bin/code-server $CODE_SERVER_DIR/bin/code-server
+  ln -sf $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION/bin/code-server $CODE_SERVER_DIR/bin/code-server
 }
 
 # 瀹夎鎻掍欢
