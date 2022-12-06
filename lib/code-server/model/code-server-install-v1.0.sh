@@ -89,14 +89,14 @@ fi
   regex="RUNNING|STARTED|running|started"
   $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf -d
   client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server)
-  if [[ $client_status =~ $regex ]]; then
+  if [ $client_status =~ $regex ]; then
 #    echo '6. start supervisor client skipped'
     client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl restart code-server)
   else
     client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server)
   fi
 
-  if [[ $client_status =~ $regex ]]; then
+  if [ $client_status =~ $regex ]; then
         echo '6. init success'
         return
       else
