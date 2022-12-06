@@ -87,8 +87,16 @@ fi
  start_supervisor_server(){
   echo '5. start supervisor server'
   $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf -d
-  # $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server
+  client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server)
+
+if test -n "${client_status#*RUNNING}" -o -z "${client_status#*running}"; then
   client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl restart code-server)
+elif test -n "${client_status#*STARTED}" -o -z "${client_status#*started}"; then
+  client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl restart code-server)
+else
+  client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server)
+fi
+
 
 if test -n "${client_status#*RUNNING}" -o -z "${client_status#*running}"; then
   echo "6. init success: $client_status"
