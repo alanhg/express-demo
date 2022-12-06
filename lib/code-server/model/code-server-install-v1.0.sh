@@ -87,6 +87,7 @@ fi
  start_supervisor_server(){
   echo '5. start supervisor server'
   $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf -d
+  # $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server
   client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl restart code-server)
 
 if test "${client_status#*RUNNING}" != "$client_status"; then
