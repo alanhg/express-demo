@@ -32,7 +32,7 @@
  install_extensions(){
   echo '1. install extensions'
   if [ -d $CODE_SERVER_DIR/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal ]; then
-#    echo '1. install extensions skipped'
+  echo '1. install extensions installed'
      return
   fi
   curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz \
