@@ -3,6 +3,7 @@
   export CODE_SERVER_PORT=36001
   export CODE_SERVER_VERSION=4.7.1
   export CODE_SERVER_DIR=$HOME/.term/code-server
+  export CODE_SERVER_RUN_DIR=$HOME/.term/code-server-run
   export BIND_ADDR=127.0.0.1:$CODE_SERVER_PORT
   export USER_DATA_PATH=$CODE_SERVER_DIR/share
   export CONFIG_PATH=$CODE_SERVER_DIR/.config/config.yaml
@@ -20,7 +21,7 @@
      return
   fi
 
-  mkdir -p $CODE_SERVER_DIR/lib $CODE_SERVER_DIR/bin $CODE_SERVER_DIR/share/extensions
+  mkdir -p $CODE_SERVER_DIR/lib $CODE_SERVER_DIR/bin $CODE_SERVER_DIR/share/extensions $CODE_SERVER_RUN_DIR
 
   curl -fLsS https://github.com/coder/code-server/releases/download/v$CODE_SERVER_VERSION/code-server-$CODE_SERVER_VERSION-linux-amd64.tar.gz \
     | tar -C $CODE_SERVER_DIR/lib -xz
@@ -73,62 +74,40 @@ fi
 #  echo '2. init user settings skipped'
 }
 
-# install supervisor
- install_supervisor(){
-  echo '3. install supervisor'
-
-  if which /usr/bin/supervisord >/dev/null;  then
-#    echo '3. install supervisor skipped'
-      return
-  fi
-  sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/install-package-supervisor.sh)"
-}
-
-
  init_supervisor_settings(){
   echo '4. init supervisor settings'
-  if [ -d $CODE_SERVER_DIR/supervisord-conf ]; then
+  if [ -d $CODE_SERVER_RUN_DIR/supervisord-conf ]; then
 #    echo '4. init supervisor settings skipped'
       return
   fi
   curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/supervisord-conf.tar.gz \
-    | tar -C $CODE_SERVER_DIR -xz
+    | tar -C $CODE_SERVER_RUN_DIR -xz
 }
 
  start_supervisor_server(){
   echo '5. start supervisor server'
-  /usr/bin/supervisord -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf
-}
-
- start_supervisor_client(){
-  echo '6. start supervisor client'
   regex="RUNNING|STARTED|running|started"
-  client_status=$(/usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf status code-server)
+  $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf -d
+  client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server)
   if [[ $client_status =~ $regex ]]; then
 #    echo '6. start supervisor client skipped'
-    /usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf restart code-server
+    client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl restart code-server)
   else
-    /usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf start code-server
+    client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server)
   fi
 
-  sleep 2
-  client_status=$(/usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf status code-server)
-
-   if [[ $client_status =~ $regex ]]; then
-      echo '7. init success'
-      return
-    else
-      echo "7. init failed: $client_status"
-      return
-  fi
+  if [[ $client_status =~ $regex ]]; then
+        echo '6. init success'
+        return
+      else
+        echo '6. init failed'
+        return
+ fi
 }
 
 init_environment_variables
 install_code_server
 install_extensions
 init_user_settings
-install_supervisor
 init_supervisor_settings
 start_supervisor_server
-start_supervisor_client
-
