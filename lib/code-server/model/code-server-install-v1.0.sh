@@ -106,10 +106,13 @@ fi
   client_status=$(/usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf status code-server)
   if [[ $client_status =~ $regex ]]; then
 #    echo '6. start supervisor client skipped'
-    client_status=$(/usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf restart code-server)
+    /usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf restart code-server
   else
-    client_status=$(/usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf start code-server)
+    /usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf start code-server
   fi
+
+  sleep 2
+  client_status=$(/usr/bin/supervisorctl -c $CODE_SERVER_DIR/supervisord-conf/supervisord.conf status code-server)
 
    if [[ $client_status =~ $regex ]]; then
       echo '7. init success'
