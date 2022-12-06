@@ -98,7 +98,7 @@ elif test "${client_status#*STARTED}" != "$client_status"; then
 elif test "${client_status#*started}" != "$client_status"; then
   echo '6. init success'
 else
-  echo '6. init failed'
+  echo "6. init failed: $client_status"
 fi
 }
 
