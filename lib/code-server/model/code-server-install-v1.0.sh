@@ -1,6 +1,6 @@
 
  init_environment_variables(){
-  export CODE_SERVER_PORT=36001
+  export CODE_SERVER_PORT=36000
   export CODE_SERVER_VERSION=4.7.1
   export CODE_SERVER_DIR=$HOME/.term/code-server
   export CODE_SERVER_RUN_DIR=$HOME/.term/code-server-run
