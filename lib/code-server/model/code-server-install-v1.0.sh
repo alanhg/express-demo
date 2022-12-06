@@ -15,19 +15,15 @@
 # 安装主程序包
  install_code_server(){
   echo '0. install code-server'
-
-  if which $CODE_SERVER_DIR/bin/code-server >/dev/null; then
-    echo "0. install code-server-$CODE_SERVER_VERSION installed"
-     return
-  fi
-
   mkdir -p $CODE_SERVER_DIR/lib $CODE_SERVER_DIR/bin $CODE_SERVER_DIR/share/extensions $CODE_SERVER_RUN_DIR
 
-  curl -fLsS https://github.com/coder/code-server/releases/download/v$CODE_SERVER_VERSION/code-server-$CODE_SERVER_VERSION-linux-amd64.tar.gz \
-    | tar -C $CODE_SERVER_DIR/lib -xz
-
-  mv $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION-linux-amd64 $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION
-
+  if [ -d $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION ]; then
+  echo "0. install code-server-$CODE_SERVER_VERSION installed"
+  else
+    curl -fLsS https://github.com/coder/code-server/releases/download/v$CODE_SERVER_VERSION/code-server-$CODE_SERVER_VERSION-linux-amd64.tar.gz \
+        | tar -C $CODE_SERVER_DIR/lib -xz
+    mv $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION-linux-amd64 $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION
+  fi
   ln -s $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION/bin/code-server $CODE_SERVER_DIR/bin/code-server
 }
 
