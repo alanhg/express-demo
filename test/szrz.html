@@ -15,25 +15,27 @@
 <body>
 <input type='file' id='theFile'/>
 
+<button onclick="testUpload()">test upload</button>
 <button onclick="saveCertFile()">save cert file</button>
 
 <script>
-  // Get the file input element
-  var el =
-    document.getElementById('theFile'), lock = false;
-  el.onclick = () => {
-    lock = true;
+
+  function testUpload(){
+    // Get the file input element
+    var el =
+      document.getElementById('theFile');
+    el.click();
+
     el.onchange = () => {
+      console.log('onchange file selected');
     };
-    el.onblur = () => {
-      if (lock) {
-        setTimeout(() => {
-          console.log(el.files);
-        }, 100)
-        lock = false;
-      }
+    document.body.onfocus = () => {
+      console.log('onfocus file selected');
     };
-  };
+    el.onclick = () => {
+      console.log('onclick file selected');
+    };
+  }
 
   function saveBlobAs(headerOrFilename, blob) {
     let filename;
