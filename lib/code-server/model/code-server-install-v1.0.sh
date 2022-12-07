@@ -20,10 +20,10 @@
   if [ -d $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION ]; then
   echo "0. install code-server-$CODE_SERVER_VERSION installed"
   else
-  curl  -fsSL https://webshell-test-1251783334.cos.ap-shanghai.myqcloud.com/code-server/code-server-$ORCA_CODE_SERVER_VERSION-$OS-$ARCH.tar.gz \
-    | tar -C $ORCA_CODE_SERVER_DIR/lib -xz
+  curl  -fsSL https://webshell-test-1251783334.cos.ap-shanghai.myqcloud.com/code-server/code-server-$CODE_SERVER_VERSION-$OS-$ARCH.tar.gz \
+    | tar -C $CODE_SERVER_DIR/lib -xz
 
-  mv $ORCA_CODE_SERVER_DIR/lib/code-server-$ORCA_CODE_SERVER_VERSION-$OS-$ARCH $ORCA_CODE_SERVER_DIR/lib/code-server-$ORCA_CODE_SERVER_VERSION
+  mv $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION-$OS-$ARCH $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION
   fi
   ln -sf $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION/bin/code-server $CODE_SERVER_DIR/bin/code-server
 }
