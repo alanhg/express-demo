@@ -38,7 +38,7 @@
   function saveBlobAs(headerOrFilename, blob) {
     let filename;
     filename = headerOrFilename;
-    const blobUrl = URL.createObjectURL(new Blob([blob]), 'application/octet-stream');
+    const blobUrl = URL.createObjectURL(new Blob([blob]));
     const link = document.createElement('a');
     link.download = filename;
     link.href = blobUrl;
