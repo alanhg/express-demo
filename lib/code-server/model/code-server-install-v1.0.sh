@@ -20,7 +20,7 @@
   if [ -d $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION ]; then
   echo "0. install code-server-$CODE_SERVER_VERSION installed"
   else
-  curl  -fsSL https://webshell-test-1251783334.cos.ap-shanghai.myqcloud.com/code-server/code-server-$CODE_SERVER_VERSION-$OS-$ARCH.tar.gz \
+  curl  -fsSL https://github.com/coder/code-server/releases/download/v$CODE_SERVER_VERSION/code-server-$CODE_SERVER_VERSION-linux-amd64.tar.gz \
     | tar -C $CODE_SERVER_DIR/lib -xz
 
   mv $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION-$OS-$ARCH $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION
