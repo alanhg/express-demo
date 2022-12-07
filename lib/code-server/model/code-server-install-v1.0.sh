@@ -129,9 +129,10 @@ fi
 
 
 start_caddy_proxy(){
-  mkdir -p $CODE_SERVER_RUN_DIR/caddy
-  curl -sS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/caddy/Caddyfile > $CODE_SERVER_RUN_DIR/caddy/Caddyfile
-  /usr/bin/caddy start --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile --force
+  mkdir -p $CODE_SERVER_RUN_DIR/nginx
+#  curl -sS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/caddy/Caddyfile > $CODE_SERVER_RUN_DIR/caddy/Caddyfile
+#  /usr/bin/caddy start --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile --force
+  nginx -c $CODE_SERVER_RUN_DIR/nginx/default.conf
 }
 
 init_environment_variables
