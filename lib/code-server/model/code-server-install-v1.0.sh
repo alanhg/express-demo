@@ -1,4 +1,23 @@
 
+arch() {
+  uname_m=$(uname -m)
+  case $uname_m in
+    aarch64) echo arm64 ;;
+    x86_64) echo amd64 ;;
+    *) echo "$uname_m" ;;
+  esac
+}
+
+os() {
+  uname="$(uname)"
+  case $uname in
+    Linux) echo linux ;;
+    Darwin) echo macos ;;
+    FreeBSD) echo freebsd ;;
+    *) echo "$uname" ;;
+  esac
+}
+
  init_environment_variables(){
   export CODE_SERVER_PORT=36000
   export CODE_SERVER_VERSION=4.7.1
@@ -9,6 +28,10 @@
   export CONFIG_PATH=$CODE_SERVER_DIR/.config/config.yaml
   export EXTENSION_PATH=$CODE_SERVER_DIR/share/extensions
   PATH="$CODE_SERVER_DIR/bin:$PATH"
+
+
+  OS=${OS:-$(os)}
+  ARCH=${ARCH:-$(arch)}
 }
 
 
@@ -20,7 +43,7 @@
   if [ -d $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION ]; then
   echo "0. install code-server-$CODE_SERVER_VERSION installed"
   else
-  curl  -fsSL https://github.com/coder/code-server/releases/download/v$CODE_SERVER_VERSION/code-server-$CODE_SERVER_VERSION-linux-amd64.tar.gz \
+  curl  -fsSL https://github.com/coder/code-server/releases/download/v$CODE_SERVER_VERSION/code-server-$CODE_SERVER_VERSION-$OS-$ARCH.tar.gz \
     | tar -C $CODE_SERVER_DIR/lib -xz
 
   mv $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION-$OS-$ARCH $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION
