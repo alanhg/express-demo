@@ -1,6 +1,6 @@
 :36000 {
   header X-Frame-Options ALLOW-FROM http://127.0.0.1:8000
-proxy / http://127.0.0.1:35999 {
+reverse_proxy / http://127.0.0.1:35999 {
 transparent
 }
 }
