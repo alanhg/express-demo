@@ -4,7 +4,7 @@
   export CODE_SERVER_VERSION=4.7.1
   export CODE_SERVER_DIR=$HOME/.term/code-server
   export CODE_SERVER_RUN_DIR=$HOME/.term/code-server-run
-  export BIND_ADDR=127.0.0.1:$CODE_SERVER_PORT
+  export BIND_ADDR=0.0.0.0:$CODE_SERVER_PORT
   export USER_DATA_PATH=$CODE_SERVER_DIR/share
   export CONFIG_PATH=$CODE_SERVER_DIR/.config/config.yaml
   export EXTENSION_PATH=$CODE_SERVER_DIR/share/extensions
