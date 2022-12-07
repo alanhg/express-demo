@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content=
+            "width=device-width, initial-scale=1.0">
+
+    <title>
+        How to detect when cancel
+        is clicked on file input?
+    </title>
+</head>
+
+<body>
+<input type='file' id='theFile'/>
+
+<button onclick="saveCertFile()">save cert file</button>
+
+<script>
+  // Get the file input element
+  var el =
+    document.getElementById('theFile'), lock = false;
+  el.onclick = () => {
+    lock = true;
+    el.onchange = () => {
+    };
+    el.onblur = () => {
+      if (lock) {
+        setTimeout(() => {
+          console.log(el.files);
+        }, 100)
+        lock = false;
+      }
+    };
+  };
+
+  function saveBlobAs(headerOrFilename, blob) {
+    let filename;
+    filename = headerOrFilename;
+    const blobUrl = URL.createObjectURL(new Blob([blob]), 'application/octet-stream');
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = blobUrl;
+    link.click();
+  }
+
+  function saveCertFile() {
+    saveBlobAs('123.pem', '-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEAtKDlewnbmabUzWwlOyrSl8OqxQ63YY/qZ9sHideArXaWRVFu\nie7CB15M8zckn2ewZFi4F1nt3FzsFOS9bmYsFEqYlzvNm7PjgZ1+mJpiop+7HZlN\nX7HvEuw93ihQlAZWaapADqh7MX65oYI1y7zd24NkjjMkA88pTzqqY1AkE3+sAObj\nfWb0dsDbk7zpefTBlGhqlJKgwTd1wKiLfhCoVEyhe9L3QGwxJ8DnByW/91cgWFfC\nzP0bPNAEKiMHIA1hung8FYhMVVcjU/n5kHvXF5tgae+4TAdjKBVG/fA72pKjDk6O\nMx9/IQ4evw6aFfYfwK8zyD20BR1NLGboVjglFQIDAQABAoIBADfDbmUoO2/5pbvP\ndcUI6N/qi8dvTiTkAblTUMX4zmR+9lBrHeWeXK9aqQXzEa7Wm4m3LAolfL3pwAaJ\nQYQaLeSLzQTvdP/rLsLepO0myGmtR16Ra+YtsAGXBliV+J5iQH45jbIYyIOUvGlE\noigGZDW3IC2YUzeL1pR7p4ume6S64lBN8niNPaEQSagtLPtD4RE6UVnIwgZKFWMa\nNZ1l/TPM2A+ZYlixCTDyYFWWpQ4XH7lvrwEef6ob7RIsIIvs3770IxF7yxmOXmyG\nfX2MqZd/dbMGtfUwpX9s0sVwsaSM6OYIKYVMlhR9RMVnAJ7quErWaHS7nnngGKIo\n07xZ+fcCgYEA1lZS6sR6MfqIygrXCtS9A+qa9d57RUc5/CJoNyS4V5lDXhh+dgXy\nUCppGjllOzulzHAjlNXIbqnAB8CJ9oB9qeY/gkeio9femhBstQzjsppMxiAZ6wM7\nwqG0XPsQw8MZ9FTE1BHetEmaWz8jnwrMUWissZ3d/CaCiJfmlHucxL8CgYEA170v\n6KwSuPQoMVAgXlIAVf2FoXNgnSAj9OfgmeT0tDxay0SxF9kDIF/lSAMKPsQUTRlZ\nUQxfwPG8mD6Wkc1xHWcEC42fP/962heNa1UpmtybrOaprNF4iHOsavkBDIN4O+Z8\nl7okp1/iVYsxytfm7SphgLcJDKtfPF/ltdeWJysCgYEAnd2q6LuZ/OG4iod9Z77V\nEONlCx640Ifrj2eQNr1XAT4jPlTwH+G1XZI/I0+O3hfKwE8ABgmHvOpOQ+duNh7h\nb5fkwwIcKm0+yV67koZR1ySK04qlTFFvXKVZgPpymJ1Eqo8dAc2/qC5mADr685My\ndeuQ9ql97NA4aH7pGAgLqWUCgYBz23KuFjKbxusKyIgJfyoVA+hOswJwf0EwFZKF\nsvJDFKKBxOsB7pYCPd2I1bEb0ftBCFrx7p5BpNBuRjZgKJ8Vdiwy9CRQnyfflYRp\n3rtQIicsLFd0qq17QfuXGxAYI0ZfjMDeTqW+iPyoie78iwPF29uu3xzqA+JKLwnS\npOtLLwKBgE1dyIsjlS3gjKL0U8zLnSVEvMdx1hn+vmDMCRSzm0aF0PSYAu/4ehDi\npXIiMd0VlZkZBBu3GHmaskUCbCBsQe1aHCRqA0GqZ/AsN0qx1Gn2kti0ZU3WCtnw\nCm2+4r9Q0uFB3ap/Foe9hqtMSHQfPtVpgmyc/FoeYeqyN3A5QDs9\n-----END RSA PRIVATE KEY-----');
+  }
+</script>
+</body>
+
+</html>
