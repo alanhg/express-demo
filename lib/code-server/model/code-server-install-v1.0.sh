@@ -23,7 +23,7 @@ os() {
   export CODE_SERVER_VERSION=4.7.1
   export CODE_SERVER_DIR=$HOME/.term/code-server
   export CODE_SERVER_RUN_DIR=$HOME/.term/code-server-run
-  export BIND_ADDR=127.0.0.1:$CODE_SERVER_PORT
+  export BIND_ADDR=0.0.0.0:$CODE_SERVER_PORT
   export USER_DATA_PATH=$CODE_SERVER_DIR/share
   export CONFIG_PATH=$CODE_SERVER_DIR/.config/config.yaml
   export EXTENSION_PATH=$CODE_SERVER_DIR/share/extensions
@@ -127,9 +127,17 @@ else
 fi
 }
 
+
+start_caddy_proxy(){
+  mkdir -p $CODE_SERVER_RUN_DIR/caddy
+  curl -sS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/caddy/Caddyfile > $CODE_SERVER_RUN_DIR/caddy/Caddyfile
+  /usr/bin/caddy start --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile --force
+}
+
 init_environment_variables
 install_code_server
 install_extensions
 init_user_settings
 init_supervisor_settings
 start_supervisor_server
+start_caddy_proxy
