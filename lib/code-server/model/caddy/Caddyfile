@@ -1,5 +1,5 @@
-:36000 {
-handle_path /* {
+http://:36000 {
+handle  {
 reverse_proxy http://127.0.0.1:35999 {
 header_up  X-Frame-Options "ALLOW-FROM=http://127.0.0.1:8000"
 }
