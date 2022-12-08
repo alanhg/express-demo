@@ -130,10 +130,9 @@ fi
 
 start_caddy_proxy(){
   mkdir -p $CODE_SERVER_RUN_DIR/nginx/conf
-  curl -sS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/nginx/conf/default.conf > $CODE_SERVER_RUN_DIR/nginx/conf/default.conf
-#  /usr/bin/caddy start --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile --force
-  kill -QUIT $( cat /usr/local/nginx/logs/nginx.pid )
-  /usr/sbin/nginx -t -c $CODE_SERVER_RUN_DIR/nginx/default.conf -g "pid /var/run/nginx.pid; worker_processes 2;"
+  curl -sS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/caddy/Caddyfile > $CODE_SERVER_RUN_DIR/caddy/Caddyfile
+  /usr/bin/caddy start --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile --force
+#  caddy reverse-proxy --from :36000 --to 127.0.0.1:35999
 }
 
 init_environment_variables
