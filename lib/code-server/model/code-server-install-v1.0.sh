@@ -55,7 +55,7 @@ os() {
  install_extensions(){
   echo '1. install extensions'
   if [ -d $CODE_SERVER_DIR/share/extensions/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal ]; then
-  echo '1. install extensions installed'
+  echo '1. extensions installed'
      return
   fi
   curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/ms-ceintl.vscode-language-pack-zh-hans-1.71.0-universal.gz \
@@ -97,7 +97,7 @@ fi
  init_supervisor_settings(){
   echo '4. init supervisor settings'
   if [ -d $CODE_SERVER_RUN_DIR/supervisord-conf ]; then
-#    echo '4. init supervisor settings skipped'
+  echo '4. supervisor settings installed'
       return
   fi
   curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/supervisord-conf.tar.gz \
