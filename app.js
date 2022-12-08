@@ -11,6 +11,7 @@ const path = require('path');
 const routes = require('./routes/index');
 const bodyParser = require('body-parser');
 var cors = require('cors');
+const {codeServerProxifier, codeServerProxyServer} = require("./lib/code-server/model/proxy");
 
 app.set('trust proxy', 1); // trust first proxy
 // app.use(cookieParser());
@@ -29,6 +30,24 @@ app.use('/', express.static(path.join(__dirname, '/static')));
 // log.use(app);
 // respond with "hello world" when a GET request is made to the homepage
 
-app.listen(conf.server.port, '0.0.0.0', function () {
+const server = app.listen(conf.server.port, '0.0.0.0', function () {
   console.log(`Example app listening on port http://127.0.0.1:${conf.server.port}!`);
+});
+
+server.on('upgrade', function (req, socket, head) {
+  console.log('req.url', req.url);
+  if (req.baseUrl === '/tty') {
+    const proxyKey = req.originalUrl.split('/')[2];
+    let httpAgent;
+    httpAgent = codeServerProxifier.getProxy(proxyKey);
+    if (!httpAgent) {
+      return;
+    }
+    socket.on('error', err => {
+      console.error(err); // ECONNRESET will be caught here
+    });
+    codeServerProxyServer.ws(req, socket, head, {
+      target: httpAgent.url
+    });
+  }
 });
