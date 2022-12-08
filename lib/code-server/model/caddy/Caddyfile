@@ -6,6 +6,10 @@ header_up X-Frame-Options "ALLOW-FROM https://127.0.0.1:8000"
 }
 
 log {
-    output file /var/log/caddy.log
-    format single_field common_log
+        output file /log/code-server/access.log {
+        roll_size 100MiB
+        roll_local_time
+        roll_keep 10
+        roll_keep_for 2160h
+        }
 }
