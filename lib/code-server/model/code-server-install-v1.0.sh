@@ -19,7 +19,7 @@ os() {
 }
 
  init_environment_variables(){
-  export CODE_SERVER_PORT=35999
+  export CODE_SERVER_PORT=36000
   export CODE_SERVER_VERSION=4.7.1
   export CODE_SERVER_DIR=$HOME/.term/code-server
   export CODE_SERVER_RUN_DIR=$HOME/.term/code-server-run
@@ -144,5 +144,3 @@ install_extensions
 init_user_settings
 init_supervisor_settings
 start_supervisor_server
-install_caddy_proxy
-start_caddy_proxy
