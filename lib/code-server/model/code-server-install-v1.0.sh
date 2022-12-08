@@ -142,3 +142,5 @@ init_user_settings
 init_supervisor_settings
 start_supervisor_server
 start_caddy_proxy
+exit 0
+
