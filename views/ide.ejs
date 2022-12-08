@@ -54,40 +54,47 @@
         class="loading-iframe"></iframe>
 <script>
   const ws = new WebSocket('ws://127.0.0.1:8000/ide/<%= proxyKey %>?<%= queryParams %>');
+  let agentFrameEl, tempPassword;
   ws.addEventListener('open', () => {
 
   });
   let startingOutput = '';
   ws.addEventListener('message', ({data}) => {
     const options = JSON.parse(data);
-
-    console.log('options', options);
-
     if (options.type === 'start-ide') {
+      if (options.data.password) {
+        tempPassword = options.data.password;
+        return;
+      }
       if (options.data.status === 'starting') {
         // 安装步骤
         startingOutput = `${startingOutput + options.data.message}`;
       } else if (options.data.status === 'done') {
-
-        console.log('startingOutput', startingOutput);
-
         if (!startingOutput.match('init success')) {
           alert('启动失败');
         } else {
           const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
-          const agentEl = document.createElement('iframe');
-          agentEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
-          agentEl.host = "<%= host %>";
-          agentEl.username = "<%= username %>/";
-          agentEl.classList = 'workspace hide';
-          loadingEl.parentNode.insertBefore(agentEl, loadingEl);
+          agentFrameEl = document.createElement('iframe');
+          agentFrameEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
+          agentFrameEl.host = "<%= host %>";
+          agentFrameEl.username = "<%= username %>/";
+          agentFrameEl.classList = 'workspace hide';
+          loadingEl.parentNode.insertBefore(agentFrameEl, loadingEl);
           console.time('加载编辑器耗时');
           let interval = setInterval(() => {
-            let loginEl = agentEl.contentWindow.document.body.querySelector('[class*="center-container"]');
-            let editor = agentEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
-            if (loginEl || editor) {
+            let loginEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="center-container"]');
+            let editor = agentFrameEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
+
+            if (loginEl) {
+              // 自动填充密码，然后提交表单登录
+              agentFrameEl.contentWindow.document.body.querySelector("[name='password']").value = tempPassword;
               loadingEl.classList.add('hide');
-              agentEl.classList.remove('hide');
+              agentFrameEl.classList.remove('hide');
+              clearInterval(interval);
+              console.timeEnd('加载编辑器耗时');
+            } else if (editor) {
+              loadingEl.classList.add('hide');
+              agentFrameEl.classList.remove('hide');
               clearInterval(interval);
               console.timeEnd('加载编辑器耗时');
             }
