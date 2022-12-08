@@ -1,18 +1,31 @@
-> 目标机器一键安装code-server,同时代理穿透访问web
+> 目标机器一键安装code-server,同时代理访问web
 
-## 基本原理
+
+## 方案
+
+### SSH代理
+1. 目标服务器只需要开放SSH端口
+2. 服务端SSH连接目标服务器，构建HTTP代理，访问内网code-server
+
+目前的缺点是代码中实现SSH连接，总会出现超时断连问题
+
+## HTTP代理
+1. 目标服务器开放code-server的web端口
+2. 服务端构建HTTP代理，访问code-server
+
+目前的缺点是目标服务器的code-server与服务端需要解决安全问题。
+
+简单方案是code-server开启密码认证，服务端页面可以自动登录，从效果上看体现成免密登录即可。
+
+## code-server安装原理
 
 1. SSH连通目标机器，用于执行命令
 2. SSH方式检测/安装/启动 code-server
-3. SSH方式启动目标机器代理服务
-4. 走HTTP代理访问内网code-server-web服务
 
 ## 好处
 
-1. 目标机器不需要直接对外开放code-server web端口，比如`8080`
-2. 一键脚本安装/运行code-server
-3. 动态代理多台code-server，服务可控/登录/安全均可走业务实现
-
+1. 一键脚本安装/运行code-server
+2. 动态代理多台code-server，服务可控/登录/安全均可走业务实现
 
 ## code-server宿主机硬件最低要求
 
