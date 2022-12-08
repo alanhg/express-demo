@@ -6,7 +6,7 @@ const router = express.Router();
 const SshClient = require("../lib/webshell-ssh");
 const ShellLog = require("../lib/shell-log");
 const ideRouter = require('../lib/code-server/route/ide');
-const ide2Router = require('../lib/code-server/route/ide2');
+const codeServerProxyRouter = require('../lib/code-server/route/agent-route');
 const SftpClient = require("../lib/sftp-client");
 
 let logStartFlag = false;
@@ -19,7 +19,7 @@ const connectOpts = {
   password: process.env.password,
   keepaliveInterval: 30000,
   keepaliveCountMax: 200,
-  debug: console.log
+  // debug: console.log
 };
 
 router.ws('/ws/webshell', function (ws, res) {
@@ -62,9 +62,8 @@ router.get('/ssh2-log', (req, res) => {
  * 指定目标机器的CodeServer,修改URL，调整为访问目标服务器的URL
  * 需要代理HTTP/WS
  */
-
+router.use('/tty', codeServerProxyRouter)
 router.use('/ide', ideRouter)
-router.use('/ide2', ide2Router)
 
 module.exports = router;
 
