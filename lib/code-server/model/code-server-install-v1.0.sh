@@ -127,17 +127,6 @@ else
 fi
 }
 
-install_caddy_proxy(){
-
-}
-
-start_caddy_proxy(){
-  mkdir -p $CODE_SERVER_RUN_DIR/caddy
-  curl -sS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/caddy/Caddyfile > $CODE_SERVER_RUN_DIR/caddy/Caddyfile
-  # /usr/bin/caddy stop --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile
-  /usr/bin/caddy start --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile
-}
-
 init_environment_variables
 install_code_server
 install_extensions
