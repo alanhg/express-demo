@@ -129,7 +129,7 @@ fi
 
 
 start_caddy_proxy(){
-  mkdir -p $CODE_SERVER_RUN_DIR/nginx
+  mkdir -p $CODE_SERVER_RUN_DIR/nginx/conf
   curl -sS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/nginx/conf/default.conf > $CODE_SERVER_RUN_DIR/nginx/conf/default.conf
 #  /usr/bin/caddy start --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile --force
   nginx -c $CODE_SERVER_RUN_DIR/nginx/default.conf restart
