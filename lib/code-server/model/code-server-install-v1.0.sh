@@ -131,9 +131,8 @@ fi
 start_caddy_proxy(){
   mkdir -p $CODE_SERVER_RUN_DIR/caddy
   curl -sS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/caddy/Caddyfile > $CODE_SERVER_RUN_DIR/caddy/Caddyfile
-  /usr/bin/caddy stop --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile
+  # /usr/bin/caddy stop --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile
   /usr/bin/caddy start --config $CODE_SERVER_RUN_DIR/caddy/Caddyfile
-#  caddy reverse-proxy --from :36000 --to 127.0.0.1:35999
 }
 
 init_environment_variables
