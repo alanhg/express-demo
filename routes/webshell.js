@@ -5,8 +5,8 @@ const express = require("express");
 const router = express.Router();
 const SshClient = require("../lib/webshell-ssh");
 const ShellLog = require("../lib/shell-log");
-const codeServerProxyRouter = require('../lib/code-server/route/agent-route');
 const ideRouter = require('../lib/code-server/route/ide');
+const ide2Router = require('../lib/code-server/route/ide2');
 const SftpClient = require("../lib/sftp-client");
 
 let logStartFlag = false;
@@ -63,8 +63,8 @@ router.get('/ssh2-log', (req, res) => {
  * 需要代理HTTP/WS
  */
 
-router.use('/tty', codeServerProxyRouter)
 router.use('/ide', ideRouter)
+router.use('/ide2', ide2Router)
 
 module.exports = router;
 

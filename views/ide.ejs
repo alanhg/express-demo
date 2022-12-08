@@ -60,12 +60,18 @@
   let startingOutput = '';
   ws.addEventListener('message', ({data}) => {
     const options = JSON.parse(data);
+
+    console.log('options', options);
+
     if (options.type === 'start-ide') {
       if (options.data.status === 'starting') {
         // 安装步骤
         startingOutput = `${startingOutput + options.data.message}`;
       } else if (options.data.status === 'done') {
-        if (!startingOutput.match('init success')) {
+
+        console.log('startingOutput', startingOutput);
+
+        if (!startingOutput.match('Successfully started Caddy')) {
           alert('启动失败');
         } else {
           const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
