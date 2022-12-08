@@ -125,6 +125,7 @@ elif test -n "${client_status#*STARTED}" -o -z "${client_status#*started}"; then
 else
   echo "6. init failed: $client_status"
 fi
+
 }
 
 init_environment_variables
