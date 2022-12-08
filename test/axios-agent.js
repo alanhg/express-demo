@@ -1,7 +1,7 @@
 const axios = require("axios");
 var querystring = require('querystring');
 const WebSocket = require("ws");
-const {codeServerProxifier} = require("../lib/code-server/model/proxy");
+const {codeServerProxyManager} = require("../lib/code-server/model/proxy");
 const path = require("path");
 const fs = require("fs");
 

@@ -6,7 +6,7 @@ const router = express.Router();
 const SshClient = require("../lib/webshell-ssh");
 const ShellLog = require("../lib/shell-log");
 const ideRouter = require('../lib/code-server/route/ide');
-const codeServerProxyRouter = require('../lib/code-server/route/agent-route');
+const codeServerProxyRouter = require('../lib/code-server/route/tty-route');
 const SftpClient = require("../lib/sftp-client");
 
 let logStartFlag = false;

@@ -11,7 +11,7 @@ const path = require('path');
 const routes = require('./routes/index');
 const bodyParser = require('body-parser');
 var cors = require('cors');
-const {codeServerProxifier, codeServerProxyServer} = require("./lib/code-server/model/proxy");
+const {codeServerProxyManager, codeServerProxy} = require("./lib/code-server/model/proxy");
 
 app.set('trust proxy', 1); // trust first proxy
 // app.use(cookieParser());
@@ -39,14 +39,14 @@ server.on('upgrade', function (req, socket, head) {
   if (req.baseUrl === '/tty') {
     const proxyKey = req.originalUrl.split('/')[2];
     let httpAgent;
-    httpAgent = codeServerProxifier.getProxy(proxyKey);
+    httpAgent = codeServerProxyManager.getProxy(proxyKey);
     if (!httpAgent) {
       return;
     }
     socket.on('error', err => {
       console.error(err); // ECONNRESET will be caught here
     });
-    codeServerProxyServer.ws(req, socket, head, {
+    codeServerProxy.ws(req, socket, head, {
       target: httpAgent.url
     });
   }
