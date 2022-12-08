@@ -127,6 +127,9 @@ else
 fi
 }
 
+install_caddy_proxy(){
+
+}
 
 start_caddy_proxy(){
   mkdir -p $CODE_SERVER_RUN_DIR/caddy
@@ -141,6 +144,5 @@ install_extensions
 init_user_settings
 init_supervisor_settings
 start_supervisor_server
+install_caddy_proxy
 start_caddy_proxy
-exit 0
-
