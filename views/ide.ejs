@@ -82,20 +82,18 @@
           loadingEl.parentNode.insertBefore(agentFrameEl, loadingEl);
           // console.time('加载编辑器耗时');
           let interval = setInterval(() => {
-            let loginEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="center-container"]');
-            let editor = agentFrameEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]');
-
+            let loginEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="center-container"]'); // 登录页面
+            let editor = agentFrameEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]'); //编辑器
             if (loginEl) {
               clearInterval(interval);
               let formEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="login-form"]');
               // 自动填充密码，然后提交表单登录
               formEl.querySelector("[name='password']").value = tempPassword;
-              console.log(tempPassword);
-              window.setTimeout(() => {
+              loadingEl.classList.add('hide');
+              agentFrameEl.classList.remove('hide');
+/*              window.setTimeout(() => {
                 formEl.submit();
-                loadingEl.classList.add('hide');
-                agentFrameEl.classList.remove('hide');
-              }, 1000);
+              }, 1000);*/
               // console.timeEnd('加载编辑器耗时');
             } else if (editor) {
               clearInterval(interval);

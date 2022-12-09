@@ -33,22 +33,3 @@ app.use('/', express.static(path.join(__dirname, '/static')));
 const server = app.listen(conf.server.port, '0.0.0.0', function () {
   console.log(`Example app listening on port http://127.0.0.1:${conf.server.port}!`);
 });
-
-// server.on('upgrade', function (req, socket, head) {
-//   if (req.baseUrl === '/tty') {
-//     const proxyKey = req.originalUrl.split('/')[2];
-//     console.log('req.url', req.url);
-//     let httpAgent;
-//     httpAgent = codeServerProxyManager.getProxy(proxyKey);
-//     if (!httpAgent) {
-//       return;
-//     }
-//
-//     socket.on('error', err => {
-//       console.error(err); // ECONNRESET will be caught here
-//     });
-//     codeServerProxy.ws(req, socket, head, {
-//       target: httpAgent.url
-//     });
-//   }
-// });
