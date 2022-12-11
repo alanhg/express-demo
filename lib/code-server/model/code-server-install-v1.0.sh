@@ -68,14 +68,14 @@ os() {
 cat <<EOF >  $CODE_SERVER_DIR/share/languagepacks.json
 {
   "zh-cn": {
-    "hash": "33ccd904ddd3f53f7ff14eb57875de36",
+    "hash": "7e362a7c22d4de1987d4809ea0dadc08",
     "extensions": [
       {
         "extensionIdentifier": {
           "id": "ms-ceintl.vscode-language-pack-zh-hans",
           "uuid": "e4ee7751-6514-4731-9cdb-7580ffa9e70b"
         },
-        "version": "1.71.8310936"
+        "version": "1.71.0"
       }
     ],
     "translations": {
