@@ -51,6 +51,7 @@
 <body>
 <iframe src="https://cs-res-1258344699.file.myqcloud.com/cloudstudio/vscode/3e54a6f80cbf72e76cc91bb32178e6b3ede84e3f/release-standalone/out/vs/code/browser/workbench/loading.html"
         class="loading-iframe"></iframe>
+<iframe id="workspace" class="workspace hide"></iframe>
 <script>
   const ws = new WebSocket('ws://127.0.0.1:8000/ide/<%= proxyKey %>?<%= queryParams %>');
   let agentFrameEl, tempPassword;
@@ -73,34 +74,30 @@
           alert('启动失败');
         } else {
           const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
-          agentFrameEl = document.createElement('iframe');
+          agentFrameEl = document.getElementById('workspace');
           agentFrameEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
           agentFrameEl.host = "<%= host %>";
           agentFrameEl.username = "<%= username %>/";
           agentFrameEl.classList = 'workspace hide';
-          loadingEl.parentNode.insertBefore(agentFrameEl, loadingEl);
-          // console.time('加载编辑器耗时');
-          let interval = setInterval(() => {
-            let loginEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="center-container"]'); // 登录页面
-            let editor = agentFrameEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]'); //编辑器
-            if (loginEl) {
-              clearInterval(interval);
-              let formEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="login-form"]');
-              // 自动填充密码，然后提交表单登录
-              formEl.querySelector("[name='password']").value = tempPassword;
-              loadingEl.classList.add('hide');
-              agentFrameEl.classList.remove('hide');
-/*              window.setTimeout(() => {
-                formEl.submit();
-              }, 1000);*/
-              // console.timeEnd('加载编辑器耗时');
-            } else if (editor) {
-              clearInterval(interval);
-              loadingEl.classList.add('hide');
-              agentFrameEl.classList.remove('hide');
-              // console.timeEnd('加载编辑器耗时');
+          agentFrameEl.onload = () => {
+            const afterIdeLoaded = () => {
+              const interval = setInterval(() => {
+                let editorEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]'); //编辑器
+                if (editorEl) {
+                  clearInterval(interval);
+                  loadingEl.classList.add('hide');
+                  agentFrameEl.classList.remove('hide');
+                }
+              }, 1000)
             }
-          }, 100);
+            let loginEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="login-form"]');
+            if (loginEl) {
+              loginEl.querySelector("[name='password']").value = tempPassword;
+              loginEl.submit();
+            }
+            afterIdeLoaded();
+          };
+          loadingEl.parentNode.insertBefore(agentFrameEl, loadingEl);
         }
       }
     }
