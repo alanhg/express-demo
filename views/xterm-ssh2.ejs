@@ -636,11 +636,33 @@
   /**
    * rz接收文件
    */
-  function handleUploadSession(zsession) {
+  async function handleUploadSession(zsession) {
     const fileEl = document.getElementById("zm_files");
+
     fileEl.click();
+    const files = await new Promise((resolve) => {
+      fileEl.onchange = async (_e) => {
+        const { files } = fileEl;
+        resolve(files);
+      };
+      fileEl.onclick = (_e) => {
+        fileEl.value = null;
+      };
+      document.body.onfocus = () => {
+        setTimeout(() => {
+          if (fileEl.files.length === 0) {
+            resolve(fileEl.files);
+          }
+        }, 500);
+      };
+    });
+
     fileEl.onchange = async (_e) => {
-      const {files} = fileEl;
+    };
+    fileEl.onclick = (_e) => {
+      fileEl.value = null;
+    };
+    const uploadFiles=async ()=>{
       const batch = [];
       let totalSize = 0;
       for (let f = files.length - 1; f >= 0; f--) {
@@ -684,18 +706,19 @@
             chunkIndex = chunkIndex + 1;
           }
           if (zsessionCanceled) {
-            showMessage(`${xfer.get_details().name} upload canceled.`);
+            showMessage(`${file.name} upload canceled.`);
           } else {
-            showMessage(`${xfer.get_details().name} upload completed.`);
+            showMessage(`${file.name} upload completed.`);
           }
           await xfer.end();
         } else {
-          showMessage(`${xfer.get_details().name} rejected.`);
+          showMessage(`${file.name} rejected.`);
         }
       }
-      activeZsession = null;
-      await zsession.close()
-    };
+    }
+    await uploadFiles();
+    await zsession.close();
+    activeZsession = null;
     return Promise.resolve();
   }
 
