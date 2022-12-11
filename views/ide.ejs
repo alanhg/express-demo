@@ -90,14 +90,20 @@
                 }
               }, 1000)
             }
+            if (agentFrameEl.contentWindow.document.body.innerText.startsWith('error')) {
+              alert(agentFrameEl.contentWindow.document.body.innerText);
+              return;
+            }
+
             let loginEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="login-form"]');
             if (loginEl) {
               loginEl.querySelector("[name='password']").value = tempPassword;
               // loginEl.submit();
               loadingEl.classList.add('hide');
               agentFrameEl.classList.remove('hide');
+            }else{
+              afterIdeLoaded();
             }
-            // afterIdeLoaded();
           };
           loadingEl.parentNode.insertBefore(agentFrameEl, loadingEl);
         }
