@@ -192,27 +192,34 @@ fi
 }
 
  start_supervisor_server(){
-  echo '5. start supervisor server'
-  $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf -d
-  client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server)
+     echo '5. start supervisor server'
+     client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server)
 
-if test -n "${client_status#*RUNNING}" -o -z "${client_status#*running}"; then
-  client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl restart code-server)
-elif test -n "${client_status#*STARTED}" -o -z "${client_status#*started}"; then
-  client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl restart code-server)
-else
-  client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server)
-fi
+  if [ "$client_status" = "" ]
+  then
+     $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf -d
+     $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server
+     client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server)
+     echo "$ECHO_SPACER supervisor server starting: $client_status"
+  else
+     echo "$ECHO_SPACER supervisor server started: $client_status"
+   fi
 
+  client_status=$(echo "$client_status" | tr '[:upper:]' '[:lower:]')
 
-if test -n "${client_status#*RUNNING}" -o -z "${client_status#*running}"; then
-  echo "6. init success: $client_status"
-elif test -n "${client_status#*STARTED}" -o -z "${client_status#*started}"; then
-  echo "6. init success: $client_status"
-else
-  echo "6. init failed: $client_status"
-fi
+   if test -n "${client_status#*stopped}"; then
+    client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server)
+    echo "$ECHO_SPACER $client_status"
+   fi
 
+   client_status=$(echo "$client_status" | tr '[:upper:]' '[:lower:]')
+   if test -n "${client_status#*running}"; then
+     echo "6. init success: $client_status"
+   elif test -n "${client_status#*started}"; then
+     echo "6. init success: $client_status"
+   else
+     echo "6. init failed: $client_status"
+   fi
 }
 
 init_environment_variables
