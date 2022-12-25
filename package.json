@@ -44,6 +44,7 @@
     "node-pty": "^0.10.1",
     "nodemon": "^2.0.19",
     "passport": "^0.4.0",
+    "path-match": "^1.2.4",
     "query-string": "^6.10.1",
     "rimraf": "^3.0.2",
     "screenfull": "^6.0.2",
