@@ -196,5 +196,4 @@ init_environment_variables
 install_code_server
 install_extensions
 init_user_settings
-init_supervisor_settings
 start_supervisor_server
