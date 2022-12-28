@@ -229,12 +229,15 @@
     }
   }
 
-  function runCodeServer(event) {
+  function runCodeServer(e) {
     socket.send(JSON.stringify({
       type: 'codeserver'
     }))
   }
 
+  function toggleBackgroundOn(e){
+
+  }
 </script>
 <div id="terminal-container"></div>
 
@@ -247,6 +250,9 @@
 </label>
 <button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
 <button data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
+<label for="backgroundOn">
+    <input id="backgroundOn" type="checkbox" onclick="toggleBackgroundOn(event)">Image Background</button>
+</label>
 <iframe id="code-server-inline">
 
 </iframe>
