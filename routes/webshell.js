@@ -8,19 +8,11 @@ const ShellLog = require("../lib/shell-log");
 const ideRouter = require('../lib/code-server/route/ide');
 const codeServerProxyRouter = require('../lib/code-server/route/tty-route');
 const SftpClient = require("../lib/sftp-client");
+const {connectOpts} = require("./config");
 
 let logStartFlag = false;
 let shellLog;
 
-const connectOpts = {
-  host: process.env.host,
-  port: process.env.port || 22,
-  username: process.env.username || 'root',
-  password: process.env.password,
-  keepaliveInterval: 30000,
-  keepaliveCountMax: 200,
-  // debug: console.log
-};
 
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('logining\r');
@@ -65,5 +57,6 @@ router.get('/ssh2-log', (req, res) => {
 router.use('/tty', codeServerProxyRouter)
 router.use('/ide', ideRouter)
 
+router.connectOpts = connectOpts;
 module.exports = router;
 
