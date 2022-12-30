@@ -236,7 +236,13 @@
     }))
   }
 
-  function toggleBackgroundOn(e){
+  function stopCodeServer(e) {
+    socket.send(JSON.stringify({
+      type: 'codeserver-logout'
+    }))
+  }
+
+  function toggleBackgroundOn(e) {
 
   }
 </script>
@@ -251,9 +257,12 @@
 </label>
 <button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
 <button data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
+<button onclick="stopCodeServer(event)">Stop Code Server</button>
+
 <label for="backgroundOn">
     <input id="backgroundOn" type="checkbox" onclick="toggleBackgroundOn(event)">Image Background</button>
 </label>
+
 <iframe id="code-server-inline">
 
 </iframe>
@@ -572,6 +581,8 @@
         // location.href = codeServerWeb;
         window.open(codeServerWeb, '_blank');
         console.log(`访问地址：${window.location.protocol}//${window.location.host}${codeServerWeb}`);
+      } else if (options.type === 'codeserver-logout') {
+        alert('stop code server successful');
       } else {
         term.write(evt.data);
       }
@@ -649,7 +660,7 @@
     fileEl.click();
     const files = await new Promise((resolve) => {
       fileEl.onchange = async (_e) => {
-        const { files } = fileEl;
+        const {files} = fileEl;
         resolve(files);
       };
       fileEl.onclick = (_e) => {
@@ -669,7 +680,7 @@
     fileEl.onclick = (_e) => {
       fileEl.value = null;
     };
-    const uploadFiles=async ()=>{
+    const uploadFiles = async () => {
       const batch = [];
       let totalSize = 0;
       for (let f = files.length - 1; f >= 0; f--) {
