@@ -655,31 +655,41 @@
    * rz接收文件
    */
   async function handleUploadSession(zsession) {
-    const fileEl = document.getElementById("zm_files");
-
-    fileEl.click();
-    const files = await new Promise((resolve) => {
+    let files = [];
+    if (window.showOpenFilePicker) {
+      try {
+        const fileHandles = await window.showOpenFilePicker({
+          multiple: true
+        });
+        files = await Promise.all(fileHandles.map(f => f.getFile()));
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      const fileEl = document.getElementById("zm_files");
+      fileEl.click();
+      files = await new Promise((resolve) => {
+        fileEl.onchange = async (_e) => {
+          const {files} = fileEl;
+          resolve(files);
+        };
+        fileEl.onclick = (_e) => {
+          fileEl.value = null;
+        };
+        document.body.onfocus = () => {
+          setTimeout(() => {
+            if (fileEl.files.length === 0) {
+              resolve(fileEl.files);
+            }
+          }, 500);
+        };
+      });
       fileEl.onchange = async (_e) => {
-        const {files} = fileEl;
-        resolve(files);
       };
       fileEl.onclick = (_e) => {
         fileEl.value = null;
       };
-      document.body.onfocus = () => {
-        setTimeout(() => {
-          if (fileEl.files.length === 0) {
-            resolve(fileEl.files);
-          }
-        }, 500);
-      };
-    });
-
-    fileEl.onchange = async (_e) => {
-    };
-    fileEl.onclick = (_e) => {
-      fileEl.value = null;
-    };
+    }
     const uploadFiles = async () => {
       const batch = [];
       let totalSize = 0;
