@@ -12,6 +12,7 @@
     <script src="/js/xterm-addon-search/lib/xterm-addon-search.js"></script>
     <script src="/js/xterm-addon-serialize/lib/xterm-addon-serialize.js"></script>
     <script src="/js/xterm-addon-unicode11/lib/xterm-addon-unicode11.js"></script>
+    <script src="/js/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
     <script src="/js/zmodem.js/dist/zmodem.js"></script>
     <script src="/js/mousetrap.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
@@ -20,150 +21,7 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/js/jquery.ztree.all.min.js"></script>
     <script src="/js/contextMenu.js"></script>
     <script src="/js/events.js"></script>
-
-    <style>
-      body {
-        margin: 0;
-      }
-
-
-      #terminal-container {
-        background-color: #090300;
-      }
-
-      .terminal {
-        background-image: url("/img/halo.jpeg");
-        background-repeat: no-repeat;
-        /*background-color: black;*/
-        /*background-size: cover;*/
-        /*background-position: right;*/
-      }
-
-      /**
-        search-addon-bar样式
-       */
-      .xterm-search-addon-bar {
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 285px;
-        color: #000;
-        padding: 5px 10px;
-        box-shadow: 0 2px 8px #000;
-        background: #252526;
-        z-index: 999;
-        display: flex;
-      }
-
-      .xterm-search-addon-bar input {
-        background-color: #3c3c3c;
-        color: #ccc;
-        border: 0;
-        padding: 2px;
-        height: 20px;
-        width: 227px;
-        outline: none;
-      }
-
-      .xterm-search-addon-bar button {
-        min-width: 20px;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        flex: initial;
-        background-position: 50%;
-        margin-left: 3px;
-        background-repeat: no-repeat;
-        background-color: #252526;
-        border: 0;
-        cursor: pointer;
-      }
-
-      .xterm-search-addon-bar button.pre {
-        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTUuNCA4YS42LjYgMCAwMS4xNzYtLjQyNGw0LTRhLjU5OC41OTggMCAwMS44NDggMCAuNTk4LjU5OCAwIDAxMCAuODQ4TDYuODQ5IDhsMy41NzUgMy41NzZhLjU5OC41OTggMCAwMTAgLjg0OC41OTguNTk4IDAgMDEtLjg0OCAwbC00LTRBLjYuNiAwIDAxNS40IDgiLz48L3N2Zz4=");
-      }
-
-      .xterm-search-addon-bar button.next {
-        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEwLjYgOGEuNi42IDAgMDEtLjE3Ni40MjRsLTQgNGEuNTk4LjU5OCAwIDAxLS44NDggMCAuNTk4LjU5OCAwIDAxMC0uODQ4TDkuMTUxIDggNS41NzYgNC40MjRhLjU5OC41OTggMCAwMTAtLjg0OC41OTguNTk4IDAgMDEuODQ4IDBsNCA0QS42LjYgMCAwMTEwLjYgOCIvPjwvc3ZnPg==");
-      }
-
-      .xterm-search-addon-bar button.close {
-        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
-      }
-
-      .xterm-search-addon-bar .search-result-count {
-        color: white;
-        position: absolute;
-        left: 126px;
-      }
-
-      .xterm-search-addon-bar .match-case,
-      .xterm-search-addon-bar .match-word,
-      .xterm-search-addon-bar .match-regex {
-        color: #c0bdbd;
-      }
-
-      .xterm-search-addon-bar .match-case.active,
-      .xterm-search-addon-bar .match-word.active,
-      .xterm-search-addon-bar .match-regex.active {
-        color: white;
-      }
-
-      #terminal-container {
-        margin-bottom: 20px;
-      }
-
-      #file-editor {
-        margin-top: 20px;
-        display: flex;
-      }
-
-      #file-editor > div {
-      }
-
-      #monaco_editor {
-        height: 400px;
-      }
-
-      .search-result a:hover {
-        cursor: pointer;
-        text-decoration: underline;
-      }
-
-      #file-tree {
-        height: 300px;
-        overflow-y: auto;
-      }
-
-      #code-server-inline {
-        margin: 0;
-        border: 0;
-        height: 200px;
-        width: 100%;
-        display: none;
-      }
-
-      .xterm-record-screen-addon {
-        position: absolute;
-        right: 10px;
-        width: 5px;
-        z-index: 2;
-        animation: rainbow 2s linear infinite;
-        background: linear-gradient(238deg, #fd8800, #fd008f, #9700fd, #003dfd, #05c7e6, #4bd58d);
-      }
-
-      @keyframes rainbow {
-        0% {
-          background-position: 0% 50%
-        }
-        50% {
-          background-position: 100% 50%
-        }
-        100% {
-          background-position: 0% 50%
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="css/xterm-ssh2.css">
 </head>
 <body>
 <script>
@@ -326,7 +184,7 @@
     theme: {
       // selection: '#0000ff55',
       foreground: '#a5a2a2',
-      background: '#09030040',
+      background: '#09030066',
       cursor: '#a5a2a2',
 
       black: '#090300',
@@ -396,7 +254,12 @@
     // selectionMaskEl.style.left = (newLeft > 0 ? newLeft : 0) + 'px';
   });
 
+  // 开启终端
   term.open(document.getElementById('terminal-container'));
+
+
+
+
   // 终端自定义打印内容
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
       (event, uri) => {
@@ -420,6 +283,11 @@
   term.loadAddon(serializeAddon);
   term.loadAddon(recordScreenAddon);
   term.loadAddon(new Unicode11Addon.Unicode11Addon());
+  const fitAddon = new FitAddon.FitAddon();
+
+  term.loadAddon(fitAddon);
+  fitAddon.fit();
+
   term.unicode.activeVersion = '11'
 
   term.attachCustomKeyEventHandler(function (event) {
