@@ -57,14 +57,15 @@
     "superagent": "^3.8.3",
     "ua-parser-js": "^0.7.18",
     "ws": "^8.9.0",
-    "xterm": "4.19.0",
+    "xterm": "5.0.0",
     "xterm-addon-attach": "^0.6.0",
+    "xterm-addon-canvas": "^0.2.0",
     "xterm-addon-fit": "^0.6.0",
     "xterm-addon-search": "0.10.0-beta.3",
     "xterm-addon-serialize": "^0.7.0",
     "xterm-addon-unicode11": "^0.3.0",
-    "xterm-addon-web-links": "^0.6.0",
-    "xterm-addon-webgl": "^0.12.0",
+    "xterm-addon-web-links": "^0.8.0",
+    "xterm-addon-webgl": "0.13.0",
     "zmodem.js": "latest"
   },
   "devDependencies": {

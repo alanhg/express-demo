@@ -12,6 +12,7 @@
     <script src="/js/xterm-addon-search/lib/xterm-addon-search.js"></script>
     <script src="/js/xterm-addon-serialize/lib/xterm-addon-serialize.js"></script>
     <script src="/js/xterm-addon-unicode11/lib/xterm-addon-unicode11.js"></script>
+    <script src="/js/xterm-addon-canvas/lib/xterm-addon-canvas.js"></script>
     <script src="/js/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
     <script src="/js/zmodem.js/dist/zmodem.js"></script>
     <script src="/js/mousetrap.min.js"></script>
@@ -182,7 +183,8 @@
     letterSpacing: 0,
     cursorBlink: true,
     theme: {
-      // selection: '#0000ff55',
+      // selection: '#0000ff',
+      // selectionBackground: '#00ffff',
       foreground: '#a5a2a2',
       background: '#09030066',
       cursor: '#a5a2a2',
@@ -215,6 +217,7 @@
     minimumContrastRatio: 1,
     // 开启透明支持-支持CSS实现终端背景图设定
     allowTransparency: true,
+    allowProposedApi: true,
     overviewRulerWidth: 8,
   });
   window.term = term;
@@ -258,8 +261,6 @@
   term.open(document.getElementById('terminal-container'));
 
 
-
-
   // 终端自定义打印内容
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
       (event, uri) => {
@@ -269,6 +270,8 @@
       }));
   let searchAddon = new SearchAddon.SearchAddon();
   serializeAddon = new SerializeAddon.SerializeAddon();
+
+  const canvasAddon = new CanvasAddon.CanvasAddon();
 
   let searchAddonBar = new SearchAddonBar({
     searchAddon
@@ -282,6 +285,7 @@
   term.loadAddon(searchAddonBar);
   term.loadAddon(serializeAddon);
   term.loadAddon(recordScreenAddon);
+  term.loadAddon(canvasAddon);
   term.loadAddon(new Unicode11Addon.Unicode11Addon());
   const fitAddon = new FitAddon.FitAddon();
 
