@@ -22,142 +22,147 @@
     <script src="/js/events.js"></script>
 
     <style>
-        body {
-            margin: 0;
-        }
+      body {
+        margin: 0;
+      }
 
-        .terminal {
-            background-image: url(/img/halo.jpeg);
-            background-repeat: no-repeat;
-            background-color: black;
-            background-size: cover;
-            background-position: right;
-        }
 
-        /**
-          search-addon-bar样式
-         */
-        .xterm-search-addon-bar {
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 285px;
-            color: #000;
-            padding: 5px 10px;
-            box-shadow: 0 2px 8px #000;
-            background: #252526;
-            z-index: 999;
-            display: flex;
-        }
+      #terminal-container {
+        background-color: #090300;
+      }
 
-        .xterm-search-addon-bar input {
-            background-color: #3c3c3c;
-            color: #ccc;
-            border: 0;
-            padding: 2px;
-            height: 20px;
-            width: 227px;
-            outline: none;
-        }
+      .terminal {
+        background-image: url("/img/halo.jpeg");
+        background-repeat: no-repeat;
+        /*background-color: black;*/
+        /*background-size: cover;*/
+        /*background-position: right;*/
+      }
 
-        .xterm-search-addon-bar button {
-            min-width: 20px;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            flex: initial;
-            background-position: 50%;
-            margin-left: 3px;
-            background-repeat: no-repeat;
-            background-color: #252526;
-            border: 0;
-            cursor: pointer;
-        }
+      /**
+        search-addon-bar样式
+       */
+      .xterm-search-addon-bar {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 285px;
+        color: #000;
+        padding: 5px 10px;
+        box-shadow: 0 2px 8px #000;
+        background: #252526;
+        z-index: 999;
+        display: flex;
+      }
 
-        .xterm-search-addon-bar button.pre {
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTUuNCA4YS42LjYgMCAwMS4xNzYtLjQyNGw0LTRhLjU5OC41OTggMCAwMS44NDggMCAuNTk4LjU5OCAwIDAxMCAuODQ4TDYuODQ5IDhsMy41NzUgMy41NzZhLjU5OC41OTggMCAwMTAgLjg0OC41OTguNTk4IDAgMDEtLjg0OCAwbC00LTRBLjYuNiAwIDAxNS40IDgiLz48L3N2Zz4=");
-        }
+      .xterm-search-addon-bar input {
+        background-color: #3c3c3c;
+        color: #ccc;
+        border: 0;
+        padding: 2px;
+        height: 20px;
+        width: 227px;
+        outline: none;
+      }
 
-        .xterm-search-addon-bar button.next {
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEwLjYgOGEuNi42IDAgMDEtLjE3Ni40MjRsLTQgNGEuNTk4LjU5OCAwIDAxLS44NDggMCAuNTk4LjU5OCAwIDAxMC0uODQ4TDkuMTUxIDggNS41NzYgNC40MjRhLjU5OC41OTggMCAwMTAtLjg0OC41OTguNTk4IDAgMDEuODQ4IDBsNCA0QS42LjYgMCAwMTEwLjYgOCIvPjwvc3ZnPg==");
-        }
+      .xterm-search-addon-bar button {
+        min-width: 20px;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        flex: initial;
+        background-position: 50%;
+        margin-left: 3px;
+        background-repeat: no-repeat;
+        background-color: #252526;
+        border: 0;
+        cursor: pointer;
+      }
 
-        .xterm-search-addon-bar button.close {
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
-        }
+      .xterm-search-addon-bar button.pre {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTUuNCA4YS42LjYgMCAwMS4xNzYtLjQyNGw0LTRhLjU5OC41OTggMCAwMS44NDggMCAuNTk4LjU5OCAwIDAxMCAuODQ4TDYuODQ5IDhsMy41NzUgMy41NzZhLjU5OC41OTggMCAwMTAgLjg0OC41OTguNTk4IDAgMDEtLjg0OCAwbC00LTRBLjYuNiAwIDAxNS40IDgiLz48L3N2Zz4=");
+      }
 
-        .xterm-search-addon-bar .search-result-count {
-            color: white;
-            position: absolute;
-            left: 126px;
-        }
+      .xterm-search-addon-bar button.next {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEwLjYgOGEuNi42IDAgMDEtLjE3Ni40MjRsLTQgNGEuNTk4LjU5OCAwIDAxLS44NDggMCAuNTk4LjU5OCAwIDAxMC0uODQ4TDkuMTUxIDggNS41NzYgNC40MjRhLjU5OC41OTggMCAwMTAtLjg0OC41OTguNTk4IDAgMDEuODQ4IDBsNCA0QS42LjYgMCAwMTEwLjYgOCIvPjwvc3ZnPg==");
+      }
 
-        .xterm-search-addon-bar .match-case,
-        .xterm-search-addon-bar .match-word,
-        .xterm-search-addon-bar .match-regex {
-            color: #c0bdbd;
-        }
+      .xterm-search-addon-bar button.close {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
+      }
 
-        .xterm-search-addon-bar .match-case.active,
-        .xterm-search-addon-bar .match-word.active,
-        .xterm-search-addon-bar .match-regex.active {
-            color: white;
-        }
+      .xterm-search-addon-bar .search-result-count {
+        color: white;
+        position: absolute;
+        left: 126px;
+      }
 
-        #terminal-container {
-            margin-bottom: 20px;
-        }
+      .xterm-search-addon-bar .match-case,
+      .xterm-search-addon-bar .match-word,
+      .xterm-search-addon-bar .match-regex {
+        color: #c0bdbd;
+      }
 
-        #file-editor {
-            margin-top: 20px;
-            display: flex;
-        }
+      .xterm-search-addon-bar .match-case.active,
+      .xterm-search-addon-bar .match-word.active,
+      .xterm-search-addon-bar .match-regex.active {
+        color: white;
+      }
 
-        #file-editor > div {
-        }
+      #terminal-container {
+        margin-bottom: 20px;
+      }
 
-        #monaco_editor {
-            height: 400px;
-        }
+      #file-editor {
+        margin-top: 20px;
+        display: flex;
+      }
 
-        .search-result a:hover {
-            cursor: pointer;
-            text-decoration: underline;
-        }
+      #file-editor > div {
+      }
 
-        #file-tree {
-            height: 300px;
-            overflow-y: auto;
-        }
+      #monaco_editor {
+        height: 400px;
+      }
 
-        #code-server-inline {
-            margin: 0;
-            border: 0;
-            height: 200px;
-            width: 100%;
-            display: none;
-        }
+      .search-result a:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
 
-        .xterm-record-screen-addon {
-            position: absolute;
-            right: 10px;
-            width: 5px;
-            z-index: 2;
-            animation: rainbow 2s linear infinite;
-            background: linear-gradient(238deg, #fd8800, #fd008f, #9700fd, #003dfd, #05c7e6, #4bd58d);
-        }
+      #file-tree {
+        height: 300px;
+        overflow-y: auto;
+      }
 
-        @keyframes rainbow {
-            0% {
-                background-position: 0% 50%
-            }
-            50% {
-                background-position: 100% 50%
-            }
-            100% {
-                background-position: 0% 50%
-            }
+      #code-server-inline {
+        margin: 0;
+        border: 0;
+        height: 200px;
+        width: 100%;
+        display: none;
+      }
+
+      .xterm-record-screen-addon {
+        position: absolute;
+        right: 10px;
+        width: 5px;
+        z-index: 2;
+        animation: rainbow 2s linear infinite;
+        background: linear-gradient(238deg, #fd8800, #fd008f, #9700fd, #003dfd, #05c7e6, #4bd58d);
+      }
+
+      @keyframes rainbow {
+        0% {
+          background-position: 0% 50%
         }
+        50% {
+          background-position: 100% 50%
+        }
+        100% {
+          background-position: 0% 50%
+        }
+      }
     </style>
 </head>
 <body>
@@ -293,7 +298,7 @@
 <script>
   const SPACER = '            ';
   var socket, activeZsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
-    clientRecordLogBlobs = [], CurrentDir = '/root';
+      clientRecordLogBlobs = [], CurrentDir = '/root';
 
   const CurrentDirRecord = [];
 
@@ -306,8 +311,8 @@
   }
 </script>
 <script type="module">
-  import { SearchAddonBar } from '/js/search-addon-bar.js';
-  import { RecordScreenAddon } from '/js/record-screen-addon.js';
+  import {SearchAddonBar} from '/js/search-addon-bar.js';
+  import {RecordScreenAddon} from '/js/record-screen-addon.js';
 
   const textEncoder = new TextEncoder();
 
@@ -321,7 +326,7 @@
     theme: {
       // selection: '#0000ff55',
       foreground: '#a5a2a2',
-      background: '#09030060',
+      background: '#09030040',
       cursor: '#a5a2a2',
 
       black: '#090300',
@@ -394,11 +399,11 @@
   term.open(document.getElementById('terminal-container'));
   // 终端自定义打印内容
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
-    (event, uri) => {
-      if (event.metaKey) {
-        window.open(uri);
-      }
-    }));
+      (event, uri) => {
+        if (event.metaKey) {
+          window.open(uri);
+        }
+      }));
   let searchAddon = new SearchAddon.SearchAddon();
   serializeAddon = new SerializeAddon.SerializeAddon();
 
@@ -506,7 +511,7 @@
     }))
   })
   term.onLineFeed(() => {
-    console.log("执行换行");
+    console.log('执行换行');
     CurrentDirRecord[term.buffer.active.cursorY] = CurrentDir; // 当前得到的目录根据行进行记录
   });
   socket = new WebSocket(`ws://${location.hostname}:${location.port}/ws/webshell`);
@@ -517,7 +522,7 @@
     activeZsession = detection.confirm();
     var promise;
     zsessionCanceled = false;
-    if (activeZsession.type === "send") {
+    if (activeZsession.type === 'send') {
       promise = handleUploadSession(activeZsession);
     } else {
       promise = handleDownloadSession(activeZsession);
@@ -600,12 +605,12 @@
    * SZ接受文件
    */
   function handleDownloadSession(zsession) {
-    zsession.on("offer", function (xfer) {
+    zsession.on('offer', function (xfer) {
       async function on_form_submit() {
         const FILE_BUFFER = [];
         term.write('\x1b[2K\r'); // 清除活跃行内容
         await new Promise(resolve => {
-          xfer.on("input", (payload) => {
+          xfer.on('input', (payload) => {
             if (zsessionCanceled) {
               resolve();
               return;
@@ -614,13 +619,13 @@
             showMessage(getProgress(xfer), true);
           });
           xfer.accept().then(
-            () => {
-              showMessage(`${xfer.get_details().name} download completed.`);
-              // term.focus();
-              resolve();
-              _save_to_disk(xfer, FILE_BUFFER);
-            },
-            console.error.bind(console)
+              () => {
+                showMessage(`${xfer.get_details().name} download completed.`);
+                // term.focus();
+                resolve();
+                _save_to_disk(xfer, FILE_BUFFER);
+              },
+              console.error.bind(console)
           )
         })
         if (zsessionCanceled) {
@@ -632,7 +637,7 @@
     });
     zsession.start();
     return new Promise((resolve) => {
-      activeZsession.on("session_end", () => {
+      activeZsession.on('session_end', () => {
         activeZsession = null;
         resolve();
       });
@@ -666,7 +671,7 @@
         console.error(e);
       }
     } else {
-      const fileEl = document.getElementById("zm_files");
+      const fileEl = document.getElementById('zm_files');
       fileEl.click();
       files = await new Promise((resolve) => {
         fileEl.onchange = async (_e) => {
@@ -858,11 +863,11 @@
   });
 
   function Encodeuint8arr(myString) {
-    return new TextEncoder("utf-8").encode(myString);
+    return new TextEncoder('utf-8').encode(myString);
   }
 
   function Decodeuint8arr(uint8array) {
-    return new TextDecoder("utf-8").decode(uint8array);
+    return new TextDecoder('utf-8').decode(uint8array);
   }
 
   /**
@@ -878,7 +883,7 @@
 
 
   function Uint8ArrayToString(fileData) {
-    let dataString = "";
+    let dataString = '';
     for (let i = 0; i < fileData.length; i++) {
       dataString += String.fromCharCode(fileData[i]);
     }
@@ -932,7 +937,7 @@
   }
 
   $(document).ready(function () {
-    zTreeObj = $.fn.zTree.init($("#file-tree"), {
+    zTreeObj = $.fn.zTree.init($('#file-tree'), {
       callback: {
         onClick: myOnClick,
         onExpand: zTreeOnExpand
@@ -981,12 +986,12 @@
 
   // require is provided by loader.min.js.
   require.config({paths: {'vs': 'https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs'}});
-  require(["vs/editor/editor.main"], () => {
+  require(['vs/editor/editor.main'], () => {
     codeEditor = monaco.editor.create(document.getElementById('monaco_editor'), {
       value: '',
       language: 'javascript',
       theme: 'vs-dark',
-      fontSize: "14px",
+      fontSize: '14px',
       minimap: {
         enabled: false
       }
@@ -1010,7 +1015,7 @@
 
 
   function saveFile(content, filename) {
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     const file = new Blob([content], {type: 'application/zip'});
     a.href = URL.createObjectURL(file);
     a.download = filename;
