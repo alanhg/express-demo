@@ -110,8 +110,18 @@
 
   }
 </script>
-<div id="terminal-container"></div>
 
+
+<div class="terminal-wrapper">
+
+
+</div>
+
+<div id="terminal-container">
+
+
+
+</div>
 <input id="zm_files" type="file" multiple style="display: none">
 <button data-start="false" onclick="recordLogStart(event)">log record start</button>
 <button data-start="false" onclick="clientRecordLogStart(event)">client log record start</button>
@@ -186,7 +196,8 @@
       // selection: '#0000ff',
       // selectionBackground: '#00ffff',
       foreground: '#a5a2a2',
-      background: '#09030030',
+      // 解决自定义背景支持
+      background: '#09030000',
       cursor: '#a5a2a2',
 
       black: '#090300',
