@@ -109,6 +109,10 @@
   function toggleBackgroundOn(e) {
 
   }
+
+  function toggleNewTabOn(e) {
+    window.toggleNewTabOn = e.target.checked;
+  }
 </script>
 
 
@@ -135,6 +139,11 @@
 
 <label for="backgroundOn">
     <input id="backgroundOn" type="checkbox" onclick="toggleBackgroundOn(event)">Image Background</button>
+</label>
+
+
+<label for="toggleNewTabOn">
+    <input id="toggleNewTabOn" type="checkbox" onclick="toggleNewTabOn(event)" checked>链接打开新标签页</button>
 </label>
 
 <iframe id="code-server-inline">
@@ -465,10 +474,14 @@
          * folder参数控制缺省打开文件夹,不传则走前端存储的最后打开文件夹
          * ?folder=/home
          */
+
         const codeServerWeb = (`/ide/${options.proxyKey}/?folder=/home&host=${options.host}`);
-        // location.href = codeServerWeb;
-        window.open(codeServerWeb, '_blank');
         console.log(`访问地址：${window.location.protocol}//${window.location.host}${codeServerWeb}`);
+        if (window.toggleNewTabOn) {
+          window.open(codeServerWeb, '_blank');
+        } else {
+          location.href = codeServerWeb;
+        }
       } else if (options.type === 'codeserver-logout') {
         alert('stop code server successful');
       } else {
