@@ -138,6 +138,10 @@ EOF
 "workbench.colorTheme": "Default Dark+"
 ```
 
+
+
+
+
 ## Code-Server升级
 
 code-server配置文件位置在`~/.local/share/code-server`，与程序安装位置不同，因此升级安装不会造成配置丢失等。
@@ -154,3 +158,17 @@ https://coder.com/docs/code-server/latest/upgrade
 ## 加载速度
 
 1. 测试发现加载出页面内容需要3s-6s
+
+
+
+## 自动登录
+
+除了使用SSO方案外，最简单的方案是读取`~/.config/code-server/config.yaml`，填充表单，自动提交，实现自动登录。为了给用户营造出自动登录，可以将登陆页面隐藏，JS操作自动提交即可。
+
+缺点是浏览器针对表单提交会自动弹出保存密码窗体，为了优化体验可以修改登录页面`src/browser/pages/login.html`，增加`autocomplete="off"`
+
+```html
+<form class="login-form" method="post" autocomplete="off">
+```
+
+注意，Safari下不work。
