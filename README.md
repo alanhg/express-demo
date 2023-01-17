@@ -10,6 +10,7 @@ node项目下各种功能研发实验，提供Demo
     - ZModem集成`szrz`
     - SFTP支持
     - 右键文件下载
+    - 终端会话录制-`清屏操作触发，录制日志中内容并不同步清除`
    
 ## code-server源码拉取
 
@@ -18,10 +19,6 @@ node项目下各种功能研发实验，提供Demo
 git clone git@github.com:coder/code-server.git  --single-branch main
 
 ```
-
-## 终端会话录制
-清屏操作触发，录制日志中内容并不同步清除
-
 
 ## Code-Server
 
