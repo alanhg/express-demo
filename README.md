@@ -5,7 +5,6 @@ node项目下各种功能研发实验，提供Demo
 ## 功能点
 1. WebShell
     - 热键支持-Ctrl F全屏切换、⌘ F终端检索，⌘ K清屏、Ctrl C执行取消
-    - 终端会话录制-日志功能
     - 文件编辑器-`Code-Server`
     - ZModem集成`szrz`
     - SFTP支持
