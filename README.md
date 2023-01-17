@@ -9,6 +9,7 @@ node项目下各种功能研发实验，提供Demo
     - 文件编辑器-`Code-Server`
     - ZModem集成`szrz`
     - SFTP支持
+    - 右键文件下载
    
 ## code-server源码拉取
 
