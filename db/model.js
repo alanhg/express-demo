@@ -2,8 +2,7 @@ const {Sequelize, DataTypes} = require('sequelize');
 
 const sequelize = new Sequelize('sqlite::memory:');
 /**
- * 针对SSH代理访问CodeServer
- * @type {ModelCtor<Model>}
+ * 多机器代理信息持久化管理
  */
 const CodeServerDB = sequelize.define('CodeServerProxy', {
   id: {
@@ -11,7 +10,6 @@ const CodeServerDB = sequelize.define('CodeServerProxy', {
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4
   },
-  proxyKey: DataTypes.STRING,
   host: DataTypes.STRING,
   username: DataTypes.STRING,
   connectOpts: DataTypes.JSON,
@@ -27,6 +25,7 @@ const CodeServerDB = sequelize.define('CodeServerProxy', {
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
+  camelCase: true,
 });
 
 module.exports = {
