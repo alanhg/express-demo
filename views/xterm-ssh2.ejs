@@ -58,7 +58,7 @@
 
 <label for="proxyProtocol">
     Code Server代理协议
-    <select id="proxyProtocol" onchange="changeProxyProtocol(event)">
+    <select id="proxyProtocol">
         <option value="http" selected>HTTP</option>
         <option value="ssh">SSH</option>
     </select>
@@ -179,11 +179,6 @@
   function toggleNewTabOn(e) {
     window.toggleNewTabOn = e.target.checked;
   }
-
-  function changeProxyProtocol(e) {
-    window.toggleNewTabOn = e.target.checked;
-  }
-
 
   const SPACER = '            ';
   var socket, activeZsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,

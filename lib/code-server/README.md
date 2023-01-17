@@ -124,6 +124,8 @@ EOF
 需要安装并启动对应进程-[安装脚本](https://github.com/alanhg/express-demo/blob/3cae43c6020e9d15c71882e6bb5e31025ff5bbaf/lib/code-server/model/install-package-supervisor.sh#L13-L13)
 
 
+服务关闭：`pkill -f "supervisord-conf"`
+服务查询：`ps -ef | grep supervisord-conf`
 
 ### URL可携带参数
 

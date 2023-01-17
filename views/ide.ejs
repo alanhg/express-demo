@@ -8,44 +8,44 @@
     <title>WebShell IDE</title>
     <style>
 
-        .hide {
-            opacity: 0;
-        }
+      .hide {
+        opacity: 0;
+      }
 
-        .loading-iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            background-color: #1e1e1e;
-        }
+      .loading-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        background-color: #1e1e1e;
+      }
 
-        .workspace-loader {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+      .workspace-loader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
 
-        .workspace {
-            z-index: 1;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+      .workspace {
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
     </style>
 </head>
 <body>
@@ -53,13 +53,21 @@
         class="loading-iframe"></iframe>
 <iframe id="workspace" class="workspace hide"></iframe>
 <script>
+  function sleep(timeout) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, timeout);
+    });
+  }
+
   const ws = new WebSocket('ws://127.0.0.1:8000/ide/<%= proxyKey %>?<%= queryParams %>');
   let agentFrameEl, tempPassword;
   ws.addEventListener('open', () => {
 
   });
   let startingOutput = '';
-  ws.addEventListener('message', ({data}) => {
+  ws.addEventListener('message', async ({data}) => {
     const options = JSON.parse(data);
     if (options.type === 'start-ide') {
       if (options.data.password) {
@@ -74,6 +82,7 @@
           alert('启动失败');
         } else {
           const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
+          await sleep(5000);
           agentFrameEl = document.getElementById('workspace');
           agentFrameEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
           agentFrameEl.host = "<%= host %>";
@@ -101,7 +110,7 @@
               loginEl.submit();
               loadingEl.classList.add('hide');
               agentFrameEl.classList.remove('hide');
-            }else{
+            } else {
               afterIdeLoaded();
             }
           };
