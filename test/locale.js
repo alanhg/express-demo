@@ -103,3 +103,5 @@ const languagepacksContent = {
 // NOTE@jsjoeio - code-server should automatically generate the languagepacks.json for
 // using different display languages. This is a temporary workaround until we fix that.
 fs.writeFileSync(path.join(__dirname, "languagepacks.json"), JSON.stringify(languagepacksContent))
+
+console.log(path.extname('languagepacks.json'))
