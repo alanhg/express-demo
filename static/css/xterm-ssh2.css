@@ -2,19 +2,6 @@ body {
   margin: 0;
 }
 
-
-#terminal-container {
-  background-color: black;
-}
-
-.terminal {
-  background-image: url("/img/halo.jpeg");
-  background-repeat: no-repeat;
-  /*background-color: black;*/
-  /*background-size: cover;*/
-  background-position: right;
-}
-
 /**
   search-addon-bar样式
  */
@@ -85,8 +72,24 @@ body {
   color: white;
 }
 
+#terminal-wrapper {
+  background-color: black;
+  position: relative;
+}
+
 #terminal-container {
+
   margin-bottom: 20px;
+}
+
+.terminal-background-img {
+  background-image: url(/img/halo.jpeg);
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  opacity: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 #file-editor {
