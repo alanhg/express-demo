@@ -4,7 +4,6 @@
  */
 const express = require('express');
 const router = express.Router();
-const db = require('../db/schema');
 const fs = require('fs');
 const path = require('path');
 const Base64 = require('js-base64').Base64;
