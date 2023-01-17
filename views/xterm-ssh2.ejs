@@ -25,9 +25,76 @@
     <link rel="stylesheet" href="css/xterm-ssh2.css">
 </head>
 <body>
+
+
+<div class="terminal-wrapper">
+
+
+</div>
+
+<div id="terminal-container">
+
+
+</div>
+<input id="zm_files" type="file" multiple style="display: none">
+<button data-start="false" onclick="recordLogStart(event)">log record start</button>
+<button data-start="false" onclick="clientRecordLogStart(event)">client log record start</button>
+<label for="record-timestamp">
+    record timestamp
+    <input id="record-timestamp" type="checkbox" checked>
+</label>
+<button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
+<button data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
+<button onclick="stopCodeServer(event)">Stop Code Server</button>
+
+<label for="backgroundOn">
+    <input id="backgroundOn" type="checkbox" onclick="toggleBackgroundOn(event)">Image Background</button>
+</label>
+
+
+<label for="toggleNewTabOn">
+    <input id="toggleNewTabOn" type="checkbox" onclick="toggleNewTabOn(event)" checked>链接打开新标签页</button>
+</label>
+
+<label for="proxyProtocol">
+    Code Server代理协议
+    <select id="proxyProtocol" onchange="changeProxyProtocol(event)">
+        <option value="http" selected>HTTP</option>
+        <option value="ssh">SSH</option>
+    </select>
+</label>
+
+<iframe id="code-server-inline">
+
+</iframe>
+<div id="file-editor">
+    <div style="width: 280px">
+        <input type="text" placeholder="内容全文检索" onkeydown="handleSearch(event)"/>
+        <div id="file-tree" class="ztree">
+        </div>
+        <div>
+
+        </div>
+        检索结果
+        <div class="search-result">
+
+        </div>
+    </div>
+    <div style="flex: 1">
+        编辑器
+        <div id="monaco_editor">
+
+        </div>
+    </div>
+
+</div>
+<footer>
+
+</footer>
 <script>
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
   const isWin = navigator.platform.indexOf('Win') > -1;
+
 
   /**
    * 测试高频打印数据
@@ -95,15 +162,14 @@
   }
 
   function runCodeServer(e) {
-    socket.send(JSON.stringify({
-      type: 'codeserver'
-    }))
+    sendData('codeserver', {
+          proxyProtocol: document.getElementById('proxyProtocol').value
+        }
+    )
   }
 
   function stopCodeServer(e) {
-    socket.send(JSON.stringify({
-      type: 'codeserver-logout'
-    }))
+    sendData('codeserver-logout')
   }
 
   function toggleBackgroundOn(e) {
@@ -113,67 +179,12 @@
   function toggleNewTabOn(e) {
     window.toggleNewTabOn = e.target.checked;
   }
-</script>
+
+  function changeProxyProtocol(e) {
+    window.toggleNewTabOn = e.target.checked;
+  }
 
 
-<div class="terminal-wrapper">
-
-
-</div>
-
-<div id="terminal-container">
-
-
-
-</div>
-<input id="zm_files" type="file" multiple style="display: none">
-<button data-start="false" onclick="recordLogStart(event)">log record start</button>
-<button data-start="false" onclick="clientRecordLogStart(event)">client log record start</button>
-<label for="record-timestamp">
-    record timestamp
-    <input id="record-timestamp" type="checkbox" checked>
-</label>
-<button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
-<button data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
-<button onclick="stopCodeServer(event)">Stop Code Server</button>
-
-<label for="backgroundOn">
-    <input id="backgroundOn" type="checkbox" onclick="toggleBackgroundOn(event)">Image Background</button>
-</label>
-
-
-<label for="toggleNewTabOn">
-    <input id="toggleNewTabOn" type="checkbox" onclick="toggleNewTabOn(event)" checked>链接打开新标签页</button>
-</label>
-
-<iframe id="code-server-inline">
-
-</iframe>
-<div id="file-editor">
-    <div style="width: 280px">
-        <input type="text" placeholder="内容全文检索" onkeydown="handleSearch(event)"/>
-        <div id="file-tree" class="ztree">
-        </div>
-        <div>
-
-        </div>
-        检索结果
-        <div class="search-result">
-
-        </div>
-    </div>
-    <div style="flex: 1">
-        编辑器
-        <div id="monaco_editor">
-
-        </div>
-    </div>
-
-</div>
-<footer>
-
-</footer>
-<script>
   const SPACER = '            ';
   var socket, activeZsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
       clientRecordLogBlobs = [], CurrentDir = '/root';
@@ -186,6 +197,13 @@
     } catch {
       return evt.data;
     }
+  }
+
+  function sendData(type, data = {}) {
+    socket.send(JSON.stringify({
+      type,
+      data
+    }))
   }
 </script>
 <script type="module">
