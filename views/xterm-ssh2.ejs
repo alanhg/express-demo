@@ -61,6 +61,12 @@
     </select>
 </label>
 
+<div>
+    <label for="proxyHost">Code Server代理地址</label>
+    <textarea id="proxyHost" cols="20" rows="20">
+    </textarea>
+</div>
+
 <iframe id="code-server-inline">
 
 </iframe>
@@ -89,6 +95,8 @@
 
 </footer>
 <script>
+  const connectOpts=<%- JSON.stringify(connectOpts) %>;//连接参数
+  document.getElementById('proxyHost').value = JSON.stringify(connectOpts, null, 2);
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
   const isWin = navigator.platform.indexOf('Win') > -1;
 
@@ -462,6 +470,7 @@
     location.reload();
   });
   socket.addEventListener('open', () => {
+    sendData('connect', JSON.parse(document.getElementById('proxyHost').value));
   });
 
   socket.addEventListener('message', (evt) => {

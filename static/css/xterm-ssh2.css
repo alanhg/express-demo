@@ -142,3 +142,8 @@ body {
     background-position: 0% 50%
   }
 }
+
+#proxyHost {
+  width: 300px;
+  height: 200px;
+}
