@@ -12,6 +12,9 @@ const CodeServerDB = sequelize.define('CodeServerProxy', {
   },
   host: DataTypes.STRING,
   username: DataTypes.STRING,
+  /**
+   * 生产环境必须对连接信息进行加密
+   */
   connectOpts: DataTypes.JSON,
   /**
    * 代理协议，ssh/http
@@ -25,8 +28,10 @@ const CodeServerDB = sequelize.define('CodeServerProxy', {
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
-  camelCase: true,
+  underscored: true,
 });
+
+sequelize.sync({ force: true });
 
 module.exports = {
   CodeServerDB
