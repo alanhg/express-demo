@@ -12,6 +12,7 @@ const apiRouter = require('./api');
 const authRouter = require('./auth');
 const webShellRouter = require('./webshell');
 const path = require("path");
+const {connectOpts} = require('./config');
 var terminals = {}, logs = {};
 
 router.use('/', webShellRouter);
@@ -89,7 +90,9 @@ router.post('/xterm/:pid/size', function (req, res) {
 
 
 router.get('/xterm-ssh2', (req, res) => {
-  res.render('xterm-ssh2');
+  res.render('xterm-ssh2',{
+    connectOpts
+  });
 });
 
 router.ws('/xterm/:pid', (ws, req) => {

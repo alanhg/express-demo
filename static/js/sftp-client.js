@@ -2,8 +2,8 @@ class SftpClient extends EventEmitter {
   constructor(url) {
     super();
     const socket = new WebSocket(url);
-    socket.onopen = function () {
-
+    socket.onopen = () => {
+      this.send('connect', JSON.parse(document.getElementById('proxyHost').value))
     }
     socket.onmessage = (evt) => {
       if (typeof evt.data === 'string') {

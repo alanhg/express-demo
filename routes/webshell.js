@@ -17,8 +17,6 @@ let shellLog;
 router.ws('/ws/webshell', function (ws, res) {
   ws.send('logining\r');
   const sshClient = new SshClient(ws);
-  sshClient.connect(connectOpts);
-
   sshClient.on('data', (data) => {
     if (logStartFlag) {
       shellLog.appendData(data);
@@ -30,7 +28,6 @@ router.ws('/ws/webshell', function (ws, res) {
 
 router.ws('/ws/sftp', function (ws, req) {
   const client = new SftpClient(ws);
-  client.connect(connectOpts);
 });
 
 router.get('/ssh2-log', (req, res) => {

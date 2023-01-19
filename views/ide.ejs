@@ -82,7 +82,7 @@
           alert('启动失败');
         } else {
           const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
-          await sleep(5000);
+          await sleep(10000);
           agentFrameEl = document.getElementById('workspace');
           agentFrameEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
           agentFrameEl.host = "<%= host %>";
