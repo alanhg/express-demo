@@ -21,7 +21,7 @@ const proxyServer = httpProxy.createProxyServer({
   hostRewrite: true,
   proxyTimeout: TIMEOUT,
   timeout: TIMEOUT,
-  agent
+  // agent
 });
 
 
@@ -41,8 +41,7 @@ console.log(sshConfig);
 // });
 
 http.createServer(function (req, res) {
-  proxyServer.agent=agent;
-  proxyServer.web(req, res, {target: 'http://127.0.0.1:36000'});
+  proxyServer.web(req, res, {target: 'http://127.0.0.1:36000', agent});
 }).listen(9000);
 
 console.log('see http://127.0.0.1:9000');
