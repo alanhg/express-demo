@@ -5,6 +5,7 @@ const connectOpts = {
   password: process.env.password,
   keepaliveInterval: 30000,
   keepaliveCountMax: 200,
+  readyTimeout: 60 * 1000,
   // debug: console.log
 };
 
