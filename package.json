@@ -42,6 +42,7 @@
     "node-forge": "^1.2.1",
     "node-pty": "^0.10.1",
     "nodemon": "^2.0.19",
+    "openai": "^3.1.0",
     "path-match": "^1.2.4",
     "query-string": "^6.10.1",
     "rimraf": "^3.0.2",
