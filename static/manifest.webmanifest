@@ -1,0 +1,26 @@
+{
+  "name": "Express Demo",
+  "short_name": "Express Demo",
+  "descriptions": "node项目下各种功能研发实验，提供Demo",
+  "icons": [
+    {
+      "src": "logo/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
