@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.1/base64.min.js"></script>
     <script src="/js/download.js"></script>
     <link rel="manifest" href="/xterm.webmanifest">
+    <meta name="theme-color" content="#0066ff"/>
     <script>
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js', {
@@ -24,5 +25,21 @@
         <% }); %>
     </ul>
 </main>
+<div>
+
+    主题切换：
+    <button onclick="changeThemeMode(event)">
+        change to dark
+    </button>
+</div>
+<script>
+  const themeTag = document.head.querySelector("meta[name='theme-color']")
+
+  function changeThemeMode(e) {
+    let isLight = themeTag.getAttribute('content') === '#0066ff';
+    themeTag.setAttribute('content', isLight ? '#000000' : '#0066ff');
+    e.target.innerText = isLight ? 'change to light' : 'change to dark';
+  }
+</script>
 </body>
 </html>
