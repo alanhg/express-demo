@@ -1,6 +1,6 @@
 {
-  "name": "Express Demo",
-  "short_name": "Express Demo",
+  "name": "webshell",
+  "short_name": "webshell demo",
   "descriptions": "node项目下各种功能研发实验，提供Demo",
   "icons": [
     {
@@ -19,7 +19,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/xterm-ssh2",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
