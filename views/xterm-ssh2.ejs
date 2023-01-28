@@ -1,14 +1,17 @@
 <head>
     <title>xterm.js-ssh2测试</title>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/js/sw.js');
+      }
+    </script>
     <link href="/js/xterm/css/xterm.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
     <link data-name="vs/editor/editor.main"
           href="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.min.css"
           rel="stylesheet">
     <link href="/js/contextMenu.css" rel="stylesheet">
-
     <link rel="manifest" href="/xterm.webmanifest">
-
     <script src="/js/xterm/lib/xterm.js"></script>
     <script src="/js/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
     <script src="/js/xterm-addon-search/lib/xterm-addon-search.js"></script>
@@ -25,11 +28,6 @@
     <script src="/js/contextMenu.js"></script>
     <script src="/js/events.js"></script>
     <link rel="stylesheet" href="css/xterm-ssh2.css">
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/js/sw.js');
-      }
-    </script>
 </head>
 <body>
 <div id="terminal-wrapper">
@@ -102,6 +100,8 @@
 
 </footer>
 <script>
+  const webSocketBaseUrl = `${location.protocol === `https:` ? 'wss:' : 'ws:'}//${location.host}`;
+
   const connectOpts =<%- JSON.stringify(connectOpts) %>;//连接参数
   document.getElementById('proxyHost').value = JSON.stringify(connectOpts, null, 2);
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
@@ -431,7 +431,7 @@
     console.log('执行换行');
     CurrentDirRecord[term.buffer.active.cursorY] = CurrentDir; // 当前得到的目录根据行进行记录
   });
-  socket = new WebSocket(`ws://${location.hostname}:${location.port}/ws/webshell`);
+  socket = new WebSocket(`${webSocketBaseUrl}/ws/webshell`);
   socket.binaryType = 'arraybuffer';
 
 
@@ -822,7 +822,7 @@
 
   import SftpClient from '/js/sftp-client.js';
 
-  const sftpSocket = new SftpClient(`ws://127.0.0.1:8000/ws/sftp`);
+  const sftpSocket = new SftpClient(`${webSocketBaseUrl}/ws/sftp`);
   // 树JS文档 https://github.com/daweilv/treejs
   const rootPath = '/home/lighthouse';
   let typeMode;

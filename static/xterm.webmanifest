@@ -2,6 +2,11 @@
   "name": "webshell",
   "short_name": "webshell demo",
   "descriptions": "node项目下各种功能研发实验，提供Demo",
+  "start_url": "/xterm-ssh2?from=pwa",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#000000",
   "icons": [
     {
       "src": "logo/favicon.ico",
@@ -18,9 +23,5 @@
       "type": "image/png",
       "sizes": "512x512"
     }
-  ],
-  "start_url": "/xterm-ssh2",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  ]
 }
