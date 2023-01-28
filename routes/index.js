@@ -15,6 +15,9 @@ const path = require("path");
 const {connectOpts} = require('./config');
 var terminals = {}, logs = {};
 
+router.get('/sw.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../static/js/sw.js'));
+})
 router.use('/', webShellRouter);
 router.use('/api', apiRouter);
 router.use('/auth', authRouter);
@@ -90,7 +93,7 @@ router.post('/xterm/:pid/size', function (req, res) {
 
 
 router.get('/xterm-ssh2', (req, res) => {
-  res.render('xterm-ssh2',{
+  res.render('xterm-ssh2', {
     connectOpts
   });
 });

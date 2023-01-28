@@ -2,7 +2,7 @@
   "name": "webshell",
   "short_name": "webshell demo",
   "descriptions": "node项目下各种功能研发实验，提供Demo",
-  "start_url": "/xterm-ssh2?from=pwa",
+  "start_url": "/?from=pwa",
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "/",

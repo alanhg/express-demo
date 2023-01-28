@@ -6,8 +6,14 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.1/base64.min.js"></script>
     <script src="/js/download.js"></script>
-    <style>
-    </style>
+    <link rel="manifest" href="/xterm.webmanifest">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', {
+          scope: "/",
+        });
+      }
+    </script>
 </head>
 <body>
 <main>
@@ -15,7 +21,7 @@
     <ul>
         <% views.forEach(item => { %>
             <li><a href="/<%= item %>"><%= item %></a></li>
-        <% });%>
+        <% }); %>
     </ul>
 </main>
 </body>
