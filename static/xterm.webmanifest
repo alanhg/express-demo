@@ -9,19 +9,19 @@
   "theme_color": "#0066ff",
   "icons": [
     {
-      "src": "logo/favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo/logo.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo/logo.png",
+      "src": "logo/logo-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "logo/logo-256x256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "logo/logo-144x144.png",
+      "type": "image/png",
+      "sizes": "144x144"
     }
   ]
 }
