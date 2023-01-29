@@ -21,7 +21,7 @@ os() {
  init_environment_variables(){
   export CODE_SERVER_PORT=36000
   export CODE_SERVER_VERSION=4.7.1
-  export SUPERVISOR_CONF_VERSION=0.2
+  export SUPERVISOR_CONF_VERSION=0.1
   export CODE_SERVER_DIR=$HOME/.term/code-server
   export CODE_SERVER_RUN_DIR=$HOME/.term/code-server-run
   export BIND_ADDR=0.0.0.0:$CODE_SERVER_PORT
