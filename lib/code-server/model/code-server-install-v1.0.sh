@@ -21,6 +21,7 @@ os() {
  init_environment_variables(){
   export CODE_SERVER_PORT=36000
   export CODE_SERVER_VERSION=4.7.1
+  export SUPERVISOR_CONF_VERSION=0.1
   export CODE_SERVER_DIR=$HOME/.term/code-server
   export CODE_SERVER_RUN_DIR=$HOME/.term/code-server-run
   export BIND_ADDR=0.0.0.0:$CODE_SERVER_PORT
@@ -183,12 +184,14 @@ fi
 
  init_supervisor_settings(){
   echo '4. init supervisor settings'
-  if [ -d $CODE_SERVER_RUN_DIR/supervisord-conf ]; then
-  echo '4. supervisor settings installed'
+  if [ -d $CODE_SERVER_RUN_DIR/supervisord-conf-$SUPERVISOR_CONF_VERSION ]; then
+  echo "4. supervisor settings ${SUPERVISOR_CONF_VERSION} installed"
       return
   fi
-  curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/supervisord-conf.tar.gz \
+  curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/supervisord-conf-$SUPERVISOR_CONF_VERSION.tar.gz \
     | tar -C $CODE_SERVER_RUN_DIR -xz
+
+  ln -sf $CODE_SERVER_RUN_DIR/supervisord-conf-$SUPERVISOR_CONF_VERSION $CODE_SERVER_DIR/supervisord-conf
 }
 
  start_supervisor_server(){
