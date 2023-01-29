@@ -6,7 +6,6 @@ const express = require('express');
 const app = express();
 require('express-ws')(app);
 const conf = require('./config');
-const cookieParser = require('cookie-parser');
 const path = require('path');
 const routes = require('./routes/index');
 const bodyParser = require('body-parser');

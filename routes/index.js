@@ -98,6 +98,11 @@ router.get('/xterm-ssh2', (req, res) => {
   });
 });
 
+router.get('/openai', (req, res) => {
+  res.render('openai', {
+  });
+});
+
 router.ws('/xterm/:pid', (ws, req) => {
   var term = terminals[parseInt(req.params.pid)];
   ws.send(logs[term.pid]);

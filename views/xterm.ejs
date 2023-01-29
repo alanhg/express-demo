@@ -6,94 +6,91 @@
     <script src="/js/xterm-addon-search/lib/xterm-addon-search.js"></script>
     <script src="/js/xterm-addon-attach/lib/xterm-addon-attach.js"></script>
     <script src="/js/xterm-addon-webgl/lib/xterm-addon-webgl.js"></script>
-    <script src="/js/nora-zmodemjs/dist/zmodem.js"></script>
-    <script src="/js/xterm/zmodem-browser.js"></script>
+    <script src="/js/zmodem.js/dist/zmodem.js"></script>
     <script src="/js/mousetrap.min.js"></script>
+    <script src="/js/utils.js"></script>
     <style>
-        #terminal {
-            /*background-image: url("/img/halo.jpeg");*/
-            background-repeat: no-repeat;
-            /*background-color: black;*/
-            /*background-size: cover;*/
-        }
+      #terminal {
+        /*background-image: url("/img/halo.jpeg");*/
+        background-repeat: no-repeat;
+        /*background-color: black;*/
+        /*background-size: cover;*/
+      }
 
-        /**
-          search-addon-bar样式
-         */
-        .xterm-search-addon-bar {
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 285px;
-            color: #000;
-            padding: 5px 10px;
-            box-shadow: 0 2px 8px #000;
-            background: #252526;
-            z-index: 999;
-            display: flex;
-        }
+      /**
+        search-addon-bar样式
+       */
+      .xterm-search-addon-bar {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 285px;
+        color: #000;
+        padding: 5px 10px;
+        box-shadow: 0 2px 8px #000;
+        background: #252526;
+        z-index: 999;
+        display: flex;
+      }
 
-        .xterm-search-addon-bar input {
-            background-color: #3c3c3c;
-            color: #ccc;
-            border: 0;
-            padding: 2px;
-            height: 20px;
-            width: 227px;
-            outline: none;
-        }
+      .xterm-search-addon-bar input {
+        background-color: #3c3c3c;
+        color: #ccc;
+        border: 0;
+        padding: 2px;
+        height: 20px;
+        width: 227px;
+        outline: none;
+      }
 
-        .xterm-search-addon-bar button {
-            min-width: 20px;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            flex: initial;
-            background-position: 50%;
-            margin-left: 3px;
-            background-repeat: no-repeat;
-            background-color: #252526;
-            border: 0;
-            cursor: pointer;
-        }
+      .xterm-search-addon-bar button {
+        min-width: 20px;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        flex: initial;
+        background-position: 50%;
+        margin-left: 3px;
+        background-repeat: no-repeat;
+        background-color: #252526;
+        border: 0;
+        cursor: pointer;
+      }
 
-        .xterm-search-addon-bar button.pre {
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTUuNCA4YS42LjYgMCAwMS4xNzYtLjQyNGw0LTRhLjU5OC41OTggMCAwMS44NDggMCAuNTk4LjU5OCAwIDAxMCAuODQ4TDYuODQ5IDhsMy41NzUgMy41NzZhLjU5OC41OTggMCAwMTAgLjg0OC41OTguNTk4IDAgMDEtLjg0OCAwbC00LTRBLjYuNiAwIDAxNS40IDgiLz48L3N2Zz4=");
-        }
+      .xterm-search-addon-bar button.pre {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTUuNCA4YS42LjYgMCAwMS4xNzYtLjQyNGw0LTRhLjU5OC41OTggMCAwMS44NDggMCAuNTk4LjU5OCAwIDAxMCAuODQ4TDYuODQ5IDhsMy41NzUgMy41NzZhLjU5OC41OTggMCAwMTAgLjg0OC41OTguNTk4IDAgMDEtLjg0OCAwbC00LTRBLjYuNiAwIDAxNS40IDgiLz48L3N2Zz4=");
+      }
 
-        .xterm-search-addon-bar button.next {
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEwLjYgOGEuNi42IDAgMDEtLjE3Ni40MjRsLTQgNGEuNTk4LjU5OCAwIDAxLS44NDggMCAuNTk4LjU5OCAwIDAxMC0uODQ4TDkuMTUxIDggNS41NzYgNC40MjRhLjU5OC41OTggMCAwMTAtLjg0OC41OTguNTk4IDAgMDEuODQ4IDBsNCA0QS42LjYgMCAwMTEwLjYgOCIvPjwvc3ZnPg==");
-        }
+      .xterm-search-addon-bar button.next {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEwLjYgOGEuNi42IDAgMDEtLjE3Ni40MjRsLTQgNGEuNTk4LjU5OCAwIDAxLS44NDggMCAuNTk4LjU5OCAwIDAxMC0uODQ4TDkuMTUxIDggNS41NzYgNC40MjRhLjU5OC41OTggMCAwMTAtLjg0OC41OTguNTk4IDAgMDEuODQ4IDBsNCA0QS42LjYgMCAwMTEwLjYgOCIvPjwvc3ZnPg==");
+      }
 
-        .xterm-search-addon-bar button.close {
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
-        }
+      .xterm-search-addon-bar button.close {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
+      }
 
-        .xterm-search-addon-bar .search-result-count {
-            color: white;
-            position: absolute;
-            left: 126px;
-        }
+      .xterm-search-addon-bar .search-result-count {
+        color: white;
+        position: absolute;
+        left: 126px;
+      }
 
-        .xterm-search-addon-bar .match-case,
-        .xterm-search-addon-bar .match-word,
-        .xterm-search-addon-bar .match-regex {
-            color: #c0bdbd;
-        }
+      .xterm-search-addon-bar .match-case,
+      .xterm-search-addon-bar .match-word,
+      .xterm-search-addon-bar .match-regex {
+        color: #c0bdbd;
+      }
 
-        .xterm-search-addon-bar .match-case.active,
-        .xterm-search-addon-bar .match-word.active,
-        .xterm-search-addon-bar .match-regex.active {
-            color: white;
-        }
+      .xterm-search-addon-bar .match-case.active,
+      .xterm-search-addon-bar .match-word.active,
+      .xterm-search-addon-bar .match-regex.active {
+        color: white;
+      }
 
     </style>
 </head>
 <body>
 <script>
-  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
-  const isWin = navigator.platform.indexOf('Win') > -1;
-
   /**
    * 测试高频打印数据
    */
@@ -139,7 +136,7 @@
     <option selected value="dom">
         dom
     </option>
-    <option  value="canvas">
+    <option value="canvas">
         canvas
     </option>
 </select>
@@ -202,17 +199,49 @@
    * 终端会话连接与zsession
    */
   var socket, zsession, attachAddon;
+  let isZsession = false;
+
+  let zsentry = new Zmodem.Sentry({
+    to_terminal:/**
+*
+*/
+ function _to_terminal(data) {
+      if (!isZsession) {
+        term.write(data);
+        console.log('data', data);
+      }
+    },
+
+    sender: (data) => {
+      socket.send(new Uint8Array(data));
+    },
+
+    on_retract: function _on_retract() {
+      term.write('\rtransfer cancelled\r\n');
+    },
+
+    on_detect: async function _on_detect(detection) {
+      isZsession = true;
+      try {
+        await processZSession(detection);
+      } finally {
+        isZsession = false;
+        console.log(isZsession);
+      }
+    },
+  });
+
 
   term.open(document.getElementById('terminal-container'));
   // 终端自定义打印内容
   term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m \r\n');
   term.write('https://1991421.cn');
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
-    (event, uri) => {
-      if (event.metaKey) {
-        window.open(uri);
-      }
-    }));
+      (event, uri) => {
+        if (event.metaKey) {
+          window.open(uri);
+        }
+      }));
   let searchAddon = new SearchAddon.SearchAddon();
   let searchAddonBar = new SearchAddonBar({
     searchAddon
@@ -298,44 +327,14 @@
     socket = new WebSocket(`ws://127.0.0.1:8000/xterm/${res}`);
     attachAddon = new AttachAddon.AttachAddon(socket);
     term.loadAddon(attachAddon);
-    term.zmodemAttach(socket, {
-      noTerminalWriteOutsideSession: true,
-    });
-    term.zmodemDetect = (detection) => {
-
-      function do_zmodem() {
-        attachAddon.dispose(); // 开启zmodem会话时，临时销毁attachAddon
-        zsession = detection.confirm();
-
-        var promise;
-
-        if (zsession.type === "receive") {
-          promise = handleReceiveSession(zsession);
-        } else {
-          promise = handleSendSession(zsession);
-        }
-        promise.catch(console.error.bind(console)).then(() => {
-          zsession = null;
-          attachAddon.activate(term); // zmodem会话结束时，重新激活attachAddon
-        });
-      }
-
-      do_zmodem();
-    };
 
     socket.addEventListener('open', () => {
       socket.send('\r');
     });
 
     socket.addEventListener('message', (evt) => {
-      let data = Decodeuint8arr(evt.data);
-      const currenDirArr = data.match(/(]1337;CurrentDir=)(.+)/); // 根据PS1获取CWD
-      if (currenDirArr) {
-        console.log(currenDirArr);
-      }
-      if (!zsession) {
-        term.write(evt.data);
-      }
+      console.log('socket', evt.data);
+      feedFromSession(evt.data);
     });
   })
 
@@ -344,98 +343,42 @@
     return Zmodem.Browser.save_to_disk(buffer, xfer.get_details().name);
   }
 
-  /**
-   * SZ接受文件
-   */
-  function handleReceiveSession(zsession) {
-    zsession.on("offer", function (xfer) {
-      term.blur();
-      term.write('\x1b[2K\r'); // 清除活跃行内容
-      term.write('0%\r');
-
-      function on_form_submit() {
-        const FILE_BUFFER = [];
-        xfer.on("input", (payload) => {
-          FILE_BUFFER.push(new Uint8Array(payload));
-          term.write(getProgress(xfer) + '\r');
-        });
-        xfer.accept().then(
-          () => {
-            term.write(`${xfer.get_details().name} download completed.\r`);
-            term.focus();
-            term.write(`\r\n`);
-            _save_to_disk(xfer, FILE_BUFFER);
-          },
-          console.error.bind(console)
-        );
-        //END
+  function feedFromSession(buffer) {
+    const chunkSize = 1024;
+    for (let i = 0; i <= Math.floor(buffer.byteLength / chunkSize); i++) {
+      try {
+        zsentry.consume(buffer.slice(i * chunkSize, (i + 1) * chunkSize));
+      } catch (e) {
+        isZsession = false
+        activeZsession && activeZsession.abort()
       }
-
-      on_form_submit();
-    });
-
-    var promise = new Promise((res) => {
-      zsession.on("session_end", () => {
-        res();
-      });
-    });
-    zsession.start();
-    return promise;
+    }
+    if (!isZsession) {
+      const dataStr = Uint8ArrayToString(new Uint8Array(buffer));
+      if (clientRecordLogFlag) {
+        clientRecordLogBlobs.push(dataStr);
+      }
+      const currenDirArr = dataStr.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
+      if (currenDirArr?.length >= 3) {
+        CurrentDir = currenDirArr[2];
+      }
+    }
   }
 
-  /**
-   * rz接收文件
-   */
-  function handleSendSession(zsession) {
-    var file_el = document.getElementById("zm_files");
-
-    file_el.click();
-    var promise = new Promise((res) => {
-      file_el.onchange = function (e) {
-
-        var files_obj = file_el.files;
-
-        Zmodem.Browser.send_files(
-          zsession,
-          files_obj,
-          {
-            on_offer_response(obj, xfer) {
-              if (!xfer) {
-                term.write(`\n* The file ${obj.name} exists *\r`);
-              } else {
-                term.write('\x1b[2K\r'); // 清除活跃行内容
-                term.blur();
-                xfer.on('send_progress', percent => {
-                  // 上传中，发送进度给后台
-                  term.write(percent + '%\r', () => {
-                    console.log(percent + '%\r');
-                  });
-                });
-              }
-            },
-            on_progress(obj, xfer) {
-            },
-            on_file_complete(obj, xfer) {
-              term.write(`${xfer.get_details().name} upload completed.\r`);
-              term.focus();
-              term.write(`\r\n`);
-            },
-          }
-        ).then().then(
-          zsession.close.bind(zsession),
-          console.error.bind(console)
-        ).then(() => {
-          res();
-        });
-      };
-    });
-
-    return promise;
-  }
-
-  function getProgress(xhr) {
-    console.log(xhr.get_offset());
-    return (xhr.get_offset() * 100 / xhr.get_details().size).toFixed(2) + '%';
+  async function processZSession(detection) {
+    activeZsession = detection.confirm();
+    var promise;
+    zsessionCanceled = false;
+    if (activeZsession.type === 'send') {
+      promise = handleUploadSession(activeZsession);
+    } else {
+      promise = handleDownloadSession(activeZsession);
+    }
+    try {
+      await promise;
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   function ab2str(buf) {
@@ -535,11 +478,11 @@
   });
 
   function Encodeuint8arr(myString) {
-    return new TextEncoder("utf-8").encode(myString);
+    return new TextEncoder('utf-8').encode(myString);
   }
 
   function Decodeuint8arr(uint8array) {
-    return new TextDecoder("utf-8").decode(uint8array);
+    return new TextDecoder('utf-8').decode(uint8array);
   }
 </script>
 </body>

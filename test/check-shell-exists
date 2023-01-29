@@ -1,9 +1,9 @@
 #!/bin/bash
-#if [ ! -e $HOME/.term/code-server/code-server-install-v1.0.sh ];then
+#if [ ! -e $HOME/.term/code-server/code-server-install-v1.3.sh ];then
 #mkdir -p $HOME/.term/code-server
-#curl -sSo $HOME/.term/code-server/code-server-install-v1.0.sh https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/code-server-install.sh
+#curl -sSo $HOME/.term/code-server/code-server-install-v1.3.sh https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/code-server-install.sh
 #fi
-#sh $HOME/.term/code-server/code-server-install-v1.0.sh
+#sh $HOME/.term/code-server/code-server-install-v1.3.sh
 
 
 echo $1
