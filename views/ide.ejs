@@ -105,10 +105,10 @@
             }
 
             let loginEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="login-form"]');
-            if (false) {
+            if (loginEl) {
               loginEl.querySelector("[name='password']").value = tempPassword;
               // 自定登录
-              loginEl.submit();
+              // loginEl.submit();
               loadingEl.classList.add('hide');
               agentFrameEl.classList.remove('hide');
             } else {

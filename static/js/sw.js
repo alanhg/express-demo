@@ -12,13 +12,7 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', () => {
-  event.respondWith(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.match(event.request, {ignoreSearch: true}))
-      .then(response => {
-        return response || fetch(event.request);
-      })
-  );
+
 });
 
 self.addEventListener('activate', function (e) {
