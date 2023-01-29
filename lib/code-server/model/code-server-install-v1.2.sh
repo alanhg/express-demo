@@ -186,10 +186,10 @@ fi
   echo '4. init supervisor settings'
   if [ -d $CODE_SERVER_RUN_DIR/supervisord-conf-$SUPERVISOR_CONF_VERSION ]; then
   echo "4. supervisor settings ${SUPERVISOR_CONF_VERSION} installed"
-      return
-  fi
+  else
   curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/supervisord-conf-$SUPERVISOR_CONF_VERSION.tar.gz \
-    | tar -C $CODE_SERVER_RUN_DIR -xz
+  | tar -C $CODE_SERVER_RUN_DIR -xz
+  fi
 
   ln -sf $CODE_SERVER_RUN_DIR/supervisord-conf-$SUPERVISOR_CONF_VERSION $CODE_SERVER_RUN_DIR/supervisord-conf
 }
