@@ -381,6 +381,7 @@
       }
       term.writeln('');
       if (term.hasSelection()) {
+        navigator.clipboard.writeText(term.getSelection());
         console.log('CV？');
       } else {
         console.log('no Selection for CV');
@@ -388,7 +389,27 @@
       return;
     }
 
-    if (event.key === '.' && event.ctrlKey && event.altKey) {
+
+    if (event.key === 'c' && event.metaKey) {
+      if (term.hasSelection()) {
+        navigator.clipboard.writeText(term.getSelection()).catch(e => {
+          console.error(e);
+        });
+        console.log('CV？');
+      } else {
+        console.log('no Selection for CV');
+      }
+    }
+
+    if (event.key === 'v' && event.metaKey) {
+      navigator.clipboard.readText().then((text) => {
+        text && term.paste(text);
+      }).catch(e => {
+        console.error(e);
+      });
+    }
+
+      if (event.key === '.' && event.ctrlKey && event.altKey) {
       console.log(event);
       return false;
     }
