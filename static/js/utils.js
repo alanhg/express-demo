@@ -203,7 +203,7 @@ async function paste() {
     textarea.focus();
     document.execCommand('paste');
     const paste = textarea.innerText;
-    document.body.removeChild(textarea);
+    // document.body.removeChild(textarea);
     return paste;
   };
   if (navigator.clipboard) {
