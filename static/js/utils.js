@@ -197,8 +197,8 @@ async function paste() {
     document.body.appendChild(textarea);
     // 隐藏此输入框
     textarea.style.position = 'fixed';
-    textarea.style.clip = 'rect(0 0 0 0)';
-    textarea.style.top = '10px';
+    // textarea.style.clip = 'rect(0 0 0 0)';
+    // textarea.style.top = '10px';
     // 选中
     textarea.focus();
     document.execCommand('paste');
