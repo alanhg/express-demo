@@ -259,11 +259,25 @@
         zsession.abort();
         term.writeln('');
       }
+
+      if (isWin && term.hasSelection()) {
+        copy(term.hasSelection());
+      }
       if (term.hasSelection()) {
         console.log('CV？');
       } else {
         console.log('no Selection for CV');
       }
+      return;
+    }
+
+    if (event.key === 'v' && event.ctrlKey) {
+      if (isWin) {
+        paste().then(res => {
+          term.write(res);
+        })
+      }
+      console.log('CV？');
       return;
     }
 

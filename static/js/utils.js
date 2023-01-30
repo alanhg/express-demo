@@ -149,6 +149,7 @@ function getProgress(xhr) {
   console.log(xhr.get_offset());
   return (xhr.get_offset() * 100 / xhr.get_details().size).toFixed(2) + '%';
 }
+
 function Uint8ArrayToString(fileData) {
   let dataString = '';
   for (let i = 0; i < fileData.length; i++) {
@@ -156,4 +157,53 @@ function Uint8ArrayToString(fileData) {
   }
 
   return dataString
+}
+
+
+/**
+ * 拷贝文本到系统剪贴板/浏览器剪贴板
+ */
+async function copy(content) {
+  const doSystemCopy = () => {
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+    // 隐藏此输入框
+    textarea.style.position = 'fixed';
+    textarea.style.clip = 'rect(0 0 0 0)';
+    textarea.style.top = '10px';
+    // 赋值
+    textarea.value = content;
+    // 选中
+    textarea.focus();
+    textarea.select();
+    // 复制
+    document.execCommand('copy');
+    // 移除输入框
+    document.body.removeChild(textarea);
+  };
+
+  if (navigator.clipboard) {
+    return navigator.clipboard.writeText(content).catch(() => doSystemCopy());
+  }
+  return doSystemCopy();
+}
+
+/**
+ * 返回文本从系统剪贴板/浏览器剪贴板
+ */
+async function paste() {
+  const doSystemPaste = () => {
+    const pasteTarget = document.createElement('div');
+    pasteTarget.contentEditable = 'true';
+    const actElem = document.activeElement.appendChild(pasteTarget).parentNode;
+    pasteTarget.focus();
+    document.execCommand('Paste');
+    const paste = pasteTarget.innerText;
+    actElem.removeChild(pasteTarget);
+    return paste;
+  };
+  if (navigator.clipboard) {
+    return navigator.clipboard.readText().catch(() => doSystemPaste());
+  }
+  return doSystemPaste();
 }
