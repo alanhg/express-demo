@@ -298,7 +298,7 @@
   });
 
   fetch('/xterm?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then(res => res.text()).then(function (res) {
-    socket = new WebSocket(`ws://127.0.0.1:8000/xterm/${res}`);
+    socket = new WebSocket(`${webSocketBaseUrl}/xterm/${res}`);
     attachAddon = new AttachAddon.AttachAddon(socket);
     term.loadAddon(attachAddon);
 

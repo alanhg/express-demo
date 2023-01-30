@@ -1,5 +1,6 @@
 const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 const isWin = navigator.platform.indexOf('Win') > -1;
+const webSocketBaseUrl = `${location.protocol === `https:` ? 'wss:' : 'ws:'}//${location.host}`;
 
 /**
  * SZ接受文件
