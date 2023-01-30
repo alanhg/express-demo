@@ -262,6 +262,7 @@
 
       if (isWin && term.hasSelection()) {
         copy(term.getSelection());
+        return true;
       }
       if (term.hasSelection()) {
         console.log('CV？');
@@ -470,4 +471,6 @@
     return new TextDecoder('utf-8').decode(uint8array);
   }
 </script>
+
+
 </body>
