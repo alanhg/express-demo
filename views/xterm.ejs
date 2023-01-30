@@ -237,30 +237,25 @@
     console.log('paste', e.clipboardData.getData('text/plain'));
   });
 
-/*  term.attachCustomKeyEventHandler(function (event) {
+  term.attachCustomKeyEventHandler(function (event) {
     console.log(event);
 
     if (event.type !== 'keydown') {
       return;
     }
-    // alternate screen模式比如vim模式下不开启终端检索
-    if (event.key === 'f' && (event.metaKey || event.ctrlKey) && term.buffer.active.type === 'normal') {
-      event.preventDefault();
-      searchAddonBar.show();
-      return true;
-    }
+    // // alternate screen模式比如vim模式下不开启终端检索
+    // if (event.key === 'f' && (event.metaKey || event.ctrlKey) && term.buffer.active.type === 'normal') {
+    //   event.preventDefault();
+    //   searchAddonBar.show();
+    //   return true;
+    // }
+    //
+    //
+    // if (event.key === ',' && event.ctrlKey && event.altKey) {
+    //   console.log(event);
+    //   return;
+    // }
 
-
-    if (event.key === ',' && event.ctrlKey && event.altKey) {
-      console.log(event);
-      return;
-    }
-
-
-    /!**
-     * 如果在session会话中需要实现取消
-     * 由于开启zmodem会话时关闭了attach插件，因此这里WS直接发送取消命令
-     *!/
     if (event.key === 'c' && event.ctrlKey) {
       if (zsession && !zsession._aborted) {
         zsession.abort();
@@ -269,46 +264,39 @@
 
       if (isWin && term.hasSelection()) {
         if (copy(term.getSelection())) {
-
+          return false;
         } else {
           alert('请打开剪贴板权限')
         }
-        return true;
       }
-      if (term.hasSelection()) {
-        console.log('CV？');
-      } else {
-        console.log('no Selection for CV');
-      }
-      return;
     }
 
     if (event.key === 'v' && event.ctrlKey) {
       console.log('CV？');
-      return;
-    }
-
-    if (event.key === '.' && event.ctrlKey && event.altKey) {
-      console.log(event);
       return false;
     }
 
-
-    if (event.key === '.' && event.ctrlKey && event.altKey) {
-      console.log(event);
-      return false;
-    }
-
-
-    if (event.key === '.' && event.ctrlKey && event.altKey) {
-      console.log(event);
-      return false;
-    }
-
-    if (event.key === 'Escape') {
-      searchAddonBar.hide();
-    }
-
+    // if (event.key === '.' && event.ctrlKey && event.altKey) {
+    //   console.log(event);
+    //   return false;
+    // }
+    //
+    //
+    // if (event.key === '.' && event.ctrlKey && event.altKey) {
+    //   console.log(event);
+    //   return false;
+    // }
+    //
+    //
+    // if (event.key === '.' && event.ctrlKey && event.altKey) {
+    //   console.log(event);
+    //   return false;
+    // }
+    //
+    // if (event.key === 'Escape') {
+    //   searchAddonBar.hide();
+    // }
+    //
     if (event.key === 'k' && (isMac ? event.metaKey : event.ctrlKey)) {
       console.log('清屏点击');
       term.clear();
@@ -316,7 +304,7 @@
       return false;
     }
     return true;
-  })*/;
+  })
 
   fetch('/xterm?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then(res => res.text()).then(function (res) {
     socket = new WebSocket(`${webSocketBaseUrl}/xterm/${res}`);
