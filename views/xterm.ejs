@@ -266,16 +266,11 @@
       }
 
       if (isWin && term.hasSelection()) {
-        copy(term.getSelection()).catch(() => {
-          alert('请打开剪贴板权限');
-        });
+        return false;
       }
     }
 
     if (isWin && event.key === 'v' && event.ctrlKey) {
-      paste().catch(() => {
-        alert('请打开剪贴板权限');
-      })
       return false;
     }
 
