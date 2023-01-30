@@ -232,7 +232,14 @@
 
   term.loadAddon(webglAddon);
 
+
+  term.textarea.addEventListener('paste', (e) => {
+    console.log('paste', e.clipboardData.getData('text/plain'));
+  });
+
   term.attachCustomKeyEventHandler(function (event) {
+    console.log(event);
+
     if (event.type !== 'keydown') {
       return;
     }
