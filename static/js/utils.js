@@ -193,13 +193,17 @@ async function copy(content) {
  */
 async function paste() {
   const doSystemPaste = () => {
-    const pasteTarget = document.createElement('div');
-    pasteTarget.contentEditable = 'true';
-    const actElem = document.activeElement.appendChild(pasteTarget).parentNode;
-    pasteTarget.focus();
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+    // 隐藏此输入框
+    textarea.style.position = 'fixed';
+    textarea.style.clip = 'rect(0 0 0 0)';
+    textarea.style.top = '10px';
+    // 选中
+    textarea.focus();
     document.execCommand('Paste');
-    const paste = pasteTarget.innerText;
-    actElem.removeChild(pasteTarget);
+    const paste = textarea.innerText;
+    document.body.removeChild(textarea);
     return paste;
   };
   if (navigator.clipboard) {
