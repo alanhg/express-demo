@@ -271,15 +271,15 @@
       return;
     }
 
-    // if (event.key === 'v' && event.ctrlKey) {
-    //   if (isWin) {
-    //     paste().then(res => {
-    //       term.write(res);
-    //     })
-    //   }
-    //   console.log('CV？');
-    //   return;
-    // }
+    if (event.key === 'v' && event.ctrlKey) {
+      if (isWin) {
+        paste().then(res => {
+          term.write(res);
+        })
+      }
+      console.log('CV？');
+      return;
+    }
 
     if (event.key === '.' && event.ctrlKey && event.altKey) {
       console.log(event);
