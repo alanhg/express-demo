@@ -284,15 +284,6 @@
     }
 
     if (event.key === 'v' && event.ctrlKey) {
-      if (isWin) {
-        paste().then(res => {
-          if (res) {
-            term.write(res);
-          } else if (res === false) {
-            alert('请打开剪贴板权限')
-          }
-        })
-      }
       console.log('CV？');
       return;
     }
