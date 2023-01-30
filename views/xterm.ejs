@@ -261,7 +261,11 @@
       }
 
       if (isWin && term.hasSelection()) {
-        copy(term.getSelection());
+        if (copy(term.getSelection())) {
+
+        } else {
+          alert('请打开剪贴板权限')
+        }
         return true;
       }
       if (term.hasSelection()) {
@@ -275,7 +279,11 @@
     if (event.key === 'v' && event.ctrlKey) {
       if (isWin) {
         paste().then(res => {
-          term.write(res);
+          if (res) {
+            term.write(res);
+          } else if (res === false) {
+            alert('请打开剪贴板权限')
+          }
         })
       }
       console.log('CV？');
