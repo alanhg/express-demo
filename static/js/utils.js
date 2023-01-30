@@ -201,8 +201,7 @@ async function paste() {
     // textarea.style.top = '10px';
     // 选中
     textarea.focus();
-    document.execCommand('paste');
-    const paste = textarea.innerText;
+    const paste = document.execCommand('paste');
     // document.body.removeChild(textarea);
     return paste;
   };
