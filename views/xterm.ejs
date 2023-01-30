@@ -141,7 +141,10 @@
     <p>The function <code>selectAll()</code> highlights all the text in the
         input field so the user can, for example, copy or delete the text.</p>
 </code>
-<script type="module">
+
+<button onclick="doPaste()">paste</button>
+
+<script>
 
   var isFullscreen = false;
   var term = new Terminal({
@@ -263,16 +266,16 @@
       }
 
       if (isWin && term.hasSelection()) {
-        if (copy(term.getSelection())) {
-          return false;
-        } else {
-          alert('请打开剪贴板权限')
-        }
+        copy(term.getSelection()).catch(() => {
+          alert('请打开剪贴板权限');
+        });
       }
     }
 
     if (event.key === 'v' && event.ctrlKey) {
-      console.log('CV？');
+      paste().then(() => {
+        alert('请打开剪贴板权限');
+      })
       return false;
     }
 
@@ -464,7 +467,13 @@
   function Decodeuint8arr(uint8array) {
     return new TextDecoder('utf-8').decode(uint8array);
   }
+
+  function doPaste() {
+    paste().then(txt => {
+      term.write(txt);
+    }).catch(() => {
+      alert('请打开剪贴板权限');
+    })
+  }
 </script>
-
-
 </body>

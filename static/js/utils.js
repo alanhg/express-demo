@@ -169,7 +169,7 @@ async function copy(content) {
     document.body.appendChild(textarea);
     // 隐藏此输入框
     textarea.style.position = 'fixed';
-    textarea.style.clip = 'rect(0 0 0 0)';
+    textarea.style.visibility = 'hidden';
     textarea.style.top = '10px';
     // 赋值
     textarea.value = content;
@@ -180,7 +180,10 @@ async function copy(content) {
     const res = document.execCommand('copy');
     // 移除输入框
     document.body.removeChild(textarea);
-    return res;
+    if (res) {
+      return;
+    }
+    throw new Error();
   };
 
   if (navigator.clipboard) {
@@ -198,16 +201,19 @@ async function paste() {
     document.body.appendChild(textarea);
     // 隐藏此输入框
     textarea.style.position = 'fixed';
-    textarea.style.clip = 'rect(0 0 0 0)';
+    textarea.style.visibility = 'hidden';
     textarea.style.top = '10px';
     // 选中
     textarea.focus();
     const paste = document.execCommand('paste');
     document.body.removeChild(textarea);
-    return textarea.value || paste;
+    if (paste) {
+      return textarea.value;
+    }
+    throw new Error();
   };
   if (navigator.clipboard) {
-    return navigator.clipboard.readText().then(() => true).catch(() => doSystemPaste());
+    return navigator.clipboard.readText().catch(() => doSystemPaste());
   }
   return doSystemPaste();
 }
