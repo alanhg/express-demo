@@ -10,10 +10,8 @@ const path = require('path');
 const routes = require('./routes/index');
 const bodyParser = require('body-parser');
 var cors = require('cors');
-const {codeServerProxyManager, codeServerProxy} = require("./lib/code-server/model/proxy");
 
 app.set('trust proxy', 1); // trust first proxy
-// app.use(cookieParser());
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');

@@ -225,7 +225,7 @@ router.get('/download-base64', function (req, res) {
 
 
 router.post('/upload', function (req, res) {
-  debugger;
+  console.log(req.body);
   res.json({status: 'ok'});
 });
 

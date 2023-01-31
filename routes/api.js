@@ -12,7 +12,6 @@ const unlessPath = [{url: '/api/login', methods: ['POST']}];
 
 const fs = require('fs');
 var crypto = require('crypto');
-const openaiBot = require('../lib/openai');
 router.put('/a', function (req, res) {
   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
   res.status(405).json({
