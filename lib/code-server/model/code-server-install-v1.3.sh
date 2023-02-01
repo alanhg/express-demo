@@ -1,3 +1,4 @@
+#!/bin/sh
 
 arch() {
   uname_m=$(uname -m)
