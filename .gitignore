@@ -9,3 +9,4 @@ lib/code-server/install-package-source
 !lib/code-server/install-package-source/.gikeeper
 .DS_Store
 
+lib/code-server/code-server-4.7.1-linux-amd64
