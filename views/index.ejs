@@ -8,6 +8,13 @@
     <script src="/js/download.js"></script>
     <link rel="manifest" href="/xterm.webmanifest">
     <meta name="theme-color" content="#0066ff"/>
+
+
+    <style>
+        #installApp {
+            display: none;
+        }
+    </style>
     <script>
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js', {
@@ -18,6 +25,8 @@
           console.warn('Error whilst registering service worker', err);
         });
       }
+
+
     </script>
 </head>
 <body>
@@ -28,6 +37,10 @@
             <li><a href="/<%= item %>"><%= item %></a></li>
         <% }); %>
     </ul>
+
+    <button id="installApp">
+        install pwa app
+    </button>
 </main>
 <div>
 
@@ -44,6 +57,24 @@
     themeTag.setAttribute('content', isLight ? '#000000' : '#0066ff');
     e.target.innerText = isLight ? 'change to light' : 'change to dark';
   }
+
+  let deferredPrompt;
+  const installApp = document.getElementById('installApp');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    installApp.style.display = 'block';
+    deferredPrompt = e;
+  });
+
+  installApp.addEventListener('click', async () => {
+    if (deferredPrompt !== null) {
+      deferredPrompt.prompt();
+      const {outcome} = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        deferredPrompt = null;
+      }
+    }
+  });
 </script>
 </body>
 </html>
