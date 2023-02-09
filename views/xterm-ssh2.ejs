@@ -95,6 +95,20 @@
 
 </footer>
 <script>
+
+  function goOpenAi({model, prompt}) {
+    return fetch('/api/openai', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify({
+        model,
+        prompt
+      })
+    }).then(res => res.json())
+  }
+
   const webSocketBaseUrl = `${location.protocol === `https:` ? 'wss:' : 'ws:'}//${location.host}`;
 
   const connectOpts =<%- JSON.stringify(connectOpts) %>;//连接参数
@@ -433,6 +447,20 @@
       console.log('清屏点击');
       term.clear();
       event.preventDefault();
+      return false;
+    }
+
+    if (event.key === 'x' && event.ctrlKey) {
+      console.log('ai trigger');
+      let line = term.buffer.active.getLine(term.buffer.active.cursorY);
+      console.log(line.translateToString());
+      goOpenAi({
+        model: 'gpt',
+        prompt: 'curl请求https://1991421.cn，获取网页状态码'
+      }).then(res => {
+        term.write('\x1b[2K\r')
+        term.writeln(res.answer);
+      })
       return false;
     }
     return true;
