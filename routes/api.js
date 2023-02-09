@@ -6,8 +6,7 @@ const express = require('express');
 const router = express.Router();
 const config = require('../config');
 const Base64 = require('js-base64').Base64;
-// const jwt = require('jsonwebtoken');
-// const token = require('../config/plugin/token');
+const openaiBot = require('../lib/openai');
 const unlessPath = [{url: '/api/login', methods: ['POST']}];
 
 const fs = require('fs');
@@ -128,16 +127,19 @@ router.post('/upload-file', function (req, res) {
   res.json('success');
 });
 
-router.post('/openai', function (req, res) {
-
-  console.log(req.body);
-
-  // const doAi = req.body.model === 'gpt' ? openaiBot.sayShellContext.bind(this) : openaiBot.sayShellContext2.bind(this);
-  // doAi(req.prompt).then(res => {
-  //   res.json({
-  //     answer: res
-  //   });
-  // });
+/**
+ *
+ */
+router.post('/openai', async function (req, res) {
+  let answer;
+  if (req.body.model === 'gpt') {
+    answer = await openaiBot.sayShellContext(req.body.prompt);
+  } else {
+    answer = await openaiBot.sayShellContext2(req.body.prompt);
+  }
+  res.json({
+    answer: answer
+  });
 });
 
 

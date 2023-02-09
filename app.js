@@ -16,6 +16,7 @@ app.set('trust proxy', 1); // trust first proxy
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(cors());
 // mount the router on the app
 app.use('/', routes);

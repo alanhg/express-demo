@@ -15,11 +15,21 @@
         <textarea class="form-control" id="aiInput">curl请求https://1991421.cn，获取网页状态码
         </textarea>
     </div>
+    <div class="mb-3">
+        <label for="model" class="form-label">Model</label>
+        <select class="form-control" id="model">
+            <option value="gpt">
+                GPT-3 模型(比如iTerm2)
+            </option>
+            <option value="codex">
+                Codex 模型(比如Fig]
+            </option>
+        </select>
+    </div>
     <button class="btn btn-primary" onclick="goAi()">Go</button>
     <div class="highlight">
     <pre>
          <code id="ai-output">
-             echo https://1991421.cn
          </code>
      </pre>
     </div>
@@ -34,11 +44,11 @@
         'Content-Type': 'application/json;charset=utf-8'
       },
       body: JSON.stringify({
-        model: 'gpt',
+        model: document.getElementById('model').value.trim(),
         prompt: document.getElementById('aiInput').value
       })
-    }).then(res => {
-      console.log(res);
+    }).then(res => res.json()).then(res => {
+      document.getElementById('ai-output').innerHTML = res.answer;
     })
   }
 </script>
