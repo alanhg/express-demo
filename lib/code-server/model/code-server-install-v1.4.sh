@@ -191,7 +191,7 @@ fi
   curl -fLsS https://raw.githubusercontent.com/alanhg/express-demo/master/lib/code-server/model/supervisord-conf-$SUPERVISOR_CONF_VERSION.tar.gz \
   | tar -C $CODE_SERVER_RUN_DIR -xz
   fi
-
+  rm -rf $CODE_SERVER_RUN_DIR/supervisord-conf
   ln -sf $CODE_SERVER_RUN_DIR/supervisord-conf-$SUPERVISOR_CONF_VERSION $CODE_SERVER_RUN_DIR/supervisord-conf
 }
 

@@ -157,6 +157,13 @@ https://coder.com/docs/code-server/latest/upgrade
    - 登录页面`src/browser/pages/login.html`
    - `WORKBENCH_WEB_BASE_URL`为静态变量，控制静态资源地址。
 
+
+宿主页面头部会返回CSP信息如下
+```
+content-security-policy: default-src 'self'; img-src 'self' https: data: blob:; media-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-HuyBNEnumn/Bw3njx2R0EXAv9HicWHLQQd9NJ9ruyrk=' 'sha256-FaI1zPA7TyVr3EtN2BNrHwWRISjx4RH44QYlshDPYmc=' 'sha256-yxwQ9j8YGPsfU554CNGiSCW08z5yqDVvuQmssjoPsm8=' 'sha256-fh3TwPMflhsEIpR8g1OYTIMVWhXTLcjQ9kh2tIpmv54='; child-src 'self'; frame-src 'self' https://*.vscode-cdn.net data:; worker-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss: https:; font-src 'self' blob:; manifest-src 'self';
+
+```
+
 ## 加载速度
 
 1. 测试发现加载出页面内容需要3s-6s
