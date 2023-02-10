@@ -155,12 +155,17 @@ https://coder.com/docs/code-server/latest/upgrade
 2. 源码修改
    - 编辑器页面`lib/vscode/out/vs/code/browser/workbench/workbench.html`
    - 登录页面`src/browser/pages/login.html`
-   - `WORKBENCH_WEB_BASE_URL`为静态变量，控制静态资源地址。
-
 
 宿主页面头部会返回CSP信息如下
 ```
 content-security-policy: default-src 'self'; img-src 'self' https: data: blob:; media-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-HuyBNEnumn/Bw3njx2R0EXAv9HicWHLQQd9NJ9ruyrk=' 'sha256-FaI1zPA7TyVr3EtN2BNrHwWRISjx4RH44QYlshDPYmc=' 'sha256-yxwQ9j8YGPsfU554CNGiSCW08z5yqDVvuQmssjoPsm8=' 'sha256-fh3TwPMflhsEIpR8g1OYTIMVWhXTLcjQ9kh2tIpmv54='; child-src 'self'; frame-src 'self' https://*.vscode-cdn.net data:; worker-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss: https:; font-src 'self' blob:; manifest-src 'self';
+
+```
+
+解决办法是出了编辑器源码层面修改外，可以在代理服务层面对res.header进行修改，比如都追加`https://cdn.com`,
+
+```
+content-security-policy: default-src 'self' https://cdn.com; img-src 'self' https://cdn.com https: data: blob:; media-src 'self' https://cdn.com; script-src 'self' https://cdn.com 'unsafe-eval' 'sha256-HuyBNEnumn/Bw3njx2R0EXAv9HicWHLQQd9NJ9ruyrk=' 'sha256-FaI1zPA7TyVr3EtN2BNrHwWRISjx4RH44QYlshDPYmc=' 'sha256-yxwQ9j8YGPsfU554CNGiSCW08z5yqDVvuQmssjoPsm8=' 'sha256-fh3TwPMflhsEIpR8g1OYTIMVWhXTLcjQ9kh2tIpmv54='; child-src 'self' https://cdn.com; frame-src 'self' https://cdn.com https://*.vscode-cdn.net data:; worker-src 'self' https://cdn.com data:; style-src 'self' https://cdn.com 'unsafe-inline'; connect-src 'self' https://cdn.com ws: wss: https:; font-src 'self' https://cdn.com blob:; manifest-src 'self' https://cdn.com;
 
 ```
 
