@@ -1,6 +1,6 @@
 const conf = {
     server: {
-        port: 3001,
+        port: 80,
         secret: 'hello world'
     },
     redis: {
@@ -9,7 +9,7 @@ const conf = {
         db: 0,
         expire: 60 * 60, // 1h
     },
-    ttl:{
+    ttl: {
         rememberMe: '7d', // 记住我
     },
     a: 1,
