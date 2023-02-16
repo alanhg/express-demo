@@ -126,4 +126,8 @@ router.ws('/xterm/:pid', (ws, req) => {
   });
 });
 
+router.get('/css', (req, res) => {
+  res.render('css.ejs', {keyword: req.query.q});
+});
+
 module.exports = router;
