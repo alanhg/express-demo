@@ -145,10 +145,14 @@
 
 <button onclick="doPaste()">paste</button>
 
+
+<h3>second terminal</h3>
+<div id="terminal-container2"></div>
+
 <script>
 
   var isFullscreen = false;
-  var term = new Terminal({
+  const terminalOptions = {
     fontFamily: 'Roboto,San Francisco,Helvetica Neue,Helvetica,Arial,PingFangSC-Light,Hiragina Sans GB,WenQuanYi Micro Hei,microsoft yahei ui,microsoft yahei,sans-serif',
     fontSize: 13,
     fontWeight: 'normal',
@@ -189,7 +193,8 @@
     allowProposedApi: true,
     // 开启透明支持-支持CSS实现终端背景图设定
     allowTransparency: true
-  });
+  };
+  var term = new Terminal(terminalOptions);
   window.term = term;
   /**
    * 终端会话连接与zsession
@@ -225,6 +230,8 @@
   });
 
   term.open(document.getElementById('terminal-container'));
+
+
   // 终端自定义打印内容
   term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m \r\n');
   term.write('https://1991421.cn');
@@ -235,7 +242,7 @@
   });
 
   term.loadAddon(webglAddon);
-
+  term.focus();
 
   term.textarea.addEventListener('paste', (e) => {
     console.log('paste', e.clipboardData.getData('text/plain'));
@@ -471,5 +478,13 @@
       alert('请打开剪贴板权限');
     })
   }
+
+  const term2 = new Terminal(terminalOptions);
+
+  term2.open(document.getElementById('terminal-container2'))
+
+
+  term2.write('hello world');
+  // term2.focus();
 </script>
 </body>
