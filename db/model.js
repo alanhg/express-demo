@@ -31,8 +31,26 @@ const CodeServerDB = sequelize.define('CodeServerProxy', {
   underscored: true,
 });
 
+
+const UserSettingDB = sequelize.define('UserSetting', {
+  id: {
+    type: DataTypes.UUID,
+    primaryKey: true,
+    defaultValue: DataTypes.UUIDV4
+  },
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
+  terminalBackgroundImage: {
+    type: DataTypes.STRING,
+    field: 'terminal_background_image',
+  },
+  underscored: true,
+});
+
+
 sequelize.sync({ force: true });
 
 module.exports = {
-  CodeServerDB
+  CodeServerDB,
+  UserSettingDB
 }
