@@ -12,6 +12,14 @@
         transform: scale(0.5);
         background-color: red;
       }
+
+      .first-letter-uppercase span {
+        display: inline-block;
+      }
+
+      .first-letter-uppercase span::first-letter {
+        text-transform: uppercase;
+      }
     </style>
 </head>
 <body>
@@ -24,6 +32,14 @@
 
     <div class="preview">
         hello world
+    </div>
+    <div class="first-letter-uppercase">
+        <span>
+            a
+        </span>
+        <span>
+            dog
+        </span>
     </div>
 </div>
 </body>
