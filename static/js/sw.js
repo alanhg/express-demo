@@ -17,6 +17,7 @@ self.addEventListener('fetch', () => {
 
 self.addEventListener('activate', function (e) {
   console.log('[ServiceWorker] Activate');
+
   // e.waitUntil(
   //   caches.keys().then(function (keyList) {
   //     return Promise.all(keyList.map(function (key) {
@@ -28,6 +29,14 @@ self.addEventListener('activate', function (e) {
   //     }));
   //   })
   // );
+  event.waitUntil(async function() {
+      // 发送消息到网页
+    const allClients = await self.clients.matchAll();
+    allClients.forEach(client => {
+      client.postMessage({ type: 'service-worker-activated' });
+    });
+    console.log('[Service Worker] Matching clients:', allClients);
+  }());
   // 更新客户端
   return self.clients.claim();
 });
