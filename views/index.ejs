@@ -74,6 +74,17 @@
       }
     }
   });
+
+  /**
+   * 测试是否是PWA模式启动
+   * @type {MediaQueryList}
+   */
+  const displayMode = window.matchMedia('(display-mode: standalone)');
+  if (displayMode.matches) {
+    console.log('PWA is running in standalone mode.');
+  } else {
+    console.log('PWA is running in browser tab.');
+  }
 </script>
 </body>
 </html>
