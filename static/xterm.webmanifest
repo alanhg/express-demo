@@ -1,7 +1,7 @@
 {
   "name": "express pwa",
   "short_name": "express",
-  "descriptions": "node项目下各种功能研发实验，提供Demo",
+  "description": "express pwa",
   "id": "/?from=pwa",
   "start_url": "/?from=pwa",
   "background_color": "#ffffff",
