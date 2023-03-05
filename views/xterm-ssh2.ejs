@@ -56,7 +56,7 @@
 <label for="proxyProtocol">
     Code Server代理协议
     <select id="proxyProtocol">
-        <option value="http" >HTTP</option>
+        <option value="http">HTTP</option>
         <option value="ssh" selected>SSH</option>
     </select>
 </label>
@@ -221,6 +221,9 @@
       data
     }))
   }
+
+  const fontSizeOptions = [12, 14, 16, 18, 20];
+
 </script>
 <script type="module">
   import { SearchAddonBar } from '/js/search-addon-bar.js';
@@ -231,7 +234,7 @@
   var isFullscreen = false;
   term = new Terminal({
     // fontFamily: 'Hack Nerd Font',
-    fontSize: 16,
+    fontSize: fontSizeOptions[2],
     fontWeight: 'normal',
     letterSpacing: 0,
     cursorBlink: true,
@@ -423,7 +426,7 @@
       });
     }
 
-      if (event.key === '.' && event.ctrlKey && event.altKey) {
+    if (event.key === '.' && event.ctrlKey && event.altKey) {
       console.log(event);
       return false;
     }
@@ -463,6 +466,11 @@
       })
       return false;
     }
+
+    // if (event.key === '=' && event.shiftKey && (isMac ? event.ctrlKey : event.altKey)) {
+    //   console.log('11111', event);
+    //   return true;
+    // }
     return true;
   });
   term.onData((data) => {
@@ -752,6 +760,14 @@
     term.write('\x1b[2K\r');
   }
 
+  function Encodeuint8arr(myString) {
+    return new TextEncoder('utf-8').encode(myString);
+  }
+
+  function Decodeuint8arr(uint8array) {
+    return new TextDecoder('utf-8').decode(uint8array);
+  }
+
   /**
    * 清屏
    * mod在Mac下即⌘，在windows等系统下即ctrl
@@ -762,7 +778,6 @@
     // and stop event from bubbling
     return false;
   });
-
   /**
    * 开启新终端Tab
    */
@@ -772,6 +787,7 @@
     // and stop event from bubbling
     return false;
   });
+
   /**
    * 关闭当前终端Tab
    */
@@ -792,6 +808,7 @@
     return false;
   });
 
+
   Mousetrap.bind(['mod+1', 'mod+2', 'mod+3', 'mod+4', 'mod+5'], function (e) {
     console.log('command k or control k', e);
 
@@ -799,7 +816,6 @@
     // and stop event from bubbling
     return false;
   });
-
 
   Mousetrap.bind('?', function () {
     console.log('show help doc');
@@ -827,13 +843,16 @@
     return false;
   });
 
-  function Encodeuint8arr(myString) {
-    return new TextEncoder('utf-8').encode(myString);
-  }
-
-  function Decodeuint8arr(uint8array) {
-    return new TextDecoder('utf-8').decode(uint8array);
-  }
+  Mousetrap.bind([isMac ? 'ctrl+shift+=' : 'alt+shift+='], function (e) {
+    console.log('increase font size', e);
+    term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(term.options.fontSize) + 1) % fontSizeOptions.length];
+    return false;
+  });
+  Mousetrap.bind([isMac ? 'ctrl+shift+-' : 'alt+shift+-'], function (e) {
+    console.log('decrease font size', e);
+    term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(term.options.fontSize) - 1 + fontSizeOptions.length) % fontSizeOptions.length];
+    return false;
+  });
 
   /**
    * 获取文件内容，同时高亮命中文本，滚动到指定位置
@@ -844,18 +863,19 @@
       type: 'get-file',
       path: event.target.dataset.path
     }));
-  }
 
+
+  }
 
   function Uint8ArrayToString(fileData) {
     let dataString = '';
     for (let i = 0; i < fileData.length; i++) {
       dataString += String.fromCharCode(fileData[i]);
+
     }
-
     return dataString
-  }
 
+  }
 </script>
 
 <script type="module">
