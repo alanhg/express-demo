@@ -467,10 +467,16 @@
       return false;
     }
 
-    // if (event.key === '=' && event.shiftKey && (isMac ? event.ctrlKey : event.altKey)) {
-    //   console.log('11111', event);
-    //   return true;
-    // }
+    if (event.key === '=' && event.shiftKey && (isMac ? event.ctrlKey : event.altKey)) {
+      console.log('11111', event);
+      return true;
+    }
+
+    if (event.key === ',' && event.ctrlKey) {
+      console.log(event);
+      return false;
+    }
+
     return true;
   });
   term.onData((data) => {
@@ -767,6 +773,13 @@
   function Decodeuint8arr(uint8array) {
     return new TextDecoder('utf-8').decode(uint8array);
   }
+
+  Mousetrap.bind(['ctrl+,',], function (e) {
+    console.log('ctrl+,', e);
+    // return false to prevent default browser behavior
+    // and stop event from bubbling
+    return false;
+  });
 
   /**
    * 清屏
