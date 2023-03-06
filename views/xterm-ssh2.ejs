@@ -382,18 +382,25 @@
   termRef.addEventListener("wheel", function (event) {
     if (isAltKeyDown) {
       scrollDistance += event.deltaY;
-      if (Math.abs(scrollDistance) >= 150) {
+      if (Math.abs(scrollDistance) >= 120) {
         const preFontSize = term.options.fontSize;
         if (scrollDistance < 0) {
-          // 向上滚动，缩小字体
-          term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(preFontSize) - 1 + fontSizeOptions.length) % fontSizeOptions.length];
-          console.log("缩小字体", preFontSize, term.options.fontSize);
+          if ((fontSizeOptions.indexOf(preFontSize) - 1) >= 0) {
+            // 向上滚动，缩小字体
+            term.options.fontSize = fontSizeOptions[fontSizeOptions.indexOf(preFontSize) - 1];
+            console.log("缩小字体", preFontSize, term.options.fontSize);
+          } else {
+            console.log("缩小字体", '已经是最小', term.options.fontSize);
+          }
         } else {
           // 向下滚动，放大字体
-          term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(preFontSize) + 1) % fontSizeOptions.length];
-          console.log("放大字体", preFontSize, term.options.fontSize);
+          if (fontSizeOptions.indexOf(preFontSize) + 1 < fontSizeOptions.length) {
+            term.options.fontSize = fontSizeOptions[fontSizeOptions.indexOf(preFontSize) + 1];
+            console.log("放大字体", preFontSize, term.options.fontSize);
+          } else {
+            console.log("放大字体", '已经是最大', term.options.fontSize);
+          }
         }
-
         // 重置滚动距离
         scrollDistance = 0;
       }
