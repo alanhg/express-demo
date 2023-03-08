@@ -228,7 +228,6 @@ fi
 
 delete_old_installers(){
   current_shell=$(basename "$0")
-  echo "7. delete_old_installers: $current_shell"
   files=$(find . -type f -name "code-server-install-v*.sh" | grep -v "$current_shell")
   if [ -n "$files" ]; then
     rm $files``
