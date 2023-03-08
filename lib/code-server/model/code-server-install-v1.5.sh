@@ -228,9 +228,9 @@ fi
 
 delete_old_installers(){
   echo "7. delete_old_installers: $0"
-  files=$(find . -type f -name "code-server-install-v*.sh" | grep -v "$0")
+  files=$(find . -type f -name "code-server-install-v*.sh" | grep -v "$(basename "$0")")
   if [ -n "$files" ]; then
-    rm $files
+    rm $files``
   fi
 #  find $ORCA_CODE_SERVER_DIR/lib -type d ! -name "code-server-$ORCA_CODE_SERVER_VERSION" -exec rm -rf {} \;
 #  find $ORCA_CODE_SERVER_RUN_DIR -type d ! -name "supervisord-conf-$ORCA_SUPERVISOR_CONF_VERSION" -exec rm -rf {} \;
