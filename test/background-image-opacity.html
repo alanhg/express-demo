@@ -32,6 +32,14 @@
     </style>
 </head>
 <body>
+<script>
+  function sayError() {
+    console.error('An error occurred while loading the iframe.');
+  }
+</script>
+<iframe src="https://1991421.cn/abc" onerror="sayError()"></iframe>
+
+</iframe>
 <div class="myDiv">
     <div class="bg"></div>
     Hi there
