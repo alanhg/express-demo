@@ -100,8 +100,8 @@
 <script src="/js/xterm-ssh2.js"></script>
 
 <script type="module">
-  import { SearchAddonBar } from '/js/search-addon-bar.js';
-  import { RecordScreenAddon } from '/js/record-screen-addon.js';
+  import {SearchAddonBar} from '/js/search-addon-bar.js';
+  import {RecordScreenAddon} from '/js/record-screen-addon.js';
 
   const textEncoder = new TextEncoder();
 
@@ -194,11 +194,11 @@
 
   // 终端自定义打印内容
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
-    (event, uri) => {
-      if (event.metaKey) {
-        window.open(uri);
-      }
-    }));
+      (event, uri) => {
+        if (event.metaKey) {
+          window.open(uri);
+        }
+      }));
   let searchAddon = new SearchAddon.SearchAddon();
   serializeAddon = new SerializeAddon.SerializeAddon();
 
@@ -225,7 +225,12 @@
 
   term.unicode.activeVersion = '11'
 
-  term.attachCustomKeyEventHandler(function (event) {
+  term.attachCustomKeyEventHandler(/**
+   *
+   * @param event
+   * @returns {boolean}
+   */
+function (event) {
     if (event.type !== 'keydown') {
       return;
     }
@@ -305,18 +310,6 @@
       return false;
     }
 
-
-    if (event.key === '.' && event.ctrlKey && event.altKey) {
-      console.log(event);
-      return false;
-    }
-
-
-    if (event.key === '.' && event.ctrlKey && event.altKey) {
-      console.log(event);
-      return false;
-    }
-
     if (event.key === 'Escape') {
       searchAddonBar.hide();
     }
@@ -340,16 +333,16 @@
       })
       return false;
     }
-    //
-    // if (event.key === '=' && event.shiftKey && (isMac ? event.ctrlKey : event.altKey)) {
-    //   console.log('11111', event);
-    //   return true;
-    // }
-    //
-    // if (event.key === ',' && event.ctrlKey) {
-    //   console.log(event);
-    //   return false;
-    // }
+
+    if (event.key === '=' && event.shiftKey && (isMac ? event.metaKey : event.altKey)) {
+      console.log('11111', event);
+      event.preventDefault();
+    }
+
+    if (event.key === '-' && event.shiftKey && (isMac ? event.metaKey : event.altKey)) {
+      console.log('22222', event);
+      event.preventDefault();
+    }
 
     return true;
   });
@@ -379,7 +372,7 @@
   });
 
   // 监听鼠标滚动事件
-  termRef.addEventListener("wheel", function (event) {
+  termRef.addEventListener('wheel', function (event) {
     if (isAltKeyDown) {
       scrollDistance += event.deltaY;
       if (Math.abs(scrollDistance) >= 120) {
@@ -388,17 +381,17 @@
           if ((fontSizeOptions.indexOf(preFontSize) - 1) >= 0) {
             // 向上滚动，缩小字体
             term.options.fontSize = fontSizeOptions[fontSizeOptions.indexOf(preFontSize) - 1];
-            console.log("缩小字体", preFontSize, term.options.fontSize);
+            console.log('缩小字体', preFontSize, term.options.fontSize);
           } else {
-            console.log("缩小字体", '已经是最小', term.options.fontSize);
+            console.log('缩小字体', '已经是最小', term.options.fontSize);
           }
         } else {
           // 向下滚动，放大字体
           if (fontSizeOptions.indexOf(preFontSize) + 1 < fontSizeOptions.length) {
             term.options.fontSize = fontSizeOptions[fontSizeOptions.indexOf(preFontSize) + 1];
-            console.log("放大字体", preFontSize, term.options.fontSize);
+            console.log('放大字体', preFontSize, term.options.fontSize);
           } else {
-            console.log("放大字体", '已经是最大', term.options.fontSize);
+            console.log('放大字体', '已经是最大', term.options.fontSize);
           }
         }
         // 重置滚动距离
@@ -519,13 +512,13 @@
             showMessage(getProgress(xfer), true);
           });
           xfer.accept().then(
-            () => {
-              showMessage(`${xfer.get_details().name} download completed.`);
-              // term.focus();
-              resolve();
-              _save_to_disk(xfer, FILE_BUFFER);
-            },
-            console.error.bind(console)
+              () => {
+                showMessage(`${xfer.get_details().name} download completed.`);
+                // term.focus();
+                resolve();
+                _save_to_disk(xfer, FILE_BUFFER);
+              },
+              console.error.bind(console)
           )
         })
         if (zsessionCanceled) {
@@ -777,16 +770,16 @@
     return false;
   });
   //
-  // Mousetrap.bind([isMac ? 'ctrl+shift+=' : 'alt+shift+='], function (e) {
-  //   console.log('increase font size', e);
-  //   term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(term.options.fontSize) + 1) % fontSizeOptions.length];
-  //   return false;
-  // });
-  // Mousetrap.bind([isMac ? 'ctrl+shift+-' : 'alt+shift+-'], function (e) {
-  //   console.log('decrease font size', e);
-  //   term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(term.options.fontSize) - 1 + fontSizeOptions.length) % fontSizeOptions.length];
-  //   return false;
-  // });
+  Mousetrap.bind([isMac ? 'mod+shift+=' : 'alt+shift+='], function (e) {
+    console.log('increase font size', e);
+    term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(term.options.fontSize) + 1) % fontSizeOptions.length];
+    return false;
+  });
+  Mousetrap.bind([isMac ? 'mod+shift+-' : 'alt+shift+-'], function (e) {
+    console.log('decrease font size', e);
+    term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(term.options.fontSize) - 1 + fontSizeOptions.length) % fontSizeOptions.length];
+    return false;
+  });
 
   /**
    * 获取文件内容，同时高亮命中文本，滚动到指定位置
