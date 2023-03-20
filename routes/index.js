@@ -130,4 +130,8 @@ router.get('/css', (req, res) => {
   res.render('css.ejs', {keyword: req.query.q});
 });
 
+router.get('/tke', (req, res) => {
+  res.render('tke');
+});
+
 module.exports = router;
