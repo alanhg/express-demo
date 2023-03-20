@@ -4,4 +4,4 @@
 
 const TkeClient = require('../lib/tke-client');
 const client = new TkeClient(process.env.tke_podname, process.env.tke_namespace);
-console.log(client.stat('/root'));
+console.log(client.execUserIdentity());
