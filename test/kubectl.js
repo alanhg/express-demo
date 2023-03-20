@@ -4,8 +4,8 @@
 
 const {execSync} = require('child_process');
 
-const podname = process.env.podname
-const namespace = process.env.namespace
+const podname = process.env.tke_podname
+const namespace = process.env.tke_namespace
 const command = 'ls -l';
 const output = execSync(`kubectl exec -it ${podname} -n ${namespace} -- ${command}`, {encoding: 'utf8'});
 
