@@ -188,7 +188,7 @@
       white: '#a5a2a2',
       brightWhite: '#f7f7f7'
     },
-    rendererType: 'dom', //  canvas,dom
+    rendererType: 'canvas', //  canvas,dom
     minimumContrastRatio: 1,
     allowProposedApi: true,
     // 开启透明支持-支持CSS实现终端背景图设定
@@ -234,7 +234,7 @@
 
   // 终端自定义打印内容
   term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m \r\n');
-  term.write('https://1991421.cn');
+  term.write('https://chat.openai.com');
   const webglAddon = new WebglAddon.WebglAddon();
   window.webglAddon = webglAddon;
   webglAddon.onContextLoss(e => {
