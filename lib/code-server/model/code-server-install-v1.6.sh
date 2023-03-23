@@ -34,6 +34,7 @@ os() {
 
   OS=${OS:-$(os)}
   ARCH=${ARCH:-$(arch)}
+  ECHO_SPACER="  "
 }
 
 
@@ -203,20 +204,25 @@ fi
   then
      $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf -d
      $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server
-     client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl status code-server)
-     echo "$ECHO_SPACER supervisor server starting: $client_status"
-  else
-     echo "$ECHO_SPACER supervisor server started: $client_status"
    fi
 
-  client_status=$(echo "$client_status" | tr '[:upper:]' '[:lower:]')
-
-   if test -n "${client_status#*stopped}"; then
+   count=1
+   while [ $count -le 10 ]
+   do
+    sleep 1
     client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server)
-    echo "$ECHO_SPACER $client_status"
+    client_status=$(echo "$client_status" | tr '[:upper:]' '[:lower:]')
+   
+   
+   if echo "$client_status" | grep -q "stopped"; then
+     $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server
+   elif echo "$client_status" | grep -q "running"; then
+     echo "6. init success: $client_status"
+     break
    fi
-
-   client_status=$(echo "$client_status" | tr '[:upper:]' '[:lower:]')
+   count=$((count+1))
+   done
+   
    if test -n "${client_status#*running}"; then
      echo "6. init success: $client_status"
    elif test -n "${client_status#*started}"; then
@@ -224,18 +230,30 @@ fi
    else
      echo "6. init failed: $client_status"
    fi
+   
+   if echo "$client_status" | grep -qv "running"; then
+     echo "6. init failed: $client_status"
+   echo "$ECHO_SPACER log: $CODE_SERVER_RUN_DIR/supervisord-conf/code-server.log"
+   tail -n 20 $CODE_SERVER_RUN_DIR/supervisord-conf/code-server.log
+   
+   echo "$ECHO_SPACER log: $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.log"
+   tail -n 5 $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.log
+   fi
+}
+
+
+delete_file(){
+  if [ -n "$1" ]; then
+      rm -r $1
+    fi
 }
 
 delete_old_installers(){
-  current_shell=$(basename "$0")
-  files=$(find . -type f -name "code-server-install-v*.sh" | grep -v "$current_shell")
-  if [ -n "$files" ]; then
-    rm $files``
-  fi
-#  find $ORCA_CODE_SERVER_DIR/lib -type d ! -name "code-server-$ORCA_CODE_SERVER_VERSION" -exec rm -rf {} \;
-#  find $ORCA_CODE_SERVER_RUN_DIR -type d ! -name "supervisord-conf-$ORCA_SUPERVISOR_CONF_VERSION" -exec rm -rf {} \;
+    current_shell=$(basename "$0")
+    delete_file "$(find . -type f -name 'code-server-install-v*.sh' | grep -v $current_shell)"
+    delete_file "$(find $CODE_SERVER_DIR/lib/* -maxdepth 0 -type d -name 'code-server-*' | grep -v $CODE_SERVER_DIR/lib/code-server-$CODE_SERVER_VERSION)"
+    delete_file "$(find $CODE_SERVER_RUN_DIR/* -maxdepth 0 -type d -name 'supervisord-conf-*' | grep -v $CODE_SERVER_RUN_DIR/supervisord-conf-$SUPERVISOR_CONF_VERSION)"
 }
-
 init_environment_variables
 install_code_server
 install_extensions
