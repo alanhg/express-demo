@@ -475,7 +475,7 @@
          */
         const codeServerWeb = (`/ide/${options.proxyKey}/`);
         console.log(`访问地址：${window.location.protocol}//${window.location.host}${codeServerWeb}`);
-        if (window.toggleNewTabOn) {
+        if (window.toggleNewTabOn.checked) {
           window.open(codeServerWeb, '_blank');
         } else {
           location.href = codeServerWeb;
