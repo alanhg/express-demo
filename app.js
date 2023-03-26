@@ -31,3 +31,4 @@ app.use('/', express.static(path.join(__dirname, '/static')));
 const server = app.listen(conf.server.port, '0.0.0.0', function () {
   console.log(`Example app listening on port http://127.0.0.1:${conf.server.port}!`);
 });
+
