@@ -9,7 +9,7 @@ const conf = require('./config');
 const path = require('path');
 const routes = require('./routes/index');
 const bodyParser = require('body-parser');
-var cors = require('cors');
+const cors = require('cors');
 
 app.set('trust proxy', 1); // trust first proxy
 
@@ -31,4 +31,3 @@ app.use('/', express.static(path.join(__dirname, '/static')));
 const server = app.listen(conf.server.port, '0.0.0.0', function () {
   console.log(`Example app listening on port http://127.0.0.1:${conf.server.port}!`);
 });
-

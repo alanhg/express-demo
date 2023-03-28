@@ -1,0 +1,31 @@
+GET /.cache/ HTTP/1.1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Referer: http://9.135.228.229:8080/
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: x-host-key-idcback=ddfa70470218da978f56faeaa041cc73cd42028a_s; x-host-key-oaback=ddfa70470218da978f56faeaa041cc73cd42028a_s; x-host-key-front=ddfa70470218da978f56faeaa041cc73cd42028a_s; x_host_key=ddfa70470218da978f56faeaa041cc73cd42028a_s; x-host-key-ngn=ddfa70470218da978f56faeaa041cc73cd42028a_s; x_host_key_access=ddfa70470218da978f56faeaa041cc73cd42028a_s; x-client-ssid=18711b77dcc-5638cfb97c0870387864b8aefa1a3287ddb88950
+x-forwarded-for: 10.91.78.106,10.99.17.81
+x-real-ip: 10.91.78.106
+x-proxy-by: NGN-Forward
+x-rio-seq: 5111630a:018711b86bf0:083d17
+x-sg-ip-chain: 10.99.17.81,10.99.17.89,10.99.17.89
+x-sg-sname: sg2-ngnip-s.sgw.woa.com
+x-ngn-connect-url: 9.135.228.229:8080
+x-client-seq: 20230324_114508%3A20168
+x-sg-seq: 5111630a:018711b86bf0:083d17
+x-sga-mn: W11
+x-forwarded-proto: http
+x-ngn-network: intranet
+x-client-ip: 10.91.78.106
+x-client-ip-port: 10.91.78.106:56974
+x-ngn-platform: pc
+Host: 9.135.228.229:8080
+Connection: keep-alive
+Accept-Encoding: gzip
+
+HTTP/1.0 200 OK
+Server: SimpleHTTP/0.6 Python/3.6.8
+Date: Fri, 24 Mar 2023 03:45:11 GMT
+Content-type: text/html; charset=utf-8
+Content-Length: 387
