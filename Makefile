@@ -1,4 +1,4 @@
-SUPERVISOR_CONF_VERSION=0.2
+SUPERVISOR_CONF_VERSION=0.3
  supervisord:
 	cd lib/code-server/model; \
 	cp -r supervisord-conf supervisord-conf-$(SUPERVISOR_CONF_VERSION); \
