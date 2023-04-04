@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canvas压缩</title>
+</head>
+<body>
+<label for="selectImg">
+    选择图片
+</label>
+<input type="file" id="selectImg" onchange="selectImgChange(event)"/>
+<button onclick="compressPreview()">压缩</button>
+<script>
+
+  function selectImgChange(e) {
+    const divEl = document.createElement('div');
+    divEl.innerText = e.target.files[0].size / 1024 + 'kb';
+    document.body.appendChild(divEl);
+  }
+
+
+  function compressPreview() {
+    const selectedImg = document.getElementById('selectImg')['files'][0];
+    const filename = selectedImg.name;
+    const suffix = filename.substring(filename.lastIndexOf('.'));
+    const filenameWithoutsuffix = filename.substring(0, filename.lastIndexOf('.'));
+    compressImage(selectedImg, 100, 100, 0.5, function (blob) {
+      const divEl = document.createElement('div');
+      divEl.innerText = '压缩后大小' + blob.size / 1024 + 'kb';
+      document.body.appendChild(divEl);
+      downloadFile(blob, filenameWithoutsuffix + '_compressed' + suffix);
+    });
+  }
+
+  function downloadFile(blob, name) {
+    const el = document.createElement('a');
+    document.body.appendChild(el);
+    el.target = '_self';
+    el.dataUrl = URL.createObjectURL(blob);
+    el.download = name;
+    el.click();
+    debugger;
+  }
+
+  function compressImage(file, maxWidth, maxHeight, quality, callback) {
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+
+    img.onload = function () {
+      let width = img.width;
+      let height = img.height;
+      const scale = Math.min(maxWidth / width, maxHeight / height);
+      width *= scale;
+      height *= scale;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      // 在Canvas上绘制缩小后的图片
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(function (blob) {
+        callback(blob);
+      }, file.type, quality);
+    };
+  }
+
+</script>
+</body>
+</html>
