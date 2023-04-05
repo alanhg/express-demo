@@ -12,7 +12,7 @@
 <label for="selectImg">
     选择图片
 </label>
-<input type="file" id="selectImg" onchange="selectImgChange(event)"/>
+<input type="file" id="selectImg" accept="image/*" onchange="selectImgChange(event)"/>
 <button onclick="compressPreview()">压缩</button>
 <script>
 
@@ -35,6 +35,7 @@
       maxHeight: 2160,
       maxWidth: 3840,
       convertSize: 2000000,
+      mimeType: 'auto',
       success(result) {
         const filename = result.name;
         const suffix = filename.substring(filename.lastIndexOf('.'));
