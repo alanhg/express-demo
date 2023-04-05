@@ -39,8 +39,8 @@
       success(result) {
         const filename = result.name;
         const suffix = filename.substring(filename.lastIndexOf('.'));
-        const filenameWithoutsuffix = filename.substring(0, filename.lastIndexOf('.'));
-        downloadFile(result, filenameWithoutsuffix + '_compress' + suffix);
+        const filenameWithoutSuffix = filename.substring(0, filename.lastIndexOf('.'));
+        downloadFile(result, `${filenameWithoutSuffix}_compress${suffix}`);
       },
       error(err) {
         console.log(err.message);
@@ -56,6 +56,8 @@
     el.href = URL.createObjectURL(blob);
     el.download = name;
     el.click();
+    URL.revokeObjectURL(el.href);
+    document.body.removeChild(el);
   }
 
 </script>
