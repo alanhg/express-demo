@@ -28,12 +28,17 @@
    */
   function compressPreview() {
     const selectedImg = document.getElementById('selectImg')['files'][0];
-    const filename = selectedImg.name;
-    const suffix = filename.substring(filename.lastIndexOf('.'));
-    const filenameWithoutsuffix = filename.substring(0, filename.lastIndexOf('.'));
+
     new Compressor(selectedImg, {
+      strict: true,
       quality: 0.6,
+      maxHeight: 2160,
+      maxWidth: 3840,
+      convertSize: 2000000,
       success(result) {
+        const filename = result.name;
+        const suffix = filename.substring(filename.lastIndexOf('.'));
+        const filenameWithoutsuffix = filename.substring(0, filename.lastIndexOf('.'));
         downloadFile(result, filenameWithoutsuffix + '_compress' + suffix);
       },
       error(err) {
