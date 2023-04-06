@@ -208,10 +208,8 @@ fi
    count=1
    while [ $count -le 10 ]
    do
-    sleep 1
     client_status=$($CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server)
     client_status=$(echo "$client_status" | tr '[:upper:]' '[:lower:]')
-
 
    if echo "$client_status" | grep -q "stopped"; then
      $CODE_SERVER_RUN_DIR/supervisord-conf/bin/supervisord -c $CODE_SERVER_RUN_DIR/supervisord-conf/supervisord.conf ctl start code-server
@@ -220,6 +218,7 @@ fi
      break
    fi
    count=$((count+1))
+   sleep 1
    done
 
    if test -n "${client_status#*running}"; then
