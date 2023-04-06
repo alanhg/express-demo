@@ -34,7 +34,8 @@
       quality: 0.6,
       maxHeight: 2160,
       maxWidth: 3840,
-      convertSize: 2000000,
+      convertSize: 10000000,
+      convertTypes: ['image/png', 'image/webp', 'image/avif'],
       mimeType: 'auto',
       success(result) {
         const filename = result.name;
