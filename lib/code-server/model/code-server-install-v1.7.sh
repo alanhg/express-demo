@@ -223,8 +223,6 @@ fi
 
    if test -n "${client_status#*running}"; then
      echo "6. init success: $client_status"
-   elif test -n "${client_status#*started}"; then
-     echo "6. init success: $client_status"
    else
      echo "6. init failed: $client_status"
    fi
