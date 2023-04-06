@@ -58,6 +58,7 @@
     "ssh2-streams": "^0.4.10",
     "superagent": "^3.8.3",
     "ua-parser-js": "1.0.32",
+    "uuid": "^9.0.0",
     "ws": "^8.9.0",
     "xterm": "^5.1.0",
     "xterm-addon-attach": "^0.8.0",
