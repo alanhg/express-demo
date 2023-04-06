@@ -38,6 +38,7 @@
       mimeType: 'auto',
       success(result) {
         const filename = result.name;
+        console.log(filename);
         const suffix = filename.substring(filename.lastIndexOf('.'));
         const filenameWithoutSuffix = filename.substring(0, filename.lastIndexOf('.'));
         downloadFile(result, `${filenameWithoutSuffix}_compress${suffix}`);
