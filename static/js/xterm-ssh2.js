@@ -1,12 +1,9 @@
 function goOpenAi({model, prompt}) {
   return fetch('/api/openai', {
-    method: 'post',
-    headers: {
+    method: 'post', headers: {
       'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify({
-      model,
-      prompt
+    }, body: JSON.stringify({
+      model, prompt
     })
   }).then(res => res.json())
 }
@@ -85,9 +82,8 @@ function clientRecordLogStart(event) {
 
 function runCodeServer(e) {
   sendData('codeserver', {
-      proxyProtocol: document.getElementById('proxyProtocol').value
-    }
-  )
+    proxyProtocol: document.getElementById('proxyProtocol').value
+  })
 }
 
 function stopCodeServer(e) {
@@ -95,7 +91,11 @@ function stopCodeServer(e) {
 }
 
 function toggleBackgroundOn(e) {
-
+  if (e.target.checked) {
+    document.querySelector('.terminal-background-img').style.backgroundImage = `url("/images/1db903d5-1fe8-4737-8f6b-2fbe20fbe9f4.png")`;
+  } else {
+    document.querySelector('.terminal-background-img').style.backgroundImage = '';
+  }
 }
 
 function toggleNewTabOn(e) {
@@ -118,8 +118,7 @@ function parseData(evt) {
 
 function sendData(type, data = {}) {
   socket.send(JSON.stringify({
-    type,
-    data
+    type, data
   }))
 }
 
