@@ -12,13 +12,18 @@
 <label for="selectImg">
     选择图片
 </label>
-<input type="file" id="selectImg" accept="image/*" onchange="selectImgChange(event)"/>
+<input type="file" id="selectImg" onchange="selectImgChange(event)"/>
 <button onclick="compressPreview()">压缩</button>
 <script>
 
   function selectImgChange(e) {
+    let file = e.target.files[0];
     const divEl = document.createElement('div');
-    divEl.innerText = e.target.files[0].size / 1024 + 'kb';
+    if (!file.type.startsWith('image/')) {
+      e.target.value = '';
+      return;
+    }
+    divEl.innerText = file.size / 1024 + 'kb';
     document.body.appendChild(divEl);
   }
 
