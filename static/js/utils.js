@@ -218,15 +218,12 @@ async function paste() {
   return doSystemPaste();
 }
 
-function goOpenAi({model, prompt}) {
+function goOpenAi(obj={}) {
   return fetch('/api/openai', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=utf-8'
     },
-    body: JSON.stringify({
-      model,
-      prompt
-    })
+    body: JSON.stringify(obj)
   }).then(res => res.json())
 }

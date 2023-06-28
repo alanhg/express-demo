@@ -4,22 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Open AI测试</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/js/bootstrap/dist/css/bootstrap.min.css">
     <script src="/js/utils.js"></script>
 </head>
 <body>
 <main class="container">
     <h1>输入命令描述，生成命令</h1>
     <div class="mb-3">
-        <label for="formGroupExampleInput" class="form-label">Prompt</label>
-        <textarea class="form-control" id="aiInput">curl请求github，获取网页状态码</textarea>
-    </div>
-    <div class="mb-3">
         <label for="model" class="form-label">Model</label>
         <select class="form-control" id="model">
             <option value="gpt3">
                 GPT-3 模型(比如iTerm2)
+            </option>
+            <option value="gpt3.5">
+                GPT-3.5 模型(比如ChatGPT)
             </option>
             <option value="gpt4">
                 GPT-4 模型(比如New Bing)
@@ -29,24 +27,76 @@
             </option>
         </select>
     </div>
-    <button class="btn btn-primary" onclick="goAi(event)">Go</button>
-    <div class="highlight">
-    <pre>
-         <code id="ai-output"></code>
-     </pre>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">聊天室</div>
+                    <div class="card-body">
+                        <div class="chat-area"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 输入框 -->
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control send-message" value="curl请求github，获取网页状态码">
+                    <button class="btn btn-primary send-btn" type="button">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <form>
+            <label>
+                请求地址
+                <input type="text">
+            </label>
+        </form>
     </div>
 </main>
 
 </body>
 <script>
-  function goAi(e) {
-    e.target.innerText = 'loading';
-    goOpenAi({
+  const input = document.querySelector('.send-message');
+  const btn = document.querySelector('.send-btn');
+  const chatContext = [];
+  btn.addEventListener('click', function () {
+    sendMessage();
+  });
+
+  // 发送消息函数
+  function sendMessage() {
+    const message = input.value.trim();
+    if (message) {
+      const chatArea = document.querySelector('.chat-area');
+      chatArea.innerHTML += '<div class="message"><span class="text-danger">User:</span>' + message + '</div>';
+      input.value = '';
+      sendMessageToAi(message, chatContext).then(function (res) {
+        chatArea.innerHTML += '<div class="message"><span class="text-danger">Assistant:</span>' + res.answer + '</div>';
+        chatContext.push({
+          role: 'user',
+          content: message
+        });
+        chatContext.push({
+          role: 'assistant',
+          content: res.answer
+        });
+      })
+    }
+  }
+
+  function sendMessageToAi(message, chatContext) {
+    return goOpenAi({
       model: document.getElementById('model').value.trim(),
-      prompt: document.getElementById('aiInput').value
-    }).then(res => {
-      document.getElementById('ai-output').innerHTML = res.answer;
-      e.target.innerText = 'Go';
+      prompt: message,
+      context: chatContext.slice(-6)
     })
   }
 </script>

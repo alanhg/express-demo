@@ -1,4 +1,4 @@
-<head>
+<head xmlns="http://www.w3.org/1999/html">
     <title>xterm.js-ssh2测试</title>
 
     <link href="/js/xterm/css/xterm.css" rel="stylesheet">
@@ -14,6 +14,8 @@
     <script src="/js/xterm-addon-unicode11/lib/xterm-addon-unicode11.js"></script>
     <script src="/js/xterm-addon-canvas/lib/xterm-addon-canvas.js"></script>
     <script src="/js/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="/js/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="/js/local-echo.js"></script>
     <script src="/js/zmodem.js/dist/zmodem.js"></script>
     <script src="/js/mousetrap.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
@@ -42,26 +44,31 @@
 </label>
 <button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
 <button data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
+<button data-start="false" onclick="runWebSocketProxy(event)">Run WebSocket Proxy</button>
+
 <button onclick="stopCodeServer(event)">Stop Code Server</button>
 
 <label for="backgroundOn">
-    <input id="backgroundOn" type="checkbox" onclick="toggleBackgroundOn(event)">Image Background</button>
+    <input id="backgroundOn" type="checkbox" onclick="toggleBackgroundOn(event)"/>Image Background
 </label>
 
 
 <label for="toggleNewTabOn">
-    <input id="toggleNewTabOn" type="checkbox" onclick="toggleNewTabOn(event)">链接打开新标签页</button>
+    <input id="toggleNewTabOn" type="checkbox" onclick="toggleNewTabOn(event)"/>链接打开新标签页
 </label>
 
 <label for="proxyProtocol">
-    Code Server代理协议
+    Code Server代理协议直接访问/tty
     <select id="proxyProtocol">
-        <option value="http">HTTP</option>
+        <option value="http">HTTP(需要防火墙放开端口36000)</option>
         <option value="ssh" selected>SSH</option>
         <option value="ws">WebSocket</option>
     </select>
 </label>
 
+<label for="visitIDEDirectly">
+    <input id="visitIDEDirectly" type="checkbox" onclick="toggleBackgroundOn(event)">直接访问/tty
+</label>
 <div>
     <label for="proxyHost">Code Server代理地址</label>
     <textarea id="proxyHost" cols="20" rows="20">
@@ -219,6 +226,25 @@
   term.loadAddon(recordScreenAddon);
   term.loadAddon(canvasAddon);
   term.loadAddon(new Unicode11Addon.Unicode11Addon());
+  const localEcho = new LocalEchoController();
+  term.loadAddon(localEcho);
+
+  // Auto-completes common commands
+  function autocompleteCommonCommands(index, tokens) {
+    if (index == 0) return ['cp', 'mv', 'ls', 'chown'];
+    return [];
+  }
+
+  // Auto-completes known files
+  function autocompleteCommonFiles(index, tokens) {
+    if (index == 0) return [];
+    return ['.git', '.gitignore', 'package.json'];
+  }
+
+  // Register the handlers
+  localEcho.addAutocompleteHandler(autocompleteCommonCommands);
+  localEcho.addAutocompleteHandler(autocompleteCommonFiles);
+
   const fitAddon = new FitAddon.FitAddon();
 
   term.loadAddon(fitAddon);
@@ -234,6 +260,11 @@
   function (event) {
     if (event.type !== 'keydown') {
       return;
+    }
+
+    if ('`' === event.key && event.ctrlKey) {
+      console.log('ai command search???');
+      return false;
     }
 
     if (['ArrowLeft', 'ArrowRight'].indexOf(event.key) > -1 && event.ctrlKey && event.shiftKey) {
@@ -473,7 +504,7 @@
          * folder参数控制缺省打开文件夹,不传则走前端存储的最后打开文件夹
          * ?folder=/home
          */
-        const codeServerWeb = (`/ide/${options.proxyKey}/`);
+        let codeServerWeb = document.getElementById('visitIDEDirectly').checked ? (`/tty/${options.proxyKey}/`) : (`/ide/${options.proxyKey}/`);
         console.log(`访问地址：${window.location.protocol}//${window.location.host}${codeServerWeb}`);
         if (window.toggleNewTabOn.checked) {
           window.open(codeServerWeb, '_blank');
@@ -482,6 +513,8 @@
         }
       } else if (options.type === 'codeserver-logout') {
         alert('stop code server successful');
+      } else if (options.type === 'websocket-proxy') {
+        window.open(`${window.location.protocol}//${window.location.host}/tty/cm9vdEA0My4xNTQuMTgyLjE4Nw==/`);
       } else {
         term.write(evt.data);
       }
@@ -689,10 +722,21 @@
     return new TextDecoder('utf-8').decode(uint8array);
   }
 
-  Mousetrap.bind(['ctrl+,',], function (e) {
+  const appMousetrap = Mousetrap(document.body);
+
+  appMousetrap.bind(['ctrl+,',], function (e) {
     console.log('ctrl+,', e);
     // return false to prevent default browser behavior
     // and stop event from bubbling
+    return false;
+  });
+
+
+  /**
+   * 全局AI热键绑定
+   */
+  appMousetrap.bind(['mod+i',], function (e) {
+    console.log('mod i', e);
     return false;
   });
 
@@ -700,7 +744,7 @@
    * 清屏
    * mod在Mac下即⌘，在windows等系统下即ctrl
    */
-  Mousetrap.bind(['mod+k', 'ctrl+k'], function (e) {
+  appMousetrap.bind(['mod+k', 'ctrl+k'], function (e) {
     console.log('command k or control k', e);
     // return false to prevent default browser behavior
     // and stop event from bubbling
@@ -709,7 +753,7 @@
   /**
    * 开启新终端Tab
    */
-  Mousetrap.bind(['ctrl+alt+,', 'alt+t', 'alt+w', 'alt+d'], function (e) {
+  appMousetrap.bind(['ctrl+alt+,', 'alt+t', 'alt+w', 'alt+d'], function (e) {
     console.log('meta+,', e);
     // return false to prevent default browser behavior
     // and stop event from bubbling
@@ -719,7 +763,7 @@
   /**
    * 关闭当前终端Tab
    */
-  Mousetrap.bind(['ctrl+alt+.'], function (e) {
+  appMousetrap.bind(['ctrl+alt+.'], function (e) {
     console.log('meta+.', e);
     // return false to prevent default browser behavior
     // and stop event from bubbling
@@ -729,7 +773,7 @@
   /**
    * 分屏打开
    */
-  Mousetrap.bind(['ctrl+alt+;'], function (e) {
+  appMousetrap.bind(['ctrl+alt+;'], function (e) {
     console.log('meta+;', e);
     // return false to prevent default browser behavior
     // and stop event from bubbling
@@ -737,7 +781,7 @@
   });
 
 
-  Mousetrap.bind(['mod+1', 'mod+2', 'mod+3', 'mod+4', 'mod+5'], function (e) {
+  appMousetrap.bind(['mod+1', 'mod+2', 'mod+3', 'mod+4', 'mod+5'], function (e) {
     console.log('command k or control k', e);
 
     // return false to prevent default browser behavior
@@ -745,7 +789,7 @@
     return false;
   });
 
-  Mousetrap.bind('?', function () {
+  appMousetrap.bind('?', function () {
     console.log('show help doc');
     // return false to prevent default browser behavior
     // and stop event from bubbling
@@ -755,7 +799,7 @@
   /**
    * windows下走f11默认也可以，不需要JS支持
    */
-  Mousetrap.bind(['mod+enter', 'f11'], function () {
+  appMousetrap.bind(['mod+enter', 'f11'], function () {
     if (!isMac) {
       return true;
     }
@@ -771,12 +815,12 @@
     return false;
   });
   //
-  Mousetrap.bind([isMac ? 'mod+shift+=' : 'alt+shift+='], function (e) {
+  appMousetrap.bind([isMac ? 'mod+shift+=' : 'alt+shift+='], function (e) {
     console.log('increase font size', e);
     term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(term.options.fontSize) + 1) % fontSizeOptions.length];
     return false;
   });
-  Mousetrap.bind([isMac ? 'mod+shift+-' : 'alt+shift+-'], function (e) {
+  appMousetrap.bind([isMac ? 'mod+shift+-' : 'alt+shift+-'], function (e) {
     console.log('decrease font size', e);
     term.options.fontSize = fontSizeOptions[(fontSizeOptions.indexOf(term.options.fontSize) - 1 + fontSizeOptions.length) % fontSizeOptions.length];
     return false;

@@ -86,6 +86,13 @@ function runCodeServer(e) {
   })
 }
 
+function runWebSocketProxy(){
+  sendData('websocket-proxy', {
+
+  });
+
+}
+
 function stopCodeServer(e) {
   sendData('codeserver-logout')
 }

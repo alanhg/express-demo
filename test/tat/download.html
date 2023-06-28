@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<a href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgl"
+   download="a.png">download dataFile</a>
+<input type="file" id="zm_files" style="display: none">
+click here
+</input>
+<button onclick="addWatch()">
+    add watch
+</button>
+
+<button onclick="downloadEmptyFile2()">
+    download empty file
+</button>
+<script src="https://cdn.bootcdn.net/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+  function downloadEmptyFile() {
+    const blob = new Blob([], {
+      type: 'application/octet-stream',
+    });
+    const downloadLink = document.createElement('a');
+    document.body.appendChild(downloadLink);
+    downloadLink.href = URL.createObjectURL(blob);
+
+
+    downloadLink.target = '_self';
+    downloadLink.download = 'empty.txt';
+    downloadLink.click();
+  }
+
+  function downloadEmptyFile2() {
+    const blob = new Blob([], {
+      type: 'application/octet-stream',
+    });
+    saveAs(blob, 'empty.txt');
+  }
+
+  function addWatch() {
+    const a = document.getElementById('zm_files');
+    a.onchange = function (e) {
+      console.log(1);
+      // a.onchange = null;
+    };
+    a.click();
+  }
+
+  const tatWebsocket = new WebSocket(`ws://81.68.158.6:3333`);
+
+  tatWebsocket.addEventListener('open', function open() {
+    console.log('connected');
+  });
+  tatWebsocket.addEventListener('message', function incoming(data) {
+    console.log(data);
+  });
+
+  tatWebsocket.addEventListener('close', function close() {
+    console.log('disconnected');
+  });
+
+  tatWebsocket.addEventListener('error', function close() {
+    console.log('error');
+    alert('error');
+  });
+</script>
+</body>
+</html>

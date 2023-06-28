@@ -6,13 +6,15 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Canvas压缩</title>
+    <link rel="stylesheet" href="/js/toastify-js/src/toastify.css">
     <script src="/js/compressorjs/dist/compressor.min.js"></script>
+    <script src="/js/toastify-js/src/toastify.js"></script>
 </head>
 <body>
 <label for="selectImg">
     选择图片
 </label>
-<input type="file" id="selectImg" onchange="selectImgChange(event)"/>
+<input type="file" id="selectImg" accept="image/*" onchange="selectImgChange(event)"/>
 <button onclick="compressPreview()">压缩</button>
 <script>
 
@@ -28,20 +30,24 @@
   }
 
 
-  /**
-   *
-   */
   function compressPreview() {
     const selectedImg = document.getElementById('selectImg')['files'][0];
 
+    /**
+     *
+     * 超过convertSize则进行压缩
+     * 分辨率超过maxWidth则进行压缩
+     * GIF/SVG会进行格式转换为PNG
+     * 除了GIF，其它格式不会转换，维持原MIME
+     */
     new Compressor(selectedImg, {
       strict: true,
       quality: 0.6,
       maxHeight: 2160,
       maxWidth: 3840,
-      convertSize: 10000000,
-      convertTypes: ['image/png', 'image/webp', 'image/avif'],
+      convertSize: 10_000_000, // 1MB
       mimeType: 'auto',
+      convertTypes: ['image/jpeg', 'image/png', 'image/webp','image/avif'],
       success(result) {
         const filename = result.name;
         console.log(filename);
@@ -50,7 +56,10 @@
         downloadFile(result, `${filenameWithoutSuffix}_compress${suffix}`);
       },
       error(err) {
-        console.log(err.message);
+        Toastify({
+          text: err,
+          duration: 3000
+        }).showToast();
       },
     });
   }
