@@ -120,7 +120,7 @@
     eval('(function (){debugger})()');
     const endTime = Date.now();
     if ((endTime - startTime) > 100) {
-      location.href = 'https://www.baidu.com';
+      window.location.replace("about:blank");
       console.log('devtool is open');
     }
   }, 1000);
