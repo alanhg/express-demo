@@ -4,6 +4,7 @@
     <title>express -demo</title>
     <base href="/"/>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
     <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.1/base64.min.js"></script>
     <script src="/js/download.js"></script>
     <link rel="manifest" href="/xterm.webmanifest">
@@ -11,9 +12,9 @@
 
 
     <style>
-        #installApp {
-            display: none;
-        }
+      #installApp {
+        display: none;
+      }
     </style>
     <script>
       if ('serviceWorker' in navigator) {
@@ -104,17 +105,18 @@
     console.log('Thank you for installing our app!');
   });
 
-  !function() {
+  !function () {
     function detectDevTool(allow) {
-      if(isNaN(+allow)) allow = 100;
+      if (isNaN(+allow)) allow = 100;
       var start = +new Date();
       var end = +new Date();
-      if(isNaN(start) || isNaN(end) || end - start > allow) {
+      if (isNaN(start) || isNaN(end) || end - start > allow) {
         alert('DEVTOOLS detected. all operations will be terminated.');
         document.write('DEVTOOLS detected.');
       }
     }
-    if(window.attachEvent) {
+
+    if (window.attachEvent) {
       if (document.readyState === "complete" || document.readyState === "interactive") {
         detectDevTool();
         window.attachEvent('onresize', detectDevTool);
@@ -132,6 +134,13 @@
       window.addEventListener('blur', detectDevTool);
     }
   }();
+
+  DisableDevtool({
+    disableMenu: false,
+    ondevtoolopen: function () {
+      console.log('devtool is open');
+    }
+  });
 </script>
 </body>
 </html>
