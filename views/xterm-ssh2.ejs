@@ -104,6 +104,61 @@
 </footer>
 <script>
   const connectOpts =<%- JSON.stringify(connectOpts) %>;//连接参数
+
+  async function readFromClipboard() {
+    const doSystemPaste = () => {
+      const textarea = document.createElement('textarea');
+      document.body.appendChild(textarea);
+      // 隐藏此输入框
+      textarea.style.position = 'fixed';
+      textarea.style.visibility = 'hidden';
+      textarea.style.top = '10px';
+      // 选中
+      textarea.focus();
+      const res = document.execCommand('paste', null, null);
+      const paste = textarea.value;
+      document.body.removeChild(textarea);
+      if (res) {
+        return paste;
+      }
+      throw new Error();
+    };
+    if (navigator.clipboard) {
+      return navigator.clipboard.readText().catch(() => doSystemPaste());
+    }
+    return doSystemPaste();
+  }
+
+  async function copyToClipboard(content) {
+    const doSystemCopy = () => {
+      const textarea = document.createElement('textarea');
+      document.body.appendChild(textarea);
+      // 隐藏此输入框
+      textarea.style.position = 'fixed';
+      textarea.style.visibility = 'hidden';
+      textarea.style.top = '10px';
+      // 赋值
+      textarea.value = content;
+      // 选中
+      textarea.focus();
+      textarea.select();
+      // 复制
+      const res = document.execCommand('copy', false);
+      // 移除输入框
+      document.body.removeChild(textarea);
+      if (res) {
+        return true;
+      }
+      throw new Error();
+    };
+
+    if (navigator.clipboard) {
+      return navigator.clipboard.writeText(content).then(() => true)
+          .catch(() => doSystemCopy());
+    }
+    return doSystemCopy();
+  }
+
 </script>
 <script src="/js/xterm-ssh2.js"></script>
 
@@ -194,6 +249,8 @@
     // const selectionMaskEl = term.element.getElementsByClassName('xterm-selection')[0].children[0];
     // const newLeft = +selectionMaskEl.style.left.replace('px', '') - term._core._renderService._renderer.dimensions.actualCellWidth * 2;
     // selectionMaskEl.style.left = (newLeft > 0 ? newLeft : 0) + 'px';
+    term.getSelection() && copyToClipboard(term.getSelection());
+    console.log('onSelectionChange', term.getSelection());
   });
 
   // 开启终端
@@ -317,26 +374,6 @@
       return;
     }
 
-
-    if (event.key === 'c' && event.metaKey) {
-      if (term.hasSelection()) {
-        navigator.clipboard.writeText(term.getSelection()).catch(e => {
-          console.error(e);
-        });
-        console.log('CV？');
-      } else {
-        console.log('no Selection for CV');
-      }
-    }
-
-    if (event.key === 'v' && event.metaKey) {
-      navigator.clipboard.readText().then((text) => {
-        text && term.paste(text);
-      }).catch(e => {
-        console.error(e);
-      });
-    }
-
     if (event.key === '.' && event.ctrlKey && event.altKey) {
       console.log(event);
       return false;
@@ -385,7 +422,6 @@
     }))
   })
   term.onLineFeed(() => {
-    console.log('执行换行');
     CurrentDirRecord[term.buffer.active.cursorY] = CurrentDir; // 当前得到的目录根据行进行记录
   });
 
