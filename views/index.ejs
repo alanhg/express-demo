@@ -105,14 +105,25 @@
     console.log('Thank you for installing our app!');
   });
 
+  //
+  // DisableDevtool({
+  //   disableMenu: false,
+  //   ondevtoolopen: function () {
+  //     // debugger;
+  //     console.log('devtool is open');
+  //   }
+  // });
 
-  DisableDevtool({
-    disableMenu: false,
-    ondevtoolopen: function () {
-      // debugger;
+  window.setInterval(() => {
+    console.log('setInterval');
+    const startTime = Date.now();
+    eval('(function (){debugger})()');
+    const endTime = Date.now();
+    if ((endTime - startTime) > 100) {
+      location.href = 'https://www.baidu.com';
       console.log('devtool is open');
     }
-  });
+  }, 1000);
 </script>
 </body>
 </html>
