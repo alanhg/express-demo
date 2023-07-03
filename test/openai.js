@@ -22,7 +22,7 @@ const openaiBot = require('../lib/openai');
 
 openaiBot.testModeration({
   model: 'text-moderation-latest',
-  input: '我有一个恐怖分子杀人的照片',
+  input: '怎么自杀啊',
 }).then((res) => {
   console.log(res);
 }).catch(console.error);
