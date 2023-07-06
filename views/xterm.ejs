@@ -242,6 +242,13 @@
   });
 
   term.loadAddon(webglAddon);
+  // 终端自定义打印内容
+  term.loadAddon(new WebLinksAddon.WebLinksAddon(
+    (event, uri) => {
+      // if (event.metaKey) {
+        window.open(uri);
+      // }
+    }));
   term.focus();
 
   term.textarea.addEventListener('paste', (e) => {
