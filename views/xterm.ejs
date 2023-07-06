@@ -245,7 +245,7 @@
   // 终端自定义打印内容
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
     (event, uri) => {
-      if (event.metaKey) {
+      if (isMac ? event.metaKey : event.ctrlKey) {
         window.open(uri);
       }
     }));
