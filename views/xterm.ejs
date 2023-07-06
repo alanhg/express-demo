@@ -11,75 +11,75 @@
     <script src="/js/utils.js"></script>
     <style>
 
-      /**
-        search-addon-bar样式
-       */
-      .xterm-search-addon-bar {
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 285px;
-        color: #000;
-        padding: 5px 10px;
-        box-shadow: 0 2px 8px #000;
-        background: #252526;
-        z-index: 999;
-        display: flex;
-      }
+        /**
+          search-addon-bar样式
+         */
+        .xterm-search-addon-bar {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 285px;
+            color: #000;
+            padding: 5px 10px;
+            box-shadow: 0 2px 8px #000;
+            background: #252526;
+            z-index: 999;
+            display: flex;
+        }
 
-      .xterm-search-addon-bar input {
-        background-color: #3c3c3c;
-        color: #ccc;
-        border: 0;
-        padding: 2px;
-        height: 20px;
-        width: 227px;
-        outline: none;
-      }
+        .xterm-search-addon-bar input {
+            background-color: #3c3c3c;
+            color: #ccc;
+            border: 0;
+            padding: 2px;
+            height: 20px;
+            width: 227px;
+            outline: none;
+        }
 
-      .xterm-search-addon-bar button {
-        min-width: 20px;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        flex: initial;
-        background-position: 50%;
-        margin-left: 3px;
-        background-repeat: no-repeat;
-        background-color: #252526;
-        border: 0;
-        cursor: pointer;
-      }
+        .xterm-search-addon-bar button {
+            min-width: 20px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            flex: initial;
+            background-position: 50%;
+            margin-left: 3px;
+            background-repeat: no-repeat;
+            background-color: #252526;
+            border: 0;
+            cursor: pointer;
+        }
 
-      .xterm-search-addon-bar button.pre {
-        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTUuNCA4YS42LjYgMCAwMS4xNzYtLjQyNGw0LTRhLjU5OC41OTggMCAwMS44NDggMCAuNTk4LjU5OCAwIDAxMCAuODQ4TDYuODQ5IDhsMy41NzUgMy41NzZhLjU5OC41OTggMCAwMTAgLjg0OC41OTguNTk4IDAgMDEtLjg0OCAwbC00LTRBLjYuNiAwIDAxNS40IDgiLz48L3N2Zz4=");
-      }
+        .xterm-search-addon-bar button.pre {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTUuNCA4YS42LjYgMCAwMS4xNzYtLjQyNGw0LTRhLjU5OC41OTggMCAwMS44NDggMCAuNTk4LjU5OCAwIDAxMCAuODQ4TDYuODQ5IDhsMy41NzUgMy41NzZhLjU5OC41OTggMCAwMTAgLjg0OC41OTguNTk4IDAgMDEtLjg0OCAwbC00LTRBLjYuNiAwIDAxNS40IDgiLz48L3N2Zz4=");
+        }
 
-      .xterm-search-addon-bar button.next {
-        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEwLjYgOGEuNi42IDAgMDEtLjE3Ni40MjRsLTQgNGEuNTk4LjU5OCAwIDAxLS44NDggMCAuNTk4LjU5OCAwIDAxMC0uODQ4TDkuMTUxIDggNS41NzYgNC40MjRhLjU5OC41OTggMCAwMTAtLjg0OC41OTguNTk4IDAgMDEuODQ4IDBsNCA0QS42LjYgMCAwMTEwLjYgOCIvPjwvc3ZnPg==");
-      }
+        .xterm-search-addon-bar button.next {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEwLjYgOGEuNi42IDAgMDEtLjE3Ni40MjRsLTQgNGEuNTk4LjU5OCAwIDAxLS44NDggMCAuNTk4LjU5OCAwIDAxMC0uODQ4TDkuMTUxIDggNS41NzYgNC40MjRhLjU5OC41OTggMCAwMTAtLjg0OC41OTguNTk4IDAgMDEuODQ4IDBsNCA0QS42LjYgMCAwMTEwLjYgOCIvPjwvc3ZnPg==");
+        }
 
-      .xterm-search-addon-bar button.close {
-        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
-      }
+        .xterm-search-addon-bar button.close {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTcgNmwyLTJhLjcxMS43MTEgMCAwMDAtMSAuNzExLjcxMSAwIDAwLTEgMEw2IDUgNCAzYS43MTEuNzExIDAgMDAtMSAwIC43MTEuNzExIDAgMDAwIDFsMiAyLTIgMmEuNzExLjcxMSAwIDAwMCAxIC43MTEuNzExIDAgMDAxIDBsMi0yIDIgMmEuNzExLjcxMSAwIDAwMSAwIC43MTEuNzExIDAgMDAwLTFMNyA2eiIvPjwvc3ZnPg==");
+        }
 
-      .xterm-search-addon-bar .search-result-count {
-        color: white;
-        position: absolute;
-        left: 126px;
-      }
+        .xterm-search-addon-bar .search-result-count {
+            color: white;
+            position: absolute;
+            left: 126px;
+        }
 
-      .xterm-search-addon-bar .match-case,
-      .xterm-search-addon-bar .match-word,
-      .xterm-search-addon-bar .match-regex {
-        color: #c0bdbd;
-      }
+        .xterm-search-addon-bar .match-case,
+        .xterm-search-addon-bar .match-word,
+        .xterm-search-addon-bar .match-regex {
+            color: #c0bdbd;
+        }
 
-      .xterm-search-addon-bar .match-case.active,
-      .xterm-search-addon-bar .match-word.active,
-      .xterm-search-addon-bar .match-regex.active {
-        color: white;
-      }
+        .xterm-search-addon-bar .match-case.active,
+        .xterm-search-addon-bar .match-word.active,
+        .xterm-search-addon-bar .match-regex.active {
+            color: white;
+        }
 
     </style>
 </head>
@@ -247,6 +247,10 @@
     (event, uri) => {
       if (isMac ? event.metaKey : event.ctrlKey) {
         window.open(uri);
+      }
+    }, {
+      hover: (event, text, location) => {
+        console.log(event, text, location);
       }
     }));
   term.focus();
