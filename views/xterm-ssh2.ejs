@@ -579,12 +579,11 @@
               return;
             }
             FILE_BUFFER.push(new Uint8Array(payload));
-            showMessage(getProgress(xfer), true);
-            // console.log(getProgressBar(xhr.get_details().size, xhr.get_offset()));
+            showMessage(getProgressBar(xfer.get_details().size, xfer.get_offset()), true);
           });
           xfer.accept().then(
             () => {
-              showMessage(`${xfer.get_details().name} download completed.`);
+              showMessage(`${xfer.get_details().name} download completed.`, true);
               resolve();
               _save_to_disk(xfer, FILE_BUFFER);
             },
@@ -698,13 +697,13 @@
             const chunk = new Uint8Array(contentBuffers.slice(chunkIndex * 1024, (chunkIndex + 1) * 1024));
             await xfer.send(chunk);
             console.log('getProgress(xfer)', getProgress(xfer));
-            showMessage(getProgress(xfer), true);
+            showMessage(getProgressBar(xfer.get_details().size, xfer.get_offset()), true);
             chunkIndex = chunkIndex + 1;
           }
           if (zsessionCanceled) {
-            showMessage(`${file.name} upload canceled.`);
+            showMessage(`${file.name} upload canceled.`, true);
           } else {
-            showMessage(`${file.name} upload completed.`);
+            showMessage(`${file.name} upload completed.`, true);
           }
           await xfer.end();
         } else {
@@ -719,8 +718,11 @@
   }
 
   function showMessage(msg, overwrite = false) {
-    term.write(textEncoder.encode(`\r${msg}${SPACER}`));
-    if (!overwrite) {
+    if (overwrite) {
+      term.write('\x1b[2K\r');
+      term.write(textEncoder.encode(`\r${msg}${SPACER}`));
+    } else {
+      term.write(textEncoder.encode(`\r${msg}${SPACER}`));
       term.write(textEncoder.encode(`\r\n`));
     }
   }
