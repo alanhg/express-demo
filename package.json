@@ -7,7 +7,7 @@
     "build": "node build.js"
   },
   "dependencies": {
-    "@cloudstudio/editor-sdk": "^1.0.4",
+    "@cloudstudio/editor-sdk": "^1.0.6",
     "@stacker/alfred-utils": "^0.1.10",
     "@widgetjs/tree": "^1.8.3",
     "axios": "^1.1.3",

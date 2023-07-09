@@ -1,3 +1,6 @@
+/**
+ * 服务于 xterm-ssh2.ejs
+ */
 function goOpenAi({model, prompt}) {
   return fetch('/api/openai', {
     method: 'post', headers: {
@@ -86,10 +89,8 @@ function runCodeServer(e) {
   })
 }
 
-function runWebSocketProxy(){
-  sendData('websocket-proxy', {
-
-  });
+function runWebSocketProxy() {
+  sendData('websocket-proxy', {});
 
 }
 
@@ -131,3 +132,19 @@ function sendData(type, data = {}) {
 
 const fontSizeOptions = [12, 14, 16, 18, 20];
 
+/**
+ * 进度条绘制
+ * @param term
+ * @param total
+ * @param current
+ */
+function getProgressBar(total, current) {
+  if (total < current) {
+    throw new Error('total must be greater than current');
+  }
+  const progressBarLength = 40;  // 进度条的长度
+  const progress = Math.floor((current / total) * progressBarLength);
+  const empty = progressBarLength - progress;
+  const progressBar = '█'.repeat(progress) + '░'.repeat(empty);
+  return `(${progressBar}) ${((current / total) * 100).toFixed(2)}%`;
+}

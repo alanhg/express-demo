@@ -10,12 +10,38 @@ function extractCommandFromAI(msg) {
   const match = msg.match(myRegexp);
   if (match !== null) {
     if (match[2] !== undefined) {
-      return match[2].replace(/\n/g,'');
+      return match[2].replace(/\n/g, '');
     }
     if (match[5] !== undefined) {
-      return match[5].replace(/\n/g,'')
+      return match[5].replace(/\n/g, '')
     }
   }
 }
 
 console.log(extractCommandFromAI('```\nls\n```'));
+
+
+function getProgressBar(total, current) {
+  const progressBarLength = 40;  // 进度条的长度
+  const progress = Math.floor((current / total) * progressBarLength);
+  const empty = progressBarLength - progress;
+  const progressBar = '█'.repeat(progress) + '░'.repeat(empty);
+  return `(${progressBar}) ${((current / total) * 100).toFixed(2)}%`;
+}
+
+
+function drawerProgressBar() {
+  let total = 1323200;
+  let current = 501111;
+  const timer = setInterval(() => {
+    if (current >= total) {
+      clearInterval(timer);
+      return;
+    }
+    process.stdout.write('\r' + getProgressBar(total, current));
+    current += 1000;
+  }, 100);
+}
+
+
+drawerProgressBar();

@@ -154,7 +154,7 @@
 
     if (navigator.clipboard) {
       return navigator.clipboard.writeText(content).then(() => true)
-          .catch(() => doSystemCopy());
+        .catch(() => doSystemCopy());
     }
     return doSystemCopy();
   }
@@ -163,8 +163,8 @@
 <script src="/js/xterm-ssh2.js"></script>
 
 <script type="module">
-  import {SearchAddonBar} from '/js/search-addon-bar.js';
-  import {RecordScreenAddon} from '/js/record-screen-addon.js';
+  import { SearchAddonBar } from '/js/search-addon-bar.js';
+  import { RecordScreenAddon } from '/js/record-screen-addon.js';
 
   const textEncoder = new TextEncoder();
 
@@ -259,11 +259,11 @@
 
   // 终端自定义打印内容
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
-      (event, uri) => {
-        if (event.metaKey) {
-          window.open(uri);
-        }
-      }));
+    (event, uri) => {
+      if (event.metaKey) {
+        window.open(uri);
+      }
+    }));
   let searchAddon = new SearchAddon.SearchAddon();
   serializeAddon = new SerializeAddon.SerializeAddon();
 
@@ -580,15 +580,15 @@
             }
             FILE_BUFFER.push(new Uint8Array(payload));
             showMessage(getProgress(xfer), true);
+            // console.log(getProgressBar(xhr.get_details().size, xhr.get_offset()));
           });
           xfer.accept().then(
-              () => {
-                showMessage(`${xfer.get_details().name} download completed.`);
-                // term.focus();
-                resolve();
-                _save_to_disk(xfer, FILE_BUFFER);
-              },
-              console.error.bind(console)
+            () => {
+              showMessage(`${xfer.get_details().name} download completed.`);
+              resolve();
+              _save_to_disk(xfer, FILE_BUFFER);
+            },
+            console.error.bind(console)
           )
         })
         if (zsessionCanceled) {
