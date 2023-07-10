@@ -25,7 +25,7 @@ function extractCommandFromAI(msg) {
  */
 function createProgressBar(styleIndex = 0) {
   return (total, current) => {
-    const styleList = [['█', '░'], ['#', ' ']];// 进度条风格
+    const styleList = [['█', '░'], ['#', ' '], ['=', '-']];// 进度条风格
     const style = styleList[styleIndex] || styleList[0];
     const progressBarLength = 40;  // 进度条的长度
     const progress = Math.floor((current / total) * progressBarLength);
@@ -36,7 +36,7 @@ function createProgressBar(styleIndex = 0) {
 }
 
 function drawerProgressBar() {
-  const getProgressBar = createProgressBar(0);
+  const getProgressBar = createProgressBar(2);
   let total = 1323200;
   let current = 501111;
   const timer = setInterval(() => {
