@@ -18,28 +18,35 @@ function extractCommandFromAI(msg) {
   }
 }
 
-console.log(extractCommandFromAI('```\nls\n```'));
-
-
-function getProgressBar(total, current) {
-  const progressBarLength = 40;  // 进度条的长度
-  const progress = Math.floor((current / total) * progressBarLength);
-  const empty = progressBarLength - progress;
-  const progressBar = '█'.repeat(progress) + '░'.repeat(empty);
-  return `(${progressBar}) ${((current / total) * 100).toFixed(2)}%`;
+/**
+ * 创建进度条
+ * @param styleIndex
+ * @returns {function(*, *): string}
+ */
+function createProgressBar(styleIndex = 0) {
+  return (total, current) => {
+    const styleList = [['█', '░'], ['#', ' ']];// 进度条风格
+    const style = styleList[styleIndex] || styleList[0];
+    const progressBarLength = 40;  // 进度条的长度
+    const progress = Math.floor((current / total) * progressBarLength);
+    const empty = progressBarLength - progress;
+    const progressBar = style[0].repeat(progress) + style[1].repeat(empty);
+    return `(${progressBar}) ${((current / total) * 100).toFixed(2)}%`;
+  };
 }
 
-
 function drawerProgressBar() {
+  const getProgressBar = createProgressBar(0);
   let total = 1323200;
   let current = 501111;
   const timer = setInterval(() => {
     if (current >= total) {
+      process.stdout.write('\r' + getProgressBar(total, total));
       clearInterval(timer);
       return;
     }
     process.stdout.write('\r' + getProgressBar(total, current));
-    current += 1000;
+    current += 10000;
   }, 100);
 }
 
