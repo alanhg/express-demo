@@ -233,16 +233,22 @@ function (event) {
 
   return true;
 });
-term.onData((data) => {
+term.onData((data, event) => {
   socket.send(JSON.stringify({
     type: 'data', data
-  }))
+  }));
 
   if (data === ' ') {
+    console.log(event);
     autoCompleteTrigger('cd');
   }
 
 });
+
+term.onKey(({key, domEvent}) => {
+  console.log(key, domEvent);
+});
+
 term.onLineFeed(() => {
   CurrentDirRecord[term.buffer.active.cursorY] = CurrentDir; // 当前得到的目录根据行进行记录
 });
@@ -846,6 +852,7 @@ $('#terminal-container').contextmenu(function (e) {
  */
 
 const specs = [];
+
 function loadSpecs() {
   import('/js/fig-autocomplete/git.js').then((module) => {
     specs.push(module.default);
@@ -865,6 +872,19 @@ function autoCompleteTrigger(input) {
   const spec = specs.find(spec => spec.name === input);
   if (spec) {
     renderSuggestions(spec.args.suggestions);
+    console.log(calculateCursorPosition());
+  }
+}
+
+function calculateCursorPosition() {
+  let cursorX = term.buffer.active.cursorX;
+  let cursorY = term.buffer.active.cursorY;
+
+  let pixelX = cursorX * 6;
+  let pixelY = cursorY * 6;
+  return {
+    x: pixelX,
+    y: pixelY
   }
 }
 
