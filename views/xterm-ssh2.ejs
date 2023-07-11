@@ -1,6 +1,7 @@
 <head xmlns="http://www.w3.org/1999/html">
     <title>xterm.js-ssh2测试</title>
 
+    <link href="/js/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/js/xterm/css/xterm.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
     <link data-name="vs/editor/editor.main"
@@ -43,17 +44,17 @@
     </div>
 </div>
 <input id="zm_files" type="file" multiple style="display: none">
-<button data-start="false" onclick="recordLogStart(event)">log record start</button>
-<button data-start="false" onclick="clientRecordLogStart(event)">client log record start</button>
+<button type="button"  class="btn btn-info" data-start="false" onclick="recordLogStart(event)">log record start</button>
+<button type="button"  class="btn btn-info" data-start="false" onclick="clientRecordLogStart(event)">client log record start</button>
 <label for="record-timestamp">
     record timestamp
     <input id="record-timestamp" type="checkbox" checked>
 </label>
-<button data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
-<button data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
-<button data-start="false" onclick="runWebSocketProxy(event)">Run WebSocket Proxy</button>
+<button class="btn btn-info" data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
+<button class="btn btn-info" data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
+<button class="btn btn-info" data-start="false" onclick="runWebSocketProxy(event)">Run WebSocket Proxy</button>
 
-<button onclick="stopCodeServer(event)">Stop Code Server</button>
+<button class="btn btn-info" onclick="stopCodeServer(event)">Stop Code Server</button>
 
 <label for="backgroundOn">
     <input id="backgroundOn" type="checkbox" onclick="toggleBackgroundOn(event)"/>Image Background
@@ -81,6 +82,7 @@
     <textarea id="proxyHost" cols="20" rows="20">
     </textarea>
 </div>
+
 
 <iframe id="code-server-inline">
 
@@ -169,4 +171,12 @@
 </script>
 <script src="/js/xterm-ssh2-utils.js"></script>
 <script type="module" src="/js/xterm-ssh2.js"></script>
+
+<div class="suggestion-box">
+</div>
+<template id="suggestion-template">
+    <div class="suggestion"></div>
+
+
+</template>
 </body>

@@ -237,6 +237,11 @@ term.onData((data) => {
   socket.send(JSON.stringify({
     type: 'data', data
   }))
+
+  if (data === ' ') {
+    autoCompleteTrigger('cd');
+  }
+
 });
 term.onLineFeed(() => {
   CurrentDirRecord[term.buffer.active.cursorY] = CurrentDir; // 当前得到的目录根据行进行记录
@@ -338,7 +343,6 @@ socket.addEventListener('open', () => {
 });
 
 socket.addEventListener('message', (evt) => {
-  console.log(term.buffer.active.type);
   if (typeof evt.data === 'string') {
     const options = parseData(evt);
     if (options.type === 'search') {
@@ -836,8 +840,51 @@ $('#terminal-container').contextmenu(function (e) {
 });
 
 
-import gitSpec from '/js/fig-autocomplete/git.js';
-import cdSpec from '/js/fig-autocomplete/cd.js';
+/**
+ * 加载自动补全规则
+ * @type {*[]}
+ */
 
-console.log(gitSpec);
-console.log(cdSpec);
+const specs = [];
+function loadSpecs() {
+  import('/js/fig-autocomplete/git.js').then((module) => {
+    specs.push(module.default);
+  });
+  import('/js/fig-autocomplete/cd.js').then((module) => {
+    specs.push(module.default);
+  });
+}
+
+loadSpecs();
+
+/**
+ * 自动补全触发
+ * @param input
+ */
+function autoCompleteTrigger(input) {
+  const spec = specs.find(spec => spec.name === input);
+  if (spec) {
+    renderSuggestions(spec.args.suggestions);
+  }
+}
+
+
+/**
+ * 执行命令，获取推荐结果进行渲染
+ * @param suggestions
+ */
+function renderSuggestions(suggestions) {
+  let suggestionBox = document.querySelector('.suggestion-box'); // 获取显示建议列表的 div 元素
+  suggestionBox.innerHTML = ''; // 清空之前的建议列表
+  let template = document.getElementById('suggestion-template'); // 获取模板
+
+  suggestions.forEach(suggestion => {
+    let clone = template.content.cloneNode(true); // 克隆模板的内容
+    let div = clone.querySelector('.suggestion'); // 获取新建的 div 元素
+    div.textContent = `${suggestion.name}(${suggestion.description})`; // 设置建议的文本内容
+    suggestionBox.appendChild(clone); // 将建议添加到建议列表中
+  });
+
+  suggestionBox.left = 0;
+  suggestionBox.top = 0;
+}

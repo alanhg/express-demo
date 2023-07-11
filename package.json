@@ -76,9 +76,9 @@
     "xterm-addon-unicode11": "^0.5.0",
     "xterm-addon-web-links": "^0.8.0",
     "xterm-addon-webgl": "^0.14.0",
-    "zmodem.js": "latest"
+    "zmodem.js": "latest",
+    "bootstrap": "^5.3.0"
   },
   "devDependencies": {
-    "bootstrap": "^3.3.7"
   }
 }
