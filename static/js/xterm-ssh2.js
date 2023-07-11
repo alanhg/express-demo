@@ -871,17 +871,15 @@ loadSpecs();
 function autoCompleteTrigger(input) {
   const spec = specs.find(spec => spec.name === input);
   if (spec) {
-    renderSuggestions(spec.args.suggestions);
-    console.log(calculateCursorPosition());
+    renderSuggestions(spec.args.suggestions, calculateCursorPosition());
   }
 }
 
 function calculateCursorPosition() {
   let cursorX = term.buffer.active.cursorX;
   let cursorY = term.buffer.active.cursorY;
-
-  let pixelX = cursorX * 6;
-  let pixelY = cursorY * 6;
+  let pixelX = cursorX * 10;
+  let pixelY = cursorY * 20;
   return {
     x: pixelX,
     y: pixelY
@@ -892,8 +890,9 @@ function calculateCursorPosition() {
 /**
  * 执行命令，获取推荐结果进行渲染
  * @param suggestions
+ * @param position
  */
-function renderSuggestions(suggestions) {
+function renderSuggestions(suggestions, position) {
   let suggestionBox = document.querySelector('.suggestion-box'); // 获取显示建议列表的 div 元素
   suggestionBox.innerHTML = ''; // 清空之前的建议列表
   let template = document.getElementById('suggestion-template'); // 获取模板
@@ -905,6 +904,6 @@ function renderSuggestions(suggestions) {
     suggestionBox.appendChild(clone); // 将建议添加到建议列表中
   });
 
-  suggestionBox.left = 0;
-  suggestionBox.top = 0;
+  suggestionBox.style.left = position.x + 10;
+  suggestionBox.style.top = position.y + 24;
 }
