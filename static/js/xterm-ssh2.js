@@ -865,7 +865,7 @@ function loadSpecs() {
 loadSpecs();
 
 /**
- * 自动补全触发
+ * 自动补全触发,执行命令/提示子命令，生成建议选项
  * @param input
  */
 function autoCompleteTrigger(input) {
