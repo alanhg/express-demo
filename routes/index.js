@@ -55,8 +55,8 @@ router.get('/ws', (req, res) => {
 });
 
 
-router.get('/xterm', (req, res) => {
-  res.render('xterm');
+router.get('/xterm-local', (req, res) => {
+  res.render('xterm-local');
 });
 
 router.get('/home', (req, res) => {

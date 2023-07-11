@@ -56,11 +56,15 @@ router.get('/ssh2-log', (req, res) => {
 });
 
 /**
+ * 编辑器代理
+ */
+router.use('/ide', ideRouter);
+
+/**
  * 指定目标机器的CodeServer,修改URL，调整为访问目标服务器的URL
  * 需要代理HTTP/WS
  */
 router.use('/tty', codeServerProxyRouter);
-router.use('/ide', ideRouter);
 
 router.connectOpts = connectOpts;
 module.exports = router;
