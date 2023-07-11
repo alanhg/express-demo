@@ -72,13 +72,17 @@ body {
   color: white;
 }
 
+.terminal-parent {
+  padding: 5px;
+  background: black;
+}
+
 #terminal-wrapper {
   background-color: black;
   position: relative;
 }
 
 #terminal-container {
-
   margin-bottom: 20px;
 }
 

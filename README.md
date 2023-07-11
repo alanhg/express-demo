@@ -1,6 +1,6 @@
 ## 简介
 
-node项目下各种功能研发实验，提供Demo
+node项目下各功能实验
 
 ## 功能点
 1. WebShell
@@ -25,3 +25,4 @@ git clone git@github.com:coder/code-server.git  --single-branch main
 ### 代理方案
 - Web代理
 - SSH代理
+- WebSocket协议代理支持

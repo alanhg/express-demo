@@ -24,15 +24,22 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/js/jquery.ztree.all.min.js"></script>
     <script src="/js/contextMenu.js"></script>
     <script src="/js/events.js"></script>
-    <link rel="stylesheet" href="css/xterm-ssh2.css">
+    <link rel="stylesheet" href="/css/xterm-ssh2.css">
 </head>
 <body>
-<div id="terminal-wrapper">
-    <div class="terminal-background-img">
+<div>
+    <a href="/">
+        返回首页
+    </a>
+</div>
+<div class="terminal-parent">
+    <div id="terminal-wrapper">
+        <div class="terminal-background-img">
 
-    </div>
-    <div id="terminal-container">
+        </div>
+        <div id="terminal-container">
 
+        </div>
     </div>
 </div>
 <input id="zm_files" type="file" multiple style="display: none">
@@ -154,7 +161,7 @@
 
     if (navigator.clipboard) {
       return navigator.clipboard.writeText(content).then(() => true)
-        .catch(() => doSystemCopy());
+          .catch(() => doSystemCopy());
     }
     return doSystemCopy();
   }
@@ -163,8 +170,8 @@
 <script src="/js/xterm-ssh2.js"></script>
 
 <script type="module">
-  import { SearchAddonBar } from '/js/search-addon-bar.js';
-  import { RecordScreenAddon } from '/js/record-screen-addon.js';
+  import {SearchAddonBar} from '/js/search-addon-bar.js';
+  import {RecordScreenAddon} from '/js/record-screen-addon.js';
 
   const textEncoder = new TextEncoder();
 
@@ -259,11 +266,11 @@
 
   // 终端自定义打印内容
   term.loadAddon(new WebLinksAddon.WebLinksAddon(
-    (event, uri) => {
-      if (event.metaKey) {
-        window.open(uri);
-      }
-    }));
+      (event, uri) => {
+        if (event.metaKey) {
+          window.open(uri);
+        }
+      }));
   let searchAddon = new SearchAddon.SearchAddon();
   serializeAddon = new SerializeAddon.SerializeAddon();
 
@@ -383,14 +390,12 @@
       searchAddonBar.hide();
     }
     if (event.key === 'k' && (isMac ? event.metaKey : event.ctrlKey)) {
-      console.log('清屏点击');
       term.clear();
       event.preventDefault();
       return false;
     }
 
     if (event.key === 'x' && event.ctrlKey) {
-      console.log('ai trigger');
       let line = term.buffer.active.getLine(term.buffer.active.cursorY);
       console.log(line.translateToString());
       goOpenAi({
@@ -420,7 +425,7 @@
       type: 'data',
       data
     }))
-  })
+  });
   term.onLineFeed(() => {
     CurrentDirRecord[term.buffer.active.cursorY] = CurrentDir; // 当前得到的目录根据行进行记录
   });
@@ -521,6 +526,7 @@
   });
 
   socket.addEventListener('message', (evt) => {
+    console.log(term.buffer.active.type);
     if (typeof evt.data === 'string') {
       const options = parseData(evt);
       if (options.type === 'search') {
@@ -582,12 +588,12 @@
             showMessage(getProgressBar(xfer.get_details().size, xfer.get_offset()), true);
           });
           xfer.accept().then(
-            () => {
-              showMessage(`${xfer.get_details().name} download completed.`, true);
-              resolve();
-              _save_to_disk(xfer, FILE_BUFFER);
-            },
-            console.error.bind(console)
+              () => {
+                showMessage(`${xfer.get_details().name} download completed.`, true);
+                resolve();
+                _save_to_disk(xfer, FILE_BUFFER);
+              },
+              console.error.bind(console)
           )
         })
         if (zsessionCanceled) {
@@ -783,7 +789,6 @@
    * mod在Mac下即⌘，在windows等系统下即ctrl
    */
   appMousetrap.bind(['mod+k', 'ctrl+k'], function (e) {
-    console.log('command k or control k', e);
     // return false to prevent default browser behavior
     // and stop event from bubbling
     return false;
@@ -792,7 +797,6 @@
    * 开启新终端Tab
    */
   appMousetrap.bind(['ctrl+alt+,', 'alt+t', 'alt+w', 'alt+d'], function (e) {
-    console.log('meta+,', e);
     // return false to prevent default browser behavior
     // and stop event from bubbling
     return false;
@@ -802,7 +806,6 @@
    * 关闭当前终端Tab
    */
   appMousetrap.bind(['ctrl+alt+.'], function (e) {
-    console.log('meta+.', e);
     // return false to prevent default browser behavior
     // and stop event from bubbling
     return false;

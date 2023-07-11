@@ -6,7 +6,7 @@ const http = require('http');
 const {Client, HTTPAgent, HTTPSAgent} = require('ssh2');
 const httpProxy = require('http-proxy');
 
-const {connectOpts} = require('../routes/config')
+const {connectOpts} = require('../constants/config')
 const sshConfig = connectOpts;
 
 // Use `HTTPSAgent` instead for an HTTPS request

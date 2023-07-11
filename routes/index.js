@@ -12,7 +12,7 @@ const apiRouter = require('./api');
 const authRouter = require('./auth');
 const webShellRouter = require('./webshell');
 const path = require("path");
-const {connectOpts} = require('./config');
+const {connectOpts} = require('../constants/config');
 var terminals = {}, logs = {};
 
 router.get('/sw.js', (req, res) => {
