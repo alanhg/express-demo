@@ -114,16 +114,16 @@
   //   }
   // });
 
-  window.setInterval(() => {
-    console.log('setInterval');
-    const startTime = Date.now();
-    eval('(function (){debugger})()');
-    const endTime = Date.now();
-    if ((endTime - startTime) > 100) {
-      window.location.replace("about:blank");
-      console.log('devtool is open');
-    }
-  }, 1000);
+  // window.setInterval(() => {
+  //   console.log('setInterval');
+  //   const startTime = Date.now();
+  //   eval('(function (){debugger})()');
+  //   const endTime = Date.now();
+  //   if ((endTime - startTime) > 100) {
+  //     window.location.replace("about:blank");
+  //     console.log('devtool is open');
+  //   }
+  // }, 1000);
 </script>
 </body>
 </html>
