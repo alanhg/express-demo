@@ -6,6 +6,92 @@ import {RecordScreenAddon} from '/js/record-screen-addon.js';
 
 const textEncoder = new TextEncoder();
 
+
+/**
+ * 服务于 xterm-ssh2.ejs
+ */
+class WebShell extends EventEmitter {
+
+  constructor() {
+    super();
+  }
+
+  connect(opts) {
+    const socket = new WebSocket(`${webSocketBaseUrl}/ws/webshell`);
+    this.socket = socket;
+    socket.binaryType = 'arraybuffer';
+
+    socket.addEventListener('close', () => {
+      location.reload();
+    });
+    socket.addEventListener('open', () => {
+      this.sendData('connect', opts);
+    });
+
+    socket.addEventListener('message', (evt) => {
+      if (typeof evt.data === 'string') {
+        const options = parseData(evt);
+        if (options.type === 'search') {
+          if (options.data.length) {
+            options.data = options.data.replace(/\n$/, '');
+            updateSearchResult(options.data.split('\n').map(item => {
+              return item.split(':');
+            }), options.keyword);
+          } else {
+            updateSearchResult([], options.keyword);
+          }
+
+        }
+        if (options.type === 'codeserver') {
+          /**
+           * workspace
+           * folder参数控制缺省打开文件夹,不传则走前端存储的最后打开文件夹
+           * ?folder=/home
+           */
+          let codeServerWeb = document.getElementById('visitIDEDirectly').checked ? (`/tty/${options.proxyKey}/`) : (`/ide/${options.proxyKey}/`);
+          console.log(`访问地址：${window.location.protocol}//${window.location.host}${codeServerWeb}`);
+          if (window.toggleNewTabOn.checked) {
+            window.open(codeServerWeb, '_blank');
+          } else {
+            location.href = codeServerWeb;
+          }
+        } else if (options.type === 'codeserver-logout') {
+          alert('stop code server successful');
+        } else if (options.type === 'websocket-proxy') {
+          window.open(`${window.location.protocol}//${window.location.host}/tty/cm9vdEA0My4xNTQuMTgyLjE4Nw==/`);
+        } else if (options.type === 'exec-command') {
+          this.emit('exec-command', options.data);
+        } else {
+          term.write(evt.data);
+        }
+      } else {
+        feedFromSession(evt.data);
+      }
+    });
+  }
+
+  execCommand(command) {
+    this.sendData('exec-command', {command});
+    return new Promise((resolve, reject) => {
+      this.once('exec-command', (data) => {
+        resolve(data);
+      })
+    });
+  }
+
+  sendData(type, data = {}) {
+    if (typeof type === 'string') {
+      this.socket.send(JSON.stringify({
+        type, data
+      }))
+    } else {
+      this.socket.send(type);
+    }
+  }
+}
+
+const webshell = new WebShell();
+webshell.connect(JSON.parse(document.getElementById('proxyHost').value));
 var isFullscreen = false;
 term = new Terminal({
   // fontFamily: 'Hack Nerd Font',
@@ -47,7 +133,7 @@ let zsentry = new Zmodem.Sentry({
   },
 
   sender: (data) => {
-    socket.send(new Uint8Array(data));
+    webshell.send(new Uint8Array(data));
   },
 
   on_retract: function _on_retract() {
@@ -237,9 +323,7 @@ function (event) {
 let commandCacheInput = '';
 
 term.onData((data, event) => {
-  socket.send(JSON.stringify({
-    type: 'data', data
-  }));
+  webshell.sendData('data', data);
 
   /**
    * 终端必须处于Normal模式下才能进行输入
@@ -307,9 +391,6 @@ termRef.addEventListener('wheel', function (event) {
   }
 });
 
-socket = new WebSocket(`${webSocketBaseUrl}/ws/webshell`);
-socket.binaryType = 'arraybuffer';
-
 
 async function processZSession(detection) {
   activeZsession = detection.confirm();
@@ -349,51 +430,6 @@ function feedFromSession(buffer) {
   }
 }
 
-socket.addEventListener('close', () => {
-  location.reload();
-});
-socket.addEventListener('open', () => {
-  sendData('connect', JSON.parse(document.getElementById('proxyHost').value));
-});
-
-socket.addEventListener('message', (evt) => {
-  if (typeof evt.data === 'string') {
-    const options = parseData(evt);
-    if (options.type === 'search') {
-      if (options.data.length) {
-        options.data = options.data.replace(/\n$/, '');
-        updateSearchResult(options.data.split('\n').map(item => {
-          return item.split(':');
-        }), options.keyword);
-      } else {
-        updateSearchResult([], options.keyword);
-      }
-
-    }
-    if (options.type === 'codeserver') {
-      /**
-       * workspace
-       * folder参数控制缺省打开文件夹,不传则走前端存储的最后打开文件夹
-       * ?folder=/home
-       */
-      let codeServerWeb = document.getElementById('visitIDEDirectly').checked ? (`/tty/${options.proxyKey}/`) : (`/ide/${options.proxyKey}/`);
-      console.log(`访问地址：${window.location.protocol}//${window.location.host}${codeServerWeb}`);
-      if (window.toggleNewTabOn.checked) {
-        window.open(codeServerWeb, '_blank');
-      } else {
-        location.href = codeServerWeb;
-      }
-    } else if (options.type === 'codeserver-logout') {
-      alert('stop code server successful');
-    } else if (options.type === 'websocket-proxy') {
-      window.open(`${window.location.protocol}//${window.location.host}/tty/cm9vdEA0My4xNTQuMTgyLjE4Nw==/`);
-    } else {
-      term.write(evt.data);
-    }
-  } else {
-    feedFromSession(evt.data);
-  }
-});
 
 function _save_to_disk(xfer, buffer) {
   return Zmodem.Browser.save_to_disk(buffer, xfer.get_details().name);
@@ -702,8 +738,6 @@ function searchResultItemOnClick(event) {
   sftpSocket.send(JSON.stringify({
     type: 'get-file', path: event.target.dataset.path
   }));
-
-
 }
 
 function Uint8ArrayToString(fileData) {
@@ -907,21 +941,9 @@ async function renderSuggestions(spec, position) {
 
   if (spec.args.generators) {
     console.log(spec.args.generators);
-    const commandResult = () => Promise.resolve('.DS_Store\n' +
-        '.fig/\n' +
-        'CodeGeeX/\n' +
-        'DefinitelyTyped/\n' +
-        'FGasper/\n' +
-        'Painter/\n' +
-        'Warp/\n' +
-        'agentkeepalive/\n' +
-        'alanhg.github.io/\n' +
-        'alfred-currency-conversion/\n' +
-        'alfred-jetbrains/\n' +
-        'alfred-utils/\n' +
-        'alfred-utils-1/\n' +
-        'alfred-utils-2/\n' +
-        'alfred-workflows/');
+    const commandResult = () => {
+      return webshell.execCommand('ls');
+    };
     const res = await spec.args.generators.custom([], commandResult, {
       'currentProcess': 'bash',
       currentWorkingDirectory: '/home/ubuntu',
