@@ -941,8 +941,9 @@ async function renderSuggestions(spec, position) {
 
   if (spec.args.generators) {
     console.log(spec.args.generators);
-    const commandResult = () => {
-      return webshell.execCommand('ls');
+    const commandResult = (cmd) => {
+      console.log(cmd);
+      return webshell.execCommand(cmd.replace(/^command /, ''));
     };
     const res = await spec.args.generators.custom([], commandResult, {
       'currentProcess': 'bash',
@@ -951,6 +952,7 @@ async function renderSuggestions(spec, position) {
       sshPrefix: '',
       'environmentVariables': {}
     });
+    console.log(res);
     return;
   }
 
