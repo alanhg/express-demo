@@ -907,7 +907,7 @@ async function renderSuggestions(spec, position) {
 
   if (spec.args.generators) {
     console.log(spec.args.generators);
-    const commandResult = Promise.resolve('.DS_Store\n' +
+    const commandResult = () => Promise.resolve('.DS_Store\n' +
         '.fig/\n' +
         'CodeGeeX/\n' +
         'DefinitelyTyped/\n' +
@@ -929,7 +929,6 @@ async function renderSuggestions(spec, position) {
       sshPrefix: '',
       'environmentVariables': {}
     });
-    debugger;
     return;
   }
 
