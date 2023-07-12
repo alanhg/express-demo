@@ -233,16 +233,24 @@ function (event) {
 
   return true;
 });
+
+let commandCacheInput = '';
+
 term.onData((data, event) => {
   socket.send(JSON.stringify({
     type: 'data', data
   }));
 
+  /**
+   * 终端必须处于Normal模式下才能进行输入
+   */
   if (data === ' ') {
-    console.log(event);
+    const currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
+    console.log(currentLineContent);
     autoCompleteTrigger('cd');
+  } else {
+    commandCacheInput += data;
   }
-
 });
 
 term.onKey(({key, domEvent}) => {
@@ -854,11 +862,10 @@ $('#terminal-container').contextmenu(function (e) {
 const specs = [];
 
 function loadSpecs() {
-  import('/js/fig-autocomplete/git.js').then((module) => {
-    specs.push(module.default);
-  });
-  import('/js/fig-autocomplete/cd.js').then((module) => {
-    specs.push(module.default);
+  ['cd', 'git', 'cat'].forEach((name) => {
+    import(`/js/fig-autocomplete/${name}.js`).then((module) => {
+      specs.push(module.default);
+    });
   });
 }
 
@@ -871,7 +878,7 @@ loadSpecs();
 function autoCompleteTrigger(input) {
   const spec = specs.find(spec => spec.name === input);
   if (spec) {
-    renderSuggestions(spec.args.suggestions, calculateCursorPosition());
+    renderSuggestions(spec, calculateCursorPosition());
   }
 }
 
@@ -889,21 +896,64 @@ function calculateCursorPosition() {
 
 /**
  * 执行命令，获取推荐结果进行渲染
- * @param suggestions
+ * @param spec
  * @param position
  */
-function renderSuggestions(suggestions, position) {
+async function renderSuggestions(spec, position) {
   let suggestionBox = document.querySelector('.suggestion-box'); // 获取显示建议列表的 div 元素
   suggestionBox.innerHTML = ''; // 清空之前的建议列表
   let template = document.getElementById('suggestion-template'); // 获取模板
+  const suggestions = [];
 
+  if (spec.args.generators) {
+    console.log(spec.args.generators);
+    const commandResult = Promise.resolve('.DS_Store\n' +
+        '.fig/\n' +
+        'CodeGeeX/\n' +
+        'DefinitelyTyped/\n' +
+        'FGasper/\n' +
+        'Painter/\n' +
+        'Warp/\n' +
+        'agentkeepalive/\n' +
+        'alanhg.github.io/\n' +
+        'alfred-currency-conversion/\n' +
+        'alfred-jetbrains/\n' +
+        'alfred-utils/\n' +
+        'alfred-utils-1/\n' +
+        'alfred-utils-2/\n' +
+        'alfred-workflows/');
+    const res = await spec.args.generators.custom([], commandResult, {
+      'currentProcess': 'bash',
+      currentWorkingDirectory: '/home/ubuntu',
+      searchTerm: '',
+      sshPrefix: '',
+      'environmentVariables': {}
+    });
+    debugger;
+    return;
+  }
+
+
+  if (spec.subcommands) {
+    /**
+     *
+     */
+    suggestions.push(...spec.subcommands);
+  }
+
+  if (spec.suggestions) {
+    /**
+     *   name: "-",
+     *   description: "Switch to the last used folder",
+     */
+    suggestions.push(...spec.suggestions);
+  }
   suggestions.forEach(suggestion => {
     let clone = template.content.cloneNode(true); // 克隆模板的内容
     let div = clone.querySelector('.suggestion'); // 获取新建的 div 元素
     div.textContent = `${suggestion.name}(${suggestion.description})`; // 设置建议的文本内容
     suggestionBox.appendChild(clone); // 将建议添加到建议列表中
   });
-
   suggestionBox.style.left = position.x + 10;
   suggestionBox.style.top = position.y + 24;
 }
