@@ -328,10 +328,11 @@ term.onData((data, event) => {
   /**
    * 终端必须处于Normal模式下才能进行输入
    */
+
   if (data === ' ') {
     const currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
     console.log(currentLineContent);
-    autoCompleteTrigger('cd');
+    autoCompleteTrigger('ls');
   } else {
     commandCacheInput += data;
   }
@@ -896,7 +897,7 @@ $('#terminal-container').contextmenu(function (e) {
 const specs = [];
 
 function loadSpecs() {
-  ['cd', 'git', 'cat'].forEach((name) => {
+  ['cd', 'git', 'cat', 'ls'].forEach((name) => {
     import(`/js/fig-autocomplete/${name}.js`).then((module) => {
       specs.push(module.default);
     });
@@ -909,10 +910,11 @@ loadSpecs();
  * 自动补全触发,执行命令/提示子命令，生成建议选项
  * @param input
  */
-function autoCompleteTrigger(input) {
+async function autoCompleteTrigger(input) {
   const spec = specs.find(spec => spec.name === input);
   if (spec) {
-    renderSuggestions(spec, calculateCursorPosition());
+    const suggestions = await createSuggestions(spec);
+    renderSuggestions(suggestions, calculateCursorPosition());
   }
 }
 
@@ -927,16 +929,12 @@ function calculateCursorPosition() {
   }
 }
 
-
 /**
- * 执行命令，获取推荐结果进行渲染
+ * 生成建议选项
  * @param spec
- * @param position
+ * @returns {Promise<*[]>}
  */
-async function renderSuggestions(spec, position) {
-  let suggestionBox = document.querySelector('.suggestion-box'); // 获取显示建议列表的 div 元素
-  suggestionBox.innerHTML = ''; // 清空之前的建议列表
-  let template = document.getElementById('suggestion-template'); // 获取模板
+async function createSuggestions(spec) {
   const suggestions = [];
 
   if (spec.args.generators) {
@@ -953,7 +951,6 @@ async function renderSuggestions(spec, position) {
       'environmentVariables': {}
     });
     console.log(res);
-    return;
   }
 
 
@@ -971,6 +968,22 @@ async function renderSuggestions(spec, position) {
      */
     suggestions.push(...spec.suggestions);
   }
+
+  if (spec.options) {
+    suggestions.push(...spec.options);
+  }
+  return suggestions;
+}
+
+/**
+ * 执行命令，获取推荐结果进行渲染
+ * @param spec
+ * @param position
+ */
+async function renderSuggestions(suggestions, position) {
+  let template = document.getElementById('suggestion-template'); // 获取模板
+  let suggestionBox = document.querySelector('.suggestion-box'); // 获取显示建议列表的 div 元素
+  suggestionBox.innerHTML = ''; // 清空之前的建议列表
   suggestions.forEach(suggestion => {
     let clone = template.content.cloneNode(true); // 克隆模板的内容
     let div = clone.querySelector('.suggestion'); // 获取新建的 div 元素
