@@ -954,6 +954,10 @@ async function createSuggestions(spec) {
   }
 
 
+  if (spec.args.template) {
+
+  }
+
   if (spec.subcommands) {
     /**
      *
