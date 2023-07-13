@@ -1,9 +1,41 @@
+/**
+ * xtermjs 自动补全插件
+ */
 export class AutoCompleteAddon {
   specs = [];
 
-  constructor(webshell) {
+  constructor(options = {}, webshell) {
     this.webshell = webshell;
+  }
+
+
+  activate(term) {
+    this.term = term;
     this.loadSpecs();
+    this.watchUserInput();
+  }
+
+  watchUserInput() {
+    let commandCacheInput = '';
+    const {term} = this;
+
+    term.onData((data, event) => {
+
+      /**
+       * 终端必须处于Normal模式下才能进行输入
+       */
+      if (data === ' ') {
+        const currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
+        console.log(currentLineContent);
+        this.autoCompleteTrigger('cd');
+      } else {
+        commandCacheInput += data;
+      }
+    });
+  }
+
+  dispose() {
+
   }
 
   /**

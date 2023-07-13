@@ -7,10 +7,6 @@ import {AutoCompleteAddon} from '/js/autocomplete-addon.js';
 
 const textEncoder = new TextEncoder();
 
-
-/**
- * 服务于 xterm-ssh2.ejs
- */
 class WebShell extends EventEmitter {
 
   constructor(term) {
@@ -125,13 +121,6 @@ const webshell = new WebShell(term);
 webshell.connect(JSON.parse(document.getElementById('proxyHost').value));
 
 
-
-/**
- * 加载自动补全规则
- * @type {*[]}
- */
-const autoCompleteAddon = new AutoCompleteAddon(webshell);
-
 /**
  * 终端会话连接与zsession
  */
@@ -201,6 +190,7 @@ term.loadAddon(serializeAddon);
 term.loadAddon(recordScreenAddon);
 term.loadAddon(canvasAddon);
 term.loadAddon(new Unicode11Addon.Unicode11Addon());
+term.loadAddon(new AutoCompleteAddon(webshell));
 
 const fitAddon = new FitAddon.FitAddon();
 
@@ -313,22 +303,8 @@ function (event) {
   return true;
 });
 
-let commandCacheInput = '';
-
 term.onData((data, event) => {
   webshell.sendData('data', data);
-
-  /**
-   * 终端必须处于Normal模式下才能进行输入
-   */
-
-  if (data === ' ') {
-    const currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
-    console.log(currentLineContent);
-    autoCompleteAddon.autoCompleteTrigger('cd');
-  } else {
-    commandCacheInput += data;
-  }
 });
 
 term.onKey(({key, domEvent}) => {
