@@ -4,7 +4,9 @@
  *
  * require: CWD支持
  *
- * echo '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' >> ~/.bashrc
+ * ## Install
+ * 1. ln -sf ../../../autocomplete/build ./static/js/fig-autocomplete
+ * 2. echo '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' >> ~/.bashrc
  */
 export class AutoCompleteAddon {
   specs = [];
