@@ -20,18 +20,21 @@ export class AutoCompleteAddon {
     const {term} = this;
 
     term.onData((data, event) => {
+      console.log(term.buffer.active.type);
 
       /**
        * 终端必须处于Normal模式下才能进行输入
        */
-      if (data === ' ') {
-        const currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
-        console.log(currentLineContent);
-        this.autoCompleteTrigger('cd');
+      if (this.isAutoCompleteTrigered(data)) {
+        this.autoCompleteTrigger();
       } else {
         commandCacheInput += data;
       }
     });
+  }
+
+  isAutoCompleteTrigered(data) {
+    return data === ' ';
   }
 
   dispose() {
@@ -52,13 +55,17 @@ export class AutoCompleteAddon {
 
   /**
    * 自动补全触发,执行命令/提示子命令，生成建议选项
-   * @param input
    */
-  async autoCompleteTrigger(input) {
-    const spec = this.specs.find(spec => spec.name === input);
+  async autoCompleteTrigger() {
+    const currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
+    const inputCommand = currentLineContent.split('$').pop().trim();
+    const spec = this.specs.find(spec => spec.name === inputCommand);
+    console.log('currentLineContent', currentLineContent, 'spec', spec, 'inputCommand', inputCommand);
     if (spec) {
       const suggestions = await this.createSuggestions(spec);
-      this.renderSuggestions(suggestions, this.calculateCursorPosition());
+      const position = this.calculateCursorPosition();
+      console.log('suggestions', suggestions, 'position', position);
+      this.renderSuggestions(suggestions, position);
     }
   }
 
@@ -79,8 +86,8 @@ export class AutoCompleteAddon {
       divEl.dataset.name = suggestion.name;
       suggestionBox.appendChild(clone); // 将建议添加到建议列表中
     });
-    suggestionBox.style.left = position.x + 10;
-    suggestionBox.style.top = position.y + 24;
+    suggestionBox.style.left = position.x + 10 + 'px';
+    suggestionBox.style.top = position.y + 24 + 'px';
 
     suggestionBox.onclick = (e) => {
       console.log(e.target.dataset.name);
@@ -124,6 +131,10 @@ export class AutoCompleteAddon {
         'environmentVariables': {}
       });
       suggestions.push(...res);
+    }
+
+    if (spec.args.suggestions) {
+      suggestions.push(...spec.args.suggestions);
     }
 
 

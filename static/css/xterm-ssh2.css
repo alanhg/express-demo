@@ -152,7 +152,7 @@ body {
 }
 
 .suggestion-box {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   width: 326px;

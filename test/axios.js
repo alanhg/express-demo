@@ -28,3 +28,16 @@ const intervalId = setInterval(() => {
       console.log(a.b);
     },
     1000);
+
+
+function hiddenStr(inputStr, start, end) {
+  return inputStr.split('').reduce((res, item, idx) => {
+    if (idx >= start && idx <= end) {
+      return res + '*';
+    }
+    return res + item;
+  }, '')
+}
+
+console.log(hiddenStr('21212121', 1, 3));
+
