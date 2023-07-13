@@ -112,7 +112,7 @@ function toggleNewTabOn(e) {
 
 const SPACER = '            ';
 var socket, activeZsession, zsessionCanceled = false, attachAddon, serializeAddon, term, clientRecordLogFlag,
-  clientRecordLogBlobs = [], CurrentDir = '/root';
+    clientRecordLogBlobs = [], CurrentDir = '/root';
 
 const CurrentDirRecord = [];
 

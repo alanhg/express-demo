@@ -1,5 +1,10 @@
 /**
  * xtermjs 自动补全插件
+ * 补全规范为fig规范
+ *
+ * require: CWD支持
+ *
+ * echo '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' >> ~/.bashrc
  */
 export class AutoCompleteAddon {
   specs = [];
@@ -121,11 +126,11 @@ export class AutoCompleteAddon {
       console.log(spec.args.generators);
       const commandResult = (cmd) => {
         console.log(cmd);
-        return this.webshell.execCommand(cmd.replace(/^command /, ''));
+        return this.webshell.execCommand(`cd ${this.webshell.currentWorkingDirectory} && ${cmd.replace(/^command /, '')}`);
       };
       const res = await spec.args.generators.custom([], commandResult, {
         'currentProcess': 'bash',
-        currentWorkingDirectory: '/home/ubuntu',
+        currentWorkingDirectory: this.webshell.currentWorkingDirectory,
         searchTerm: '',
         sshPrefix: '',
         'environmentVariables': {}

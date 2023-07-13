@@ -12,6 +12,7 @@ class WebShell extends EventEmitter {
   constructor(term) {
     super();
     this.term = term;
+    this.currentWorkingDirectory = '';
   }
 
   connect(opts) {
@@ -396,6 +397,7 @@ function feedFromSession(buffer) {
     const currenDirArr = dataStr.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
     if (currenDirArr?.length >= 3) {
       CurrentDir = currenDirArr[2];
+      webshell.currentWorkingDirectory = currenDirArr[2];
     }
   }
 }
