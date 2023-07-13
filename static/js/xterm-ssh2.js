@@ -190,7 +190,7 @@ term.loadAddon(serializeAddon);
 term.loadAddon(recordScreenAddon);
 term.loadAddon(canvasAddon);
 term.loadAddon(new Unicode11Addon.Unicode11Addon());
-term.loadAddon(new AutoCompleteAddon(webshell));
+term.loadAddon(new AutoCompleteAddon({}, webshell));
 
 const fitAddon = new FitAddon.FitAddon();
 
