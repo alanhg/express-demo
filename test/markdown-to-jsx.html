@@ -6,5 +6,16 @@
 </head>
 <body>
 
+
+<script>
+  fetch('http://127.0.0.1:8000')
+      .then(response => response.text())
+      .then(text => {
+        const ele = document.createElement('div')
+        ele.innerHTML = text
+        document.body.appendChild(ele)
+      });
+</script>
+
 </body>
 </html>
