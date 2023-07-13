@@ -157,7 +157,17 @@ body {
   top: 0;
   width: 326px;
   max-height: 250px;
-  background-color: blue;
+  background-color: white;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.suggestion-item {
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #eee;
 }
