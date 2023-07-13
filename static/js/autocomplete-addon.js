@@ -91,6 +91,7 @@ export class AutoCompleteAddon {
       divEl.dataset.name = suggestion.name;
       suggestionBox.appendChild(clone); // 将建议添加到建议列表中
     });
+
     suggestionBox.style.left = position.x + 10 + 'px';
     suggestionBox.style.top = position.y + 24 + 'px';
 
@@ -122,43 +123,39 @@ export class AutoCompleteAddon {
   async createSuggestions(spec) {
     const suggestions = [];
 
-    if (spec.args.generators) {
-      console.log(spec.args.generators);
-      const commandResult = (cmd) => {
-        console.log(cmd);
-        return this.webshell.execCommand(`cd ${this.webshell.currentWorkingDirectory} && ${cmd.replace(/^command /, '')}`);
-      };
-      const res = await spec.args.generators.custom([], commandResult, {
-        'currentProcess': 'bash',
-        currentWorkingDirectory: this.webshell.currentWorkingDirectory,
-        searchTerm: '',
-        sshPrefix: '',
-        'environmentVariables': {}
-      });
-      suggestions.push(...res);
-    }
+    if (spec.args) {
+      if (spec.args.generators?.custom) {
+        console.log(spec.args.generators);
+        const commandResult = (cmd) => {
+          console.log(cmd);
+          return this.webshell.execCommand(`cd ${this.webshell.currentWorkingDirectory} && ${cmd.replace(/^command /, '')}`);
+        };
+        const res = await spec.args.generators.custom([], commandResult, {
+          'currentProcess': 'bash',
+          currentWorkingDirectory: this.webshell.currentWorkingDirectory,
+          searchTerm: '',
+          sshPrefix: '',
+          'environmentVariables': {}
+        });
+        suggestions.push(...res);
+      }
 
-    if (spec.args.suggestions) {
-      suggestions.push(...spec.args.suggestions);
-    }
+      if (spec.args.suggestions) {
+        suggestions.push(...spec.args.suggestions);
+      }
 
+      if (spec.args.template) {
+        if (spec.args.template === 'filepaths') {
 
-    if (spec.args.template) {
-
+        }
+      }
     }
 
     if (spec.subcommands) {
-      /**
-       *
-       */
       suggestions.push(...spec.subcommands);
     }
 
     if (spec.suggestions) {
-      /**
-       *   name: "-",
-       *   description: "Switch to the last used folder",
-       */
       suggestions.push(...spec.suggestions);
     }
 
