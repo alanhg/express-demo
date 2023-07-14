@@ -137,7 +137,7 @@ let zsentry = new Zmodem.Sentry({
   },
 
   sender: (data) => {
-    webshell.send(new Uint8Array(data));
+    webshell.sendData(new Uint8Array(data));
   },
 
   on_retract: function _on_retract() {
