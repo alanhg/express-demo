@@ -31,6 +31,11 @@ class WebShell extends EventEmitter {
       if (typeof evt.data === 'string') {
         const options = parseData(evt);
         if (options.type === 'data') {
+          const currenDirArr = options.data.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
+          if (currenDirArr?.length >= 3) {
+            CurrentDir = currenDirArr[2];
+            webshell.currentWorkingDirectory = currenDirArr[2];
+          }
           term.write(options.data);
         } else if (options.type === 'search') {
           if (options.data.length) {
@@ -388,17 +393,6 @@ function feedFromSession(buffer) {
     } catch (e) {
       isZsession = false
       activeZsession && activeZsession.abort()
-    }
-  }
-  if (!isZsession) {
-    const dataStr = Uint8ArrayToString(new Uint8Array(buffer));
-    if (clientRecordLogFlag) {
-      clientRecordLogBlobs.push(dataStr);
-    }
-    const currenDirArr = dataStr.match(/(;CurrentDir=)([^;\u0007]+)/); // 根据PS1获取CWD
-    if (currenDirArr?.length >= 3) {
-      CurrentDir = currenDirArr[2];
-      webshell.currentWorkingDirectory = currenDirArr[2];
     }
   }
 }

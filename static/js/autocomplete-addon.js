@@ -136,8 +136,10 @@ export class AutoCompleteAddon {
       if (spec.args.generators?.custom) {
         console.log(spec.args.generators);
         const commandResult = (cmd) => {
-          console.log(cmd);
-          return this.webshell.execCommand(`cd ${this.webshell.currentWorkingDirectory} && ${cmd.replace(/^command /, '')}`);
+          let execCommand = this.webshell.execCommand(`cd ${this.webshell.currentWorkingDirectory} && ${cmd.replace(/^command /, '')}`);
+          return execCommand.then(res => {
+            return res.data;
+          });
         };
         const res = await spec.args.generators.custom([], commandResult, {
           'currentProcess': 'bash',
