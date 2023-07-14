@@ -32,7 +32,7 @@ export class AutoCompleteAddon {
       /**
        * 终端必须处于Normal模式下才能进行输入
        */
-      if (this.isAutoCompleteTrigered(data)) {
+      if (this.isAutoCompleteTrigerred(data)) {
         this.autoCompleteTrigger();
       } else {
         commandCacheInput += data;
@@ -40,7 +40,7 @@ export class AutoCompleteAddon {
     });
   }
 
-  isAutoCompleteTrigered(data) {
+  isAutoCompleteTrigerred(data) {
     return data === ' ';
   }
 
