@@ -30,7 +30,10 @@ class WebShell extends EventEmitter {
     socket.addEventListener('message', (evt) => {
       if (typeof evt.data === 'string') {
         const options = parseData(evt);
-        if (options.type === 'search') {
+        if (options.type === 'data') {
+          term.write(options.data);
+        }
+        else if (options.type === 'search') {
           if (options.data.length) {
             options.data = options.data.replace(/\n$/, '');
             updateSearchResult(options.data.split('\n').map(item => {
@@ -41,7 +44,7 @@ class WebShell extends EventEmitter {
           }
 
         }
-        if (options.type === 'codeserver') {
+        else if (options.type === 'codeserver') {
           /**
            * workspace
            * folder参数控制缺省打开文件夹,不传则走前端存储的最后打开文件夹
