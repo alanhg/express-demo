@@ -76,6 +76,7 @@ export class AutoCompleteAddon {
       const suggestions = await this.createSuggestions(spec);
       const position = this.calculateCursorPosition();
       console.log('suggestions', suggestions, 'position', position);
+      this.term.blur();
       this.renderSuggestions(suggestions, position);
     }
   }
