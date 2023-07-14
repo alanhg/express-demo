@@ -49,11 +49,14 @@ export class AutoCompleteAddon {
   }
 
   /**
-   * 加载规范
+   * 加载规范及相关文件
    */
   loadSpecs() {
-    ['cd', 'git', 'cat', 'ls'].forEach((name) => {
-      import(`/js/fig-autocomplete/${name}.js`).then((module) => {
+    [].forEach((name) => {
+      import(`/js/fig-autocomplete/${name}.js`);
+    });
+    autocompleteSpecArr.forEach((name) => {
+      import(`/js/fig-autocomplete/${name}`).then((module) => {
         this.specs.push(module.default);
       });
     });

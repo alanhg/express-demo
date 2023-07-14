@@ -11,7 +11,7 @@ router.use('/test', testRouter);
 const apiRouter = require('./api');
 const authRouter = require('./auth');
 const webShellRouter = require('./webshell');
-const path = require("path");
+const path = require('path');
 const {connectOpts} = require('../constants/config');
 var terminals = {}, logs = {};
 
@@ -38,12 +38,12 @@ router.get('/', (req, res) => {
 });
 
 router.get('/ws', (req, res) => {
-  const ws = new WebSocket(``, "rust");
+  const ws = new WebSocket(``, 'rust');
   ws.addEventListener('open', function () {
     console.info('WebSocket connected');
     let json = JSON.stringify({
-      Type: "PtyStart", Data: {
-        SessionId: "1234", Cols: 100, Rows: 50,
+      Type: 'PtyStart', Data: {
+        SessionId: '1234', Cols: 100, Rows: 50,
       }
     });
     ws.send(json);
@@ -70,10 +70,10 @@ router.get('/shortcuts', (req, res) => {
 router.post('/xterm', (req, res) => {
   let shell = 'bash';// zsh,bash
   var cols = parseInt(req.query.cols), rows = parseInt(req.query.rows),
-    term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : shell, [], {
-      encoding: null, name: 'xterm-color', cols: cols || 80, rows: rows || 24, cwd: process.env.PWD + '/_cache', // // 首次进入系统目录
-      env: process.env
-    });
+      term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : shell, [], {
+        encoding: null, name: 'xterm-color', cols: cols || 80, rows: rows || 24, cwd: process.env.PWD + '/_cache', // // 首次进入系统目录
+        env: process.env
+      });
 
   console.log('Created terminal with PID: ' + term.pid);
   terminals[term.pid] = term;
@@ -84,7 +84,7 @@ router.post('/xterm', (req, res) => {
 
 router.post('/xterm/:pid/size', function (req, res) {
   var pid = parseInt(req.params.pid), cols = parseInt(req.query.cols), rows = parseInt(req.query.rows),
-    term = terminals[pid];
+      term = terminals[pid];
 
   term.resize(cols, rows);
   console.log('Resized terminal ' + pid + ' to ' + cols + ' cols and ' + rows + ' rows.');
@@ -93,19 +93,20 @@ router.post('/xterm/:pid/size', function (req, res) {
 
 
 router.get('/xterm-ssh2', (req, res) => {
+  let autocompleteSpecs = fs.readdirSync(path.join(__dirname, '../static/js/fig-autocomplete'));
+  autocompleteSpecs = autocompleteSpecs.filter(item => item.endsWith('.js'));
   res.render('xterm-ssh2', {
-    connectOpts
+    connectOpts,
+    autocompleteSpecs
   });
 });
 
 router.get('/openai', (req, res) => {
-  res.render('openai', {
-  });
+  res.render('openai', {});
 });
 
 router.get('/canvas', (req, res) => {
-  res.render('canvas', {
-  });
+  res.render('canvas', {});
 });
 
 router.ws('/xterm/:pid', (ws, req) => {

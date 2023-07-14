@@ -122,6 +122,8 @@
 <script>
   const connectOpts =<%- JSON.stringify(connectOpts) %>;//连接参数
 
+  const autocompleteSpecArr = JSON.parse('<%- JSON.stringify(autocompleteSpecs) %>');
+
   async function readFromClipboard() {
     const doSystemPaste = () => {
       const textarea = document.createElement('textarea');
