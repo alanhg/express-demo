@@ -32,14 +32,18 @@ export class AutoCompleteAddon {
       /**
        * 终端必须处于Normal模式下才能进行输入
        */
-      if (this.isAutoCompleteTrigerred(data)) {
-        this.autoCompleteTrigger();
-      } else {
-        commandCacheInput += data;
+
+      if (term.buffer.active.type === 'normal') {
+        if (this.isAutoCompleteTrigerred(data)) {
+          this.autoCompleteTrigger();
+        }
       }
     });
   }
 
+  /**
+   * 空格之后
+   */
   isAutoCompleteTrigerred(data) {
     return data === ' ';
   }
@@ -70,8 +74,12 @@ export class AutoCompleteAddon {
     let currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
     currentLineContent = currentLineContent.substring(0, term.buffer.active.cursorX);
     console.log('currentLineContent', currentLineContent);
-    const inputCommand = currentLineContent.split('$').pop().trim();
-    const spec = this.specs.find(spec => spec.name === inputCommand);
+    const inputEntireCommand = currentLineContent.split('$').pop().trim();
+    /**
+     * cd git => cd
+     * git --help => git
+     */
+    const spec = this.specs.find(spec => spec.name === inputEntireCommand);
     if (spec) {
       const suggestions = await this.createSuggestions(spec);
       const position = this.calculateCursorPosition();
