@@ -171,3 +171,8 @@ body {
 .suggestion-item:hover {
   background-color: #eee;
 }
+
+.suggestion-item.active {
+  background-color: blue;
+  color: white;
+}

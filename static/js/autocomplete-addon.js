@@ -67,10 +67,11 @@ export class AutoCompleteAddon {
    * 自动补全触发,执行命令/提示子命令，生成建议选项
    */
   async autoCompleteTrigger() {
-    const currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
+    let currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
+    currentLineContent = currentLineContent.substring(0, term.buffer.active.cursorX);
+    console.log('currentLineContent', currentLineContent);
     const inputCommand = currentLineContent.split('$').pop().trim();
     const spec = this.specs.find(spec => spec.name === inputCommand);
-    console.log('currentLineContent', currentLineContent, 'spec', spec, 'inputCommand', inputCommand);
     if (spec) {
       const suggestions = await this.createSuggestions(spec);
       const position = this.calculateCursorPosition();
@@ -82,24 +83,27 @@ export class AutoCompleteAddon {
 
   /**
    * 执行命令，获取推荐结果进行渲染
-   * @param spec
+   * @param suggestions
    * @param position
    */
   async renderSuggestions(suggestions, position) {
     let template = document.getElementById('suggestion-template'); // 获取模板
     let suggestionBox = document.querySelector('.suggestion-box'); // 获取显示建议列表的 div 元素
     suggestionBox.innerHTML = ''; // 清空之前的建议列表
-    suggestions.forEach(suggestion => {
+    suggestions.forEach((suggestion, idx) => {
       let clone = template.content.cloneNode(true); // 克隆模板的内容
       let divEl = clone.querySelector('.suggestion-item'); // 获取新建的 divEl 元素
       divEl.textContent = `${suggestion.name}(${suggestion.description})`; // 设置建议的文本内容
       divEl.dataset.name = suggestion.name;
+      if (idx === 0) {
+        divEl.classList.add('active');
+        divEl.focus();
+      }
       suggestionBox.appendChild(clone); // 将建议添加到建议列表中
     });
 
     suggestionBox.style.left = position.x + 10 + 'px';
     suggestionBox.style.top = position.y + 24 + 'px';
-
     suggestionBox.onclick = (e) => {
       console.log(e.target.dataset.name);
       this.webshell.sendData('data', e.target.dataset.name);
