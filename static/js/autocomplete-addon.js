@@ -142,6 +142,8 @@ export class AutoCompleteAddon {
    * 生成建议选项
    * @param spec
    * @returns {Promise<*[]>}
+   *
+   * spec.args.generators.trigger判断是否需要处理缓存
    */
   async createSuggestions(spec) {
     const suggestions = [];
