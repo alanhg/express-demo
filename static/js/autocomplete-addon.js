@@ -9,6 +9,7 @@
  * 2. echo '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' >> ~/.bashrc
  */
 export class AutoCompleteAddon {
+  // 已加载的规范
   specs = [];
 
   constructor(options = {}, webshell) {
@@ -89,7 +90,6 @@ export class AutoCompleteAddon {
       const suggestions = await this.createSuggestions(spec);
       const position = this.calculateCursorPosition();
       console.log('suggestions', suggestions, 'position', position);
-      this.term.blur();
       this.renderSuggestions(suggestions, position);
     }
   }
