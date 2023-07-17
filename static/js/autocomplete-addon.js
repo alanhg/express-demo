@@ -23,7 +23,6 @@ export class AutoCompleteAddon {
   }
 
   watchUserInput() {
-    let commandCacheInput = '';
     const {term} = this;
 
     term.onData((data, event) => {
