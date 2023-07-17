@@ -107,7 +107,7 @@ export class AutoCompleteAddon {
     suggestions.forEach((suggestion, idx) => {
       let clone = template.content.cloneNode(true); // 克隆模板的内容
       let divEl = clone.querySelector('.suggestion-item'); // 获取新建的 divEl 元素
-      divEl.textContent = `${suggestion.name}(${suggestion.description})`; // 设置建议的文本内容
+      divEl.textContent = `${suggestion.name}${suggestion.description ? '(' + suggestion.description + ')' : ''}`; // 设置建议的文本内容
       divEl.dataset.name = suggestion.name;
       if (idx === 0) {
         divEl.classList.add('active');
@@ -169,7 +169,8 @@ export class AutoCompleteAddon {
       }
 
       if (spec.args.template) {
-        if (spec.args.template === 'filepaths') {
+        if (typeof spec.args.template === 'string'
+            && spec.args.template === 'filepaths') {
 
         }
       }
