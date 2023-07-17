@@ -167,7 +167,7 @@ export class AutoCompleteAddon {
       }
 
       if (spec.args.suggestions) {
-        suggestions.push(...spec.args.suggestions);
+        suggestions.push(...spec.args.suggestions.filter(item => item.hidden !== true));
       }
 
       if (spec.args.template) {
