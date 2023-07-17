@@ -74,12 +74,18 @@ export class AutoCompleteAddon {
     let currentLineContent = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString();
     currentLineContent = currentLineContent.substring(0, term.buffer.active.cursorX);
     console.log('currentLineContent', currentLineContent);
+
     const inputEntireCommand = currentLineContent.split('$').pop().trim();
+
+    const inputCommand = inputEntireCommand.split(' ').shift().trim();
+
+    console.log('inputEntireCommand', inputEntireCommand, 'inputCommand', inputCommand);
+
     /**
      * cd git => cd
      * git --help => git
      */
-    const spec = this.specs.find(spec => spec.name === inputEntireCommand);
+    const spec = this.specs.find(spec => spec.name === inputCommand);
     if (spec) {
       const suggestions = await this.createSuggestions(spec);
       const position = this.calculateCursorPosition();
