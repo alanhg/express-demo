@@ -148,3 +148,57 @@ function getProgressBar(total, current) {
   const progressBar = '█'.repeat(progress) + '░'.repeat(empty);
   return `(${progressBar}) ${((current / total) * 100).toFixed(2)}%`;
 }
+
+async function readFromClipboard() {
+  const doSystemPaste = () => {
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+    // 隐藏此输入框
+    textarea.style.position = 'fixed';
+    textarea.style.visibility = 'hidden';
+    textarea.style.top = '10px';
+    // 选中
+    textarea.focus();
+    const res = document.execCommand('paste', null, null);
+    const paste = textarea.value;
+    document.body.removeChild(textarea);
+    if (res) {
+      return paste;
+    }
+    throw new Error();
+  };
+  if (navigator.clipboard) {
+    return navigator.clipboard.readText().catch(() => doSystemPaste());
+  }
+  return doSystemPaste();
+}
+
+async function copyToClipboard(content) {
+  const doSystemCopy = () => {
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+    // 隐藏此输入框
+    textarea.style.position = 'fixed';
+    textarea.style.visibility = 'hidden';
+    textarea.style.top = '10px';
+    // 赋值
+    textarea.value = content;
+    // 选中
+    textarea.focus();
+    textarea.select();
+    // 复制
+    const res = document.execCommand('copy', false);
+    // 移除输入框
+    document.body.removeChild(textarea);
+    if (res) {
+      return true;
+    }
+    throw new Error();
+  };
+
+  if (navigator.clipboard) {
+    return navigator.clipboard.writeText(content).then(() => true)
+      .catch(() => doSystemCopy());
+  }
+  return doSystemCopy();
+}

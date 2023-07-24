@@ -234,6 +234,12 @@ function (event) {
     return true;
   }
 
+  if ('c' === event.key && (isMac ? event.metaKey : event.ctrlKey) && term.getSelection()) {
+    event.preventDefault();
+    copyToClipboard(term.getSelection());
+    return true;
+  }
+
   if (['ArrowLeft', 'ArrowRight'].indexOf(event.key) > -1 && event.ctrlKey && event.shiftKey) {
     console.log('左右tab切换-tab');
     return false;
