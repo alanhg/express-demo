@@ -1,9 +1,9 @@
 /**
  * xterm-ssh2.ejs
  */
-import {SearchAddonBar} from '/js/search-addon-bar.js';
-import {RecordScreenAddon} from '/js/record-screen-addon.js';
-import {AutoCompleteAddon} from '/js/autocomplete-addon.js';
+import { SearchAddonBar } from '/js/search-addon-bar.js';
+import { RecordScreenAddon } from '/js/record-screen-addon.js';
+import { AutoCompleteAddon } from '/js/autocomplete-addon.js';
 
 const textEncoder = new TextEncoder();
 
@@ -206,6 +206,11 @@ fitAddon.fit();
 
 term.unicode.activeVersion = '11';
 
+term.textarea.addEventListener('paste', (e) => {
+  let originalContent = e.clipboardData.getData('text'); // Get the original content
+  console.log('originalContent', originalContent);
+});
+
 term.attachCustomKeyEventHandler(/**
  *
  * @param event
@@ -219,6 +224,14 @@ function (event) {
   if ('`' === event.key && event.ctrlKey) {
     console.log('ai command search???');
     return false;
+  }
+
+  if ('v' === event.key && (isMac ? event.metaKey : event.ctrlKey)) {
+    event.preventDefault();
+    readFromClipboard().then((value) => {
+      term.paste(value.replace(/\n+$/, ''));
+    });
+    return true;
   }
 
   if (['ArrowLeft', 'ArrowRight'].indexOf(event.key) > -1 && event.ctrlKey && event.shiftKey) {
