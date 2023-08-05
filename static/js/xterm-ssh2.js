@@ -222,12 +222,12 @@ function (event) {
   }
 
 
-  if (isMac ? ('ArrowLeft' === event.key && event.metaKey) : ('Home' === event.key)) {
+  if (term.buffer.active.type === 'normal' && (isMac ? ('ArrowLeft' === event.key && event.metaKey) : ('Home' === event.key))) {
     webshell.sendData('data', '\x1bOH');
     return false;
   }
 
-  if (isMac ? ('ArrowRight' === event.key && event.metaKey) : ('End' === event.key)) {
+  if (term.buffer.active.type === 'normal' && (isMac ? ('ArrowRight' === event.key && event.metaKey) : ('End' === event.key))) {
     webshell.sendData('data', '\x1bOF');
     return false;
   }
