@@ -221,6 +221,17 @@ function (event) {
     return;
   }
 
+
+  if (isMac ? ('ArrowLeft' === event.key && event.metaKey) : ('Home' === event.key)) {
+    webshell.sendData('data', '\x1bOH');
+    return false;
+  }
+
+  if (isMac ? ('ArrowRight' === event.key && event.metaKey) : ('End' === event.key)) {
+    webshell.sendData('data', '\x1bOF');
+    return false;
+  }
+
   if ('`' === event.key && event.ctrlKey) {
     console.log('ai command search???');
     return false;
