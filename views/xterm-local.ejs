@@ -162,7 +162,7 @@
     fontSize: 13,
     fontWeight: 'normal',
     letterSpacing: 0,
-    cursorBlink: true,
+    cursorBlink: false,
     theme: {
       // selection: '#0000ff55',
       foreground: '#a5a2a2',
@@ -197,7 +197,7 @@
     minimumContrastRatio: 1,
     allowProposedApi: true,
     // 开启透明支持-支持CSS实现终端背景图设定
-    allowTransparency: true
+    allowTransparency: false
   };
   var term = new Terminal(terminalOptions);
   window.term = term;

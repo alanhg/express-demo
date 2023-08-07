@@ -104,5 +104,14 @@
     // and stop event from bubbling
     return false;
   });
+
+  mousetrap.bind('', function (event, combo) {
+    console.log('没有绑定????', event, combo);
+    return false;
+  });
+  mousetrap.bind([], function (event, combo) {
+    console.log('没有绑定-222????', event, combo);
+    return false;
+  });
 </script>
 </body>
