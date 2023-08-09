@@ -41,66 +41,66 @@ router.get('/b', function (req, res) {
 });
 
 router.get('/protected',
-    function (req, res) {
-      if (!req.user.admin) return res.sendStatus(401);
-      res.sendStatus(200);
-    });
+  function (req, res) {
+    if (!req.user.admin) return res.sendStatus(401);
+    res.sendStatus(200);
+  });
 
 router.use('/token', function (req, res) {
-      res.json({a: 1});
-    }
+    res.json({a: 1});
+  }
 );
 router.get('/crypto',
-    function (req, res) {
-      const secret = 'abcdefg';
-      var cipher = crypto.createCipher('aes-256-cbc', 'testkey');
-      var text = JSON.stringify({
-        username: 'staffchina',
-        password: 'pass#123kland',
-        appid: '824228206'
-      });
-      var crypted = cipher.update(text, 'utf8', 'hex');
-      crypted += cipher.final('hex');
-      console.log('加密后的文本：' + crypted);
-      res.send(Base64.encode(crypted));
-    }
+  function (req, res) {
+    const secret = 'abcdefg';
+    var cipher = crypto.createCipher('aes-256-cbc', 'testkey');
+    var text = JSON.stringify({
+      username: 'staffchina',
+      password: 'pass#123kland',
+      appid: '824228206'
+    });
+    var crypted = cipher.update(text, 'utf8', 'hex');
+    crypted += cipher.final('hex');
+    console.log('加密后的文本：' + crypted);
+    res.send(Base64.encode(crypted));
+  }
 );
 router.get('/decrypto',
-    function (req, res) {
-      var crypted = Base64.decode(req.query.crypted);
-      var decipher = crypto.createDecipher('aes-256-cbc', 'testkey');
-      var dec = decipher.update(crypted, 'hex', 'utf8');
-      dec += decipher.final('utf8');
-      console.log('解密的文本：' + dec);
-      res.send(dec);
-    }
+  function (req, res) {
+    var crypted = Base64.decode(req.query.crypted);
+    var decipher = crypto.createDecipher('aes-256-cbc', 'testkey');
+    var dec = decipher.update(crypted, 'hex', 'utf8');
+    dec += decipher.final('utf8');
+    console.log('解密的文本：' + dec);
+    res.send(dec);
+  }
 );
 
 router.get('/encodeURI',
-    function (req, res) {
-      var str = 'http://law.wkinfo.com.cn/legislation';
-      res.redirect(str);
-      // res.send(encodeURI(str));
-    }
+  function (req, res) {
+    var str = 'http://law.wkinfo.com.cn/legislation';
+    res.redirect(str);
+    // res.send(encodeURI(str));
+  }
 );
 
 router.get('/tips',
-    function (req, res) {
-      res.json([req.query.q, ['firefox', 'first choice', 'mozilla firefox']]);
-    }
+  function (req, res) {
+    res.json([req.query.q, ['firefox', 'first choice', 'mozilla firefox']]);
+  }
 );
 
 /**
  * 登录
  */
 router.post('/login',
-    function (req, res) {
-      console.log(req.headers);
-      let rememberMe = req.body['rememberMe'];
-      const authToken = rememberMe ? jwt.sign({username: req.body.username}, config.server.secret, {expiresIn: config.ttl.rememberMe}) : jwt.sign({username: req.body.username}, config.server.secret);
-      token.add(authToken);
-      return res.json({token: authToken});
-    }
+  function (req, res) {
+    console.log(req.headers);
+    let rememberMe = req.body['rememberMe'];
+    const authToken = rememberMe ? jwt.sign({username: req.body.username}, config.server.secret, {expiresIn: config.ttl.rememberMe}) : jwt.sign({username: req.body.username}, config.server.secret);
+    token.add(authToken);
+    return res.json({token: authToken});
+  }
 );
 
 /**
@@ -125,6 +125,13 @@ router.post('/upload-file', function (req, res) {
   const buff = new Buffer(req.body.file, 'base64');
   fs.writeFileSync(`./test.${req.body.fileType === 'zip' ? 'zip' : 'sol'}`, buff);
   res.json('success');
+});
+
+
+router.get('/encode', function (req, res) {
+  res.json({
+    params: req.query
+  });
 });
 
 /**

@@ -109,6 +109,11 @@ router.get('/canvas', (req, res) => {
   res.render('canvas', {});
 });
 
+
+router.get('/encode', (req, res) => {
+  res.render('encode', {});
+});
+
 router.ws('/xterm/:pid', (ws, req) => {
   var term = terminals[parseInt(req.params.pid)];
   ws.send(logs[term.pid]);
