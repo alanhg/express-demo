@@ -8,7 +8,7 @@ const config = require('../config');
 const Base64 = require('js-base64').Base64;
 const openaiBot = require('../lib/openai');
 const unlessPath = [{url: '/api/login', methods: ['POST']}];
-
+const http = require('http');
 const fs = require('fs');
 var crypto = require('crypto');
 router.put('/a', function (req, res) {
@@ -21,6 +21,12 @@ router.put('/a', function (req, res) {
 router.get('/a', function (req, res) {
   res.json({
     value: 1
+  });
+});
+
+router.get('/say-name', function (req, res) {
+  res.json({
+    params: req.query
   });
 });
 
@@ -129,8 +135,25 @@ router.post('/upload-file', function (req, res) {
 
 
 router.get('/encode', function (req, res) {
-  res.json({
-    params: req.query
+  http.get('http://127.0.0.1:8000/api/say-name?name=你好 $我是xxx', function (resMsg) {
+    let rawData = '';
+    resMsg.on('data', (chunk) => {
+      rawData += chunk;
+    });
+    resMsg.on('end', () => {
+      try {
+        const parsedData = JSON.parse(rawData);
+        console.log(parsedData);
+        res.json({
+          params: parsedData
+        });
+      } catch (e) {
+        console.error();
+        res.json({
+          params: e.message
+        });
+      }
+    });
   });
 });
 
