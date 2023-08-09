@@ -1,5 +1,6 @@
 // const http = require('http');
 const WebSocket = require('ws');
+const qs = require('querystring');
 
 // http.get(
 //   'http://127.0.0.1:8000/api/say-name?name=你好【 】我是xxx',
@@ -20,7 +21,7 @@ const WebSocket = require('ws');
 // );
 
 const ws = new WebSocket(
-  'ws://127.0.0.1:8000/encode-ws?name=你好 $$$$【 】我是xxx'
+  `ws://127.0.0.1:8000/encode-ws?name=你好${qs.escape('&b=')}$$$$=【 】我是xxx`
 );
 
 ws.on('open', function open() {
