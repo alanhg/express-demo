@@ -70,10 +70,10 @@ router.get('/shortcuts', (req, res) => {
 router.post('/xterm', (req, res) => {
   let shell = 'bash';// zsh,bash
   var cols = parseInt(req.query.cols), rows = parseInt(req.query.rows),
-      term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : shell, [], {
-        encoding: null, name: 'xterm-color', cols: cols || 80, rows: rows || 24, cwd: process.env.PWD + '/_cache', // // 首次进入系统目录
-        env: process.env
-      });
+    term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : shell, [], {
+      encoding: null, name: 'xterm-color', cols: cols || 80, rows: rows || 24, cwd: process.env.PWD + '/_cache', // // 首次进入系统目录
+      env: process.env
+    });
 
   console.log('Created terminal with PID: ' + term.pid);
   terminals[term.pid] = term;
@@ -84,7 +84,7 @@ router.post('/xterm', (req, res) => {
 
 router.post('/xterm/:pid/size', function (req, res) {
   var pid = parseInt(req.params.pid), cols = parseInt(req.query.cols), rows = parseInt(req.query.rows),
-      term = terminals[pid];
+    term = terminals[pid];
 
   term.resize(cols, rows);
   console.log('Resized terminal ' + pid + ' to ' + cols + ' cols and ' + rows + ' rows.');
@@ -143,6 +143,15 @@ router.get('/css', (req, res) => {
 
 router.get('/tke', (req, res) => {
   res.render('tke');
+});
+
+router.ws('/encode-ws', (ws, req) => {
+  ws.send(JSON.stringify(req.query || {}));
+  ws.on('message', function incoming(message) {
+  });
+  ws.on('error', function error(err) {
+    console.error(err);
+  });
 });
 
 module.exports = router;
