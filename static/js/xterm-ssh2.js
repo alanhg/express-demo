@@ -1,9 +1,8 @@
 /**
  * xterm-ssh2.ejs
  */
-import { SearchAddonBar } from '/js/search-addon-bar.js';
-import { RecordScreenAddon } from '/js/record-screen-addon.js';
-import { AutoCompleteAddon } from '/js/autocomplete-addon.js';
+import {SearchAddonBar} from '/js/search-addon-bar.js';
+import {RecordScreenAddon} from '/js/record-screen-addon.js';
 
 const textEncoder = new TextEncoder();
 
@@ -197,7 +196,7 @@ term.loadAddon(serializeAddon);
 term.loadAddon(recordScreenAddon);
 term.loadAddon(canvasAddon);
 term.loadAddon(new Unicode11Addon.Unicode11Addon());
-term.loadAddon(new AutoCompleteAddon({}, webshell));
+// term.loadAddon(new AutoCompleteAddon({}, webshell));
 
 const fitAddon = new FitAddon.FitAddon();
 
@@ -884,5 +883,10 @@ $('#terminal-container').contextmenu(function (e) {
   ContextMenu.render(e, menu, this); //开始渲染
 });
 
-
+document.querySelector('#executeCommandBtn').onclick= function () {
+  let textEl = document.getElementById('executeCommand');
+  webshell.execCommand(textEl.value).then(({data})=>{
+    textEl.value=data;
+  });
+}
 
