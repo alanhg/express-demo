@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <script>
+      if (location.protocol !== "https:") {
+        location.protocol = "https:";
+      }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>Keyboard Lock Demo</title>
+
+    <style>
+
+        /* CSS files add styling rules to your content */
+
+        :root {
+            color-scheme: dark light;
+        }
+
+        html {
+            display: flex;
+            justify-content: center;
+        }
+
+        body {
+            font-family: helvetica, arial, sans-serif;
+            margin: 2em;
+        }
+
+        main {
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #373fff;
+        }
+
+        button {
+            display: block;
+            margin-block: 1rem;
+            width: 100%;
+        }
+
+        p, div {
+            margin-block-end: 2.5rem;
+        }
+
+        kbd {
+            outline: solid 1px gray;
+            background-color: lightgray;
+            color: black;
+            padding-inline: 0.25rem;
+            font-family: monospace;
+        }
+
+        .info {
+            color: red;
+        }
+    </style>
+
+
+</head>
+<body>
+<main>
+    <h1>Keyboard Lock Demo</h1>
+
+    <p>
+        Press the button to toggle full screen mode.
+        <button id="fullscreen" type="button">Enter full screen</button>
+    </p>
+
+    <div hidden>
+        Press the button to toggle the keyboard lock. When the keyboard lock is
+        active, try pressing <kbd>Command</kbd>&nbsp;+&nbsp;<kbd>T</kbd> (new
+        tab) or <kbd>Command</kbd>&nbsp;+&nbsp;<kbd>N</kbd> (new window). It
+        won't work when the keyboard lock is active.
+        <button id="keyboard" type="button">Activate keyboard lock</button>
+        <div>
+            Hold the <kbd>Esc</kbd> key for two seconds to exit full screen.
+        </div>
+    </div>
+    <div class="info" hidden>
+        The keyboard lock has captured this key or key combination.
+    </div>
+</main>
+<script>
+  navigator.keyboard.lock();
+
+
+  if (window.self === window.top) {
+    if (!("keyboard" in navigator)) {
+      alert("Your browser does not support the Keyboard Lock API.");
+    }
+  }
+
+  const fullscreenButton = document.querySelector("#fullscreen");
+  const keyboardButton = document.querySelector("#keyboard");
+  const body = document.body;
+  const div = document.querySelector("div");
+  const info = document.querySelector(".info");
+
+  const ENTER_FULLSCREEN = "Enter full screen";
+  const LEAVE_FULLSCREEN = "Leave full screen";
+  const ACTIVATE_KEYBOARD_LOCK = "Activate keyboard lock";
+  const DEACTIVATE_KEYBOARD_LOCK = "Dectivate keyboard lock";
+
+  const LOCKED_KEYS = ["MetaLeft", "MetaRight", "Tab", "KeyN", "KeyT", "Escape"];
+
+  let lock = false;
+
+  fullscreenButton.addEventListener("click", async () => {
+    if (window.self !== window.top) {
+      window.open(location.href, "", "noopener,noreferrer");
+      return;
+    }
+    try {
+      if (!document.fullscreen) {
+        await document.documentElement.requestFullscreen();
+        fullscreenButton.textContent = LEAVE_FULLSCREEN;
+        return;
+      }
+      await document.exitFullscreen();
+      fullscreenButton.textContent = ENTER_FULLSCREEN;
+    } catch (err) {
+      fullscreenButton.textContent = ENTER_FULLSCREEN;
+      alert(`${err.name}: ${err.message}`);
+    }
+  });
+
+  keyboardButton.addEventListener("click", async () => {
+    try {
+      if (!lock) {
+        await navigator.keyboard.lock();
+        lock = true;
+        keyboardButton.textContent = DEACTIVATE_KEYBOARD_LOCK;
+        return;
+      }
+      navigator.keyboard.unlock();
+      keyboardButton.textContent = ACTIVATE_KEYBOARD_LOCK;
+      lock = false;
+    } catch (err) {
+      lock = false;
+      keyboardButton.textContent = ACTIVATE_KEYBOARD_LOCK;
+      alert(`${err.name}: ${err.message}`);
+    }
+  });
+
+  document.addEventListener("fullscreenchange", () => {
+    keyboardButton.textContent = ACTIVATE_KEYBOARD_LOCK;
+    lock = false;
+    if (document.fullscreen) {
+      fullscreenButton.textContent = LEAVE_FULLSCREEN;
+      return (div.style.display = "block");
+    }
+    fullscreenButton.textContent = ENTER_FULLSCREEN;
+    div.style.display = "none";
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (
+      lock &&
+      (e.code === "Escape" ||
+        ((e.code === "KeyN" || e.code === "KeyT") &&
+          (event.ctrlKey || event.metaKey)))
+    ) {
+      info.style.display = "block";
+      setTimeout(() => {
+        info.style.display = "none";
+      }, 3000);
+    }
+  });
+
+</script>
+</body>
+</html>
