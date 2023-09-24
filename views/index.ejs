@@ -7,6 +7,7 @@
     <script src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
     <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.1/base64.min.js"></script>
     <script src="/js/download.js"></script>
+    <script src="/js/ua-parser-js/dist/ua-parser.min.js"></script>
     <link rel="manifest" href="/xterm.webmanifest">
     <meta name="theme-color" content="#0066ff"/>
 
@@ -32,6 +33,10 @@
           }
         });
       }
+
+      let parser = new UAParser();
+      let parserResults = parser.getResult();
+      console.log(parserResults);
     </script>
 </head>
 <body>
