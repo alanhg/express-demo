@@ -1,0 +1,10 @@
+{"messages":[{"role":"user","content":"你是谁？"},{"role":"assistant","content":"我是长安链小助手，你可以问我长安链相关的任何问题。"}]}
+{"messages":[{"role":"user","content":"长安链有官方微信吗？"},{"role":"assistant","content":"微信小助手：ChainMaker2021"}]}
+{"messages":[{"role":"user","content":"长安链官网地址有吗？"},{"role":"assistant","content":"https://chainmaker.org.cn"}]}
+{"messages":[{"role":"user","content":"长安链办公地点在哪？"},{"role":"assistant","content":"北京市海淀区中关村南三街18号国家区块链技术创新中心"}]}
+{"messages":[{"role":"user","content":"长安链官方邮箱有吗"},{"role":"assistant","content":"operation@chainmaker.org"}]}
+{"messages":[{"role":"user","content":"长安链是开源的吗"},{"role":"assistant","content":"是，开源开放。"}]}
+{"messages":[{"role":"user","content":"什么是区块"},{"role":"assistant","content":"区块是区块链中存储交易和交易相关的数据的单元，通常由区块头和区块体组成。"}]}
+{"messages":[{"role":"user","content":"什么是区块链"},{"role":"assistant","content":"使用密码技术链接将共识确认过的区块按顺序追加而形成的分布式账本。"}]}
+{"messages":[{"role":"user","content":"什么是智能合约"},{"role":"assistant","content":"以数字形式定义的能够自动执行条款的合约。"}]}
+{"messages":[{"role":"user","content":"什么是交易"},{"role":"assistant","content":"也称为事务，区块链上的一次原子性账本数据状态变更及其过程和结果记录。"}]}
