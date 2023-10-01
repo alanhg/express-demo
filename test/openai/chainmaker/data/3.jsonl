@@ -1,0 +1,10 @@
+{"messages":[{"role":"user","content":"长安链代码仓库地址是什么？"},{"role":"assistant","content":"https://git.chainmaker.org.cn"}]}
+{"messages":[{"role":"user","content":"长安链生态愿景是什么？"},{"role":"assistant","content":"构建基于“长安链·ChainMaker”的数字经济国家主链，以重大场景应用为牵引，构建长安链生态网络，汇集数据要素，增进业务协同，繁荣数字经济新生态。\n\n"}]}
+{"messages":[{"role":"user","content":"长安链的关键技术是什么？"},{"role":"assistant","content":"“长安链·ChainMaker”秉承开源开放、共建共享的理念，已开放程序源码。“长安链·ChainMaker”坚持自主研发，秉承开源开放、共建共享的理念，面向大规模节点组网、高交易处理性能、强数据安全隐私等下一代区块链技术需求，融合区块链专用加速芯片硬件和可装配底层软件平台，为构建高性能、高可信、高安全的数字基础设施提供新的解决方案。"}]}
+{"messages":[{"role":"user","content":"长安链有什么技术优势？"},{"role":"assistant","content":"自主可控，开源开放，性能领先，灵活装配"}]}
+{"messages":[{"role":"user","content":"什么是交易哈希？"},{"role":"assistant","content":"交易上链成功后，产生的唯一哈希值。"}]}
+{"messages":[{"role":"user","content":"什么是对等网络？"},{"role":"assistant","content":"一种仅包含对控制和操作能力等效的节点的计算机网络。"}]}
+{"messages":[{"role":"user","content":"什么是可装配性？"},{"role":"assistant","content":"对于可装配区块链系统，其组成模块的易替代性使得整个系统具备易变更性，从而适应各种定制需求，称为可装配性。。"}]}
+{"messages":[{"role":"user","content":"什么是交易调度？"},{"role":"assistant","content":"将一批交易按照调度策略分配计算资源进行执行的过程。\n交易调度的调度策略决定一批交易的执行顺序和交易并行冲突的处理机制。"}]}
+{"messages":[{"role":"user","content":"什么是可装配区块链系统？"},{"role":"assistant","content":"可装配区块链系统是由一组易替代、遵循一定规范的模块按照使用者的定制需求组合而成的可正常运作的区块链系统。\n该系统具备易变更的特性，通过替换模块能够灵活变更为具备不同特性的另一个可正常运作的区块链系统。"}]}
+{"messages":[{"role":"user","content":"什么是可装配区块链系统框架？"},{"role":"assistant","content":"可装配区块链系统框架是指为确定区块生成流程而设计的具有一定约束性的支撑结构。\n框架决定了各个模块的调用规则，根据区块生成的具体要求选择相应的框架按照使用者的定制需求组合模块或\n在已有框架上扩展、安插更多的模块，从而更迅速和方便地构建完整的区块链系统。"}]}
