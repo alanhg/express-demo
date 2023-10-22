@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button onclick="saveFile()">
+        download
+    </button>
+</body>
+<script>
+  async function saveFile() {
+    // create a new handle
+    const newHandle = await window.showSaveFilePicker();
+
+    // create a FileSystemWritableFileStream to write to
+    const writableStream = await newHandle.createWritable();
+
+    // write our file
+    await writableStream.write("This is my file content");
+
+    // close the file and write the contents to disk.
+    await writableStream.close();
+  }
+</script>
+</html>
