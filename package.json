@@ -64,6 +64,7 @@
     "ssh2": "^1.11.0",
     "ssh2-sftp-client": "^9.1.0",
     "ssh2-streams": "^0.4.10",
+    "streamsaver": "^2.0.6",
     "superagent": "^3.8.3",
     "throttle": "^1.0.3",
     "toastify-js": "^1.12.0",

@@ -154,4 +154,8 @@ router.ws('/encode-ws', (ws, req) => {
   });
 });
 
+router.get('/download', (req, res) => {
+  res.render('download', {});
+});
+
 module.exports = router;
