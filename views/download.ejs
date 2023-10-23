@@ -6,37 +6,11 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <script src="/js/streamsaver/StreamSaver.js"></script>
 </head>
 <body>
-<button id="downBtn" >Start</button>
 <script>
-  // streamSaver.mitm = '/streamsaver/mitm.html';
 
-  window.downBtn.onclick = () => {
-    const url = 'https://d8d913s460fub.cloudfront.net/videoserver/cat-test-video-320x240.mp4'
-    const fileStream = streamSaver.createWriteStream('cat.mp4')
 
-    fetch(url).then(res => {
-      const readableStream = res.body
-
-      // more optimized
-      if (window.WritableStream && readableStream.pipeTo) {
-        return readableStream.pipeTo(fileStream)
-            .then(() => console.log('done writing'))
-      }
-
-      window.writer = fileStream.getWriter()
-
-      const reader = res.body.getReader()
-      const pump = () => reader.read()
-          .then(res => res.done
-              ? writer.close()
-              : writer.write(res.value).then(pump))
-
-      pump()
-    })
-  }
 </script>
 </body>
 </html>

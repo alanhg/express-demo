@@ -11,33 +11,35 @@
     <link rel="manifest" href="/xterm.webmanifest">
     <meta name="theme-color" content="#0066ff"/>
 
-
     <style>
       #installApp {
         display: none;
       }
     </style>
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js', {
-          scope: "/",
-        }).then(function (reg) {
-          console.log('Successfully registered service worker', reg);
-        }).catch(function (err) {
-          console.warn('Error whilst registering service worker', err);
-        });
-
-        navigator.serviceWorker.addEventListener('message', event => {
-          if (event.data.type === 'service-worker-activated') {
-            console.log('Service Worker activated!');
-          }
-        });
-      }
+      // if ('serviceWorker' in navigator) {
+      //   navigator.serviceWorker.register('/sw.js', {
+      //     scope: "/",
+      //   }).then(function (reg) {
+      //     console.log('Successfully registered service worker', reg);
+      //   }).catch(function (err) {
+      //     console.warn('Error whilst registering service worker', err);
+      //   });
+      //
+      //   navigator.serviceWorker.addEventListener('message', event => {
+      //     if (event.data.type === 'service-worker-activated') {
+      //       console.log('Service Worker activated!');
+      //     }
+      //   });
+      // }
 
       let parser = new UAParser();
       let parserResults = parser.getResult();
       console.log(parserResults);
     </script>
+
+    <script src="/js/streamsaver/StreamSaver.js"></script>
+
 </head>
 <body>
 <main>
@@ -51,6 +53,8 @@
     <button id="installApp">
         install pwa app
     </button>
+
+    <button id="downBtn" >Download Start</button>
 </main>
 <div>
     主题切换：
@@ -129,6 +133,33 @@
   //     console.log('devtool is open');
   //   }
   // }, 1000);
+
+streamSaver.mitm = 'https://alanhe-test2.com/streamsaver/mitm.html';
+
+window.downBtn.onclick = () => {
+    const url = 'https://d8d913s460fub.cloudfront.net/videoserver/cat-test-video-320x240.mp4'
+    const fileStream = streamSaver.createWriteStream('cat.mp4')
+
+    fetch(url).then(res => {
+      const readableStream = res.body
+
+      // more optimized
+      if (window.WritableStream && readableStream.pipeTo) {
+        return readableStream.pipeTo(fileStream)
+            .then(() => console.log('done writing'))
+      }
+
+      window.writer = fileStream.getWriter()
+
+      const reader = res.body.getReader()
+      const pump = () => reader.read()
+          .then(res => res.done
+              ? writer.close()
+              : writer.write(res.value).then(pump))
+
+      pump()
+    })
+  }
 </script>
 </body>
 </html>
