@@ -1,12 +1,13 @@
 /**
  * 服务于 xterm-ssh2.ejs
  */
-function goOpenAi({model, prompt}) {
+function goOpenAi({model, messages}) {
   return fetch('/api/openai', {
     method: 'post', headers: {
       'Content-Type': 'application/json;charset=utf-8'
     }, body: JSON.stringify({
-      model, prompt
+      messages,
+      model
     })
   }).then(res => res.json())
 }

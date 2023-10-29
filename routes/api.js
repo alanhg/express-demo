@@ -170,11 +170,11 @@ async function (req, res) {
   let answer;
   try {
     if (req.body.model === 'codex') {
-      answer = await openaiBot.sayShellContextForCodex(req.body.prompt);
+      answer = await openaiBot.sayShellContextForCodex(req.body.messages);
     } else if (req.body.model === 'gpt4') {
-      answer = await openaiBot.sayShellContextByGPT4(req.body.prompt);
+      answer = await openaiBot.sayShellContextByGPT4(req.body.messages);
     } else if (req.body.model === 'gpt3') {
-      answer = await openaiBot.sayShellContextForGPT3(req.body.prompt);
+      answer = await openaiBot.sayShellContextForGPT3(req.body.messages);
     } else {
       const context = req.body.context || [];
       context.shift({
@@ -183,9 +183,7 @@ async function (req, res) {
       });
       answer = await openaiBot.sayShellContextByGPT35(req.body.prompt, context);
     }
-    res.json({
-      answer: answer
-    });
+    res.json(answer);
   } catch (e) {
     console.error(e);
     res.json({

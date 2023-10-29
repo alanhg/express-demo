@@ -9,7 +9,6 @@
 </head>
 <body>
 <main class="container">
-    <h1>输入命令描述，生成命令</h1>
     <div class="mb-3">
         <label for="model" class="form-label">Model</label>
         <select class="form-control" id="model">
@@ -19,13 +18,29 @@
             <option value="gpt3.5">
                 GPT-3.5 模型(比如ChatGPT)
             </option>
-            <option value="gpt4">
+            <option value="gpt4" selected>
                 GPT-4 模型(比如New Bing)
             </option>
             <option value="codex">
                 Codex 模型(比如Fig]
             </option>
         </select>
+    </div>
+    <div class="mb-3">
+        <input class="form-check-input" type="radio" name="isStreaming" id="isStreaming" checked disabled>
+        <label class="form-check-label" for="isStreaming">
+            是否流
+        </label>
+    </div>
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control send-message" value="curl请求github，获取网页状态码">
+                    <button class="btn btn-primary send-btn" type="button">发送</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -39,25 +54,13 @@
             </div>
         </div>
     </div>
-
-    <!-- 输入框 -->
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control send-message" value="curl请求github，获取网页状态码">
-                    <button class="btn btn-primary send-btn" type="button">发送</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </main>
 
 </body>
 <script>
   const input = document.querySelector('.send-message');
   const btn = document.querySelector('.send-btn');
-  const chatContext = [];
+  const chatHistory = []; // 聊天历史
   btn.addEventListener('click', function () {
     sendMessage();
   });
@@ -69,25 +72,24 @@
       const chatArea = document.querySelector('.chat-area');
       chatArea.innerHTML += '<div class="message"><span class="text-danger">User:</span>' + message + '</div>';
       input.value = '';
-      sendMessageToAi(message, chatContext).then(function (res) {
-        chatArea.innerHTML += '<div class="message"><span class="text-danger">Assistant:</span>' + res.answer + '</div>';
-        chatContext.push({
-          role: 'user',
-          content: message
-        });
-        chatContext.push({
+      chatHistory.push({
+        role: 'user',
+        content: message
+      });
+      sendMessageToAi(chatHistory).then(function (res) {
+        chatArea.innerHTML += '<div class="message"><span class="text-danger">Assistant:</span>' + res.message.content + '</div>';
+        chatHistory.push({
           role: 'assistant',
-          content: res.answer
+          content: res.message.content
         });
       })
     }
   }
 
-  function sendMessageToAi(message, chatContext) {
+  function sendMessageToAi(chatHistory) {
     return goOpenAi({
       model: document.getElementById('model').value.trim(),
-      prompt: message,
-      context: chatContext.slice(-6)
+      messages: chatHistory.slice(-6)
     })
   }
 </script>
