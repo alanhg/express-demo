@@ -1,17 +1,3 @@
-/**
- * 服务于 xterm-ssh2.ejs
- */
-function goOpenAi({model, messages}) {
-  return fetch('/api/openai', {
-    method: 'post', headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    }, body: JSON.stringify({
-      messages,
-      model
-    })
-  }).then(res => res.json())
-}
-
 const webSocketBaseUrl = `${location.protocol === `https:` ? 'wss:' : 'ws:'}//${location.host}`;
 
 document.getElementById('proxyHost').value = JSON.stringify(connectOpts, null, 2);
