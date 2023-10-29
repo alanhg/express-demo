@@ -76,13 +76,14 @@
         role: 'user',
         content: message
       });
-      sendMessageToAi(chatHistory).then(function (res) {
-        chatArea.innerHTML += '<div class="message"><span class="text-danger">Assistant:</span>' + res.message.content + '</div>';
-        chatHistory.push({
-          role: 'assistant',
-          content: res.message.content
-        });
-      })
+      sendMessageToAiStream(chatHistory);
+      // sendMessageToAi(chatHistory).then(function (res) {
+      //   chatArea.innerHTML += '<div class="message"><span class="text-danger">Assistant:</span>' + res.message.content + '</div>';
+      //   chatHistory.push({
+      //     role: 'assistant',
+      //     content: res.message.content
+      //   });
+      // })
     }
   }
 
@@ -90,6 +91,39 @@
     return goOpenAi({
       model: document.getElementById('model').value.trim(),
       messages: chatHistory.slice(-6)
+    })
+  }
+
+  function sendMessageToAiStream(messages) {
+    return fetch('/api/openai/stream', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify({
+        messages
+      })
+    }).then(res => {
+      const reader = res.body.getReader();
+      return new ReadableStream({
+        start(controller) {
+          function push() {
+            reader.read().then(({done, value}) => {
+              if (done) {
+                controller.close();
+                return;
+              }
+              controller.enqueue(value);
+              push();
+            });
+          }
+          push();
+        }
+      });
+    }).then(stream => {
+      return new Response(stream, {headers: {'Content-Type': 'text/event-stream'}}).text();
+    }).then(text => {
+      console.log(text);
     })
   }
 </script>
