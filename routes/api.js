@@ -201,7 +201,8 @@ router.post('/openai/stream', async function (req, res) {
     if (part.choices[0].finish_reason) {
       res.end();
     } else {
-      res.write('data:'+part.choices[0].delta.content+'\n\n');
+      res.write('data:'+part.choices[0].delta.content);
+      console.log(part.choices[0].delta.content);
     }
   }
 });
