@@ -4,42 +4,35 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
 
-
     <style>
-
-      .preview {
-        width: 500px;
-        transform: scale(0.5);
-        background-color: red;
+      .terminal {
+        width: 100%;
+        min-height: 200px;
+        background-color: #4bd58d;
+      }
+      .editor{
+        width: 100%;
+        height: 100px;
+        background-color: #003dfd;
       }
 
-      .first-letter-uppercase span {
-        display: inline-block;
-      }
-
-      .first-letter-uppercase span::first-letter {
-        text-transform: uppercase;
+      .editor:has(+.terminal) +.terminal{
+        background-color: #ff0000;
       }
     </style>
 </head>
 <body>
-<div class="container">
-    <h>css-test</h>
-    <div class="img-container">
-        <img src="/img/rmbp.jpg" alt=""/>
-        <h2 class="title"><span>夕阳下的风景</span></h2>
-    </div>
-
-    <div class="preview">
-        hello world
-    </div>
-    <div class="first-letter-uppercase">
-        <span>
-            a
-        </span>
-        <span>
-            dog
-        </span>
-    </div>
+<button onclick="openEditor()">open editor</button>
+<div class="terminal">
+    123456789
 </div>
+<script>
+  function openEditor() {
+      const terminalEl=document.querySelector('.terminal');
+      const editorEl=document.createElement('div');
+      editorEl.classList='editor';
+      editorEl.innerText='editor';
+      document.body.insertBefore(editorEl,terminalEl);
+  }
+</script>
 </body>
