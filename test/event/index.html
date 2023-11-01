@@ -1,24 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>js事件机制</title>
+    <style>
+      #parent{
+        width: 200px;
+        height:200px;
+        text-align: center;
+        line-height: 3;
+        background: green;
+      }
+      #child{
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        background: orange;
+      }
+    </style>
 </head>
 <body>
-<div id="container">
-    <button>Click me!</button>
+<div id="parent">
+    父元素
+    <div id="child">
+        子元素
+    </div>
 </div>
-<pre id="output"></pre>
+<script type="text/javascript">
+  var parent = document.getElementById("parent");
+  var child = document.getElementById("child");
 
-<script>
+  document.body.addEventListener("click",function(e){
+    console.log("click-body");
+  },false);
 
-  const output = document.querySelector("#output");
-  function handleClick(e) {
-    output.textContent += `You clicked on a ${e.currentTarget.tagName} element\n`;
-  }
+  parent.addEventListener("click",function(e){
+    console.log("click-parent---事件传播");
+  },false);
+  //新增事件捕获事件代码
+  parent.addEventListener("click",function(e){
+    console.log("click-parent--事件捕获");
+  },true);
 
-  const container = document.querySelector("#container");
-  container.addEventListener("click", handleClick);
+  child.addEventListener("click",function(e){
+    console.log("click-child");
+  },false);
 </script>
 </body>
 </html>
