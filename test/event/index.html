@@ -39,6 +39,7 @@
   //新增事件捕获事件代码
   parent.addEventListener("click",function(e){
     console.log("click-parent--事件捕获");
+    e.stopPropagation();
   },true);
 
   child.addEventListener("click",function(e){
