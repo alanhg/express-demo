@@ -6,6 +6,8 @@
     <script src="/js/xterm-addon-search/lib/xterm-addon-search.js"></script>
     <script src="/js/xterm-addon-attach/lib/xterm-addon-attach.js"></script>
     <script src="/js/xterm-addon-webgl/lib/xterm-addon-webgl.js"></script>
+    <script src="/js/xterm-addon-webgl/lib/xterm-addon-webgl.js"></script>
+    <script src="/js/@xterm/addon-image/lib/addon-image.js"></script>
     <script src="/js/zmodem.js/dist/zmodem.js"></script>
     <script src="/js/mousetrap.min.js"></script>
     <script src="/js/utils.js"></script>
@@ -258,6 +260,22 @@
           console.log(event, text, location);
         }
       }));
+  const customSettings = {
+    enableSizeReports: true,    // whether to enable CSI t reports (see below)
+    pixelLimit: 16777216,       // max. pixel size of a single image
+    sixelSupport: true,         // enable sixel support
+    sixelScrolling: true,       // whether to scroll on image output
+    sixelPaletteLimit: 256,     // initial sixel palette size
+    sixelSizeLimit: 25000000,   // size limit of a single sixel sequence
+    storageLimit: 128,          // FIFO storage limit in MB
+    showPlaceholder: true,      // whether to show a placeholder for evicted images
+    iipSupport: true,           // enable iTerm IIP support
+    iipSizeLimit: 20000000      // size limit of a single IIP sequence
+  }
+  const imageAddon = new ImageAddon.ImageAddon(customSettings);
+
+  term.loadAddon(imageAddon);
+
   term.focus();
 
   term.parser.registerEscHandler({final: 'D'}, () => {
