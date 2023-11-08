@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        body {
+            position: relative;
+        }
+        input{
+            padding: 0;
+            margin: 0;
+        }
+        .autoCompletion {
+            position: absolute;
+            margin-left: 2px;
+            display: flex;
+        }
+
+        .autoCompletion span:first-child {
+            color: blue;
+            visibility: hidden;
+        }
+
+        .autoCompletion span:nth-child(2) {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="autoCompletion">
+<span>
+
+</span>
+    <span>
+
+</span>
+</div>
+<input id="commandInput"/>
+<script>
+
+  const can_completion_value = 'hello';
+  const completionRef = document.querySelector('.autoCompletion');
+  document.querySelector('#commandInput').addEventListener('keyup', function (e) {
+    if (can_completion_value.match(new RegExp('^' + e.target.value + '[^$]'))) {
+      completionRef.children[0].textContent = e.target.value;
+      completionRef.children[1].textContent = can_completion_value.replace(e.target.value, '');
+    }
+    else{
+      completionRef.children[0].textContent = '';
+      completionRef.children[1].textContent = '';
+    }
+  });
+</script>
+</body>
+</html>
