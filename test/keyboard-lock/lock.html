@@ -8,6 +8,9 @@
         location.protocol = "https:";
       }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.6.5/mousetrap.min.js"
+            integrity="sha512-+Jg3Ynmj9hse704K48H6rBBI3jdNBjReRGBCxUWFfOz3yVurnJFWtAWssDAsGtzWYw89xFWPxShuj2T6E9EOpg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <title>Keyboard Lock Demo</title>
@@ -77,27 +80,33 @@
     </div>
 </main>
 <script>
-  navigator.keyboard.lock();
+  const LOCKED_KEYS = ["MetaLeft", "MetaRight", "Tab", "KeyN", "KeyT", "Escape"];
 
-
+  navigator.keyboard.lock(LOCKED_KEYS);
   if (window.self === window.top) {
     if (!("keyboard" in navigator)) {
       alert("Your browser does not support the Keyboard Lock API.");
     }
   }
 
+  const mousetrap = new Mousetrap(window);
+  mousetrap.bind('command+t', (e) => {
+    console.log('command+t');
+  });
+  mousetrap.bind('command+w', (e) => {
+    console.log('command+w');
+  });
   const fullscreenButton = document.querySelector("#fullscreen");
   const keyboardButton = document.querySelector("#keyboard");
   const body = document.body;
   const div = document.querySelector("div");
-  const info = document.querySelector(".info");
 
+  const info = document.querySelector(".info");
   const ENTER_FULLSCREEN = "Enter full screen";
   const LEAVE_FULLSCREEN = "Leave full screen";
   const ACTIVATE_KEYBOARD_LOCK = "Activate keyboard lock";
-  const DEACTIVATE_KEYBOARD_LOCK = "Dectivate keyboard lock";
 
-  const LOCKED_KEYS = ["MetaLeft", "MetaRight", "Tab", "KeyN", "KeyT", "Escape"];
+  const DEACTIVATE_KEYBOARD_LOCK = "Dectivate keyboard lock";
 
   let lock = false;
 
