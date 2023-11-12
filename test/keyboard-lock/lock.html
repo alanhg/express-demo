@@ -80,9 +80,13 @@
     </div>
 </main>
 <script>
-  const LOCKED_KEYS = ["MetaLeft", "MetaRight", "Tab", "KeyN", "KeyT", "Escape"];
+  const LOCKED_KEYS = ["MetaLeft", "MetaRight", "Tab", "KeyN", "KeyT", "Escape", "ArrowLeft", "ArrowRight"];
 
-  navigator.keyboard.lock(LOCKED_KEYS);
+  navigator.keyboard.lock().then(() => {
+    console.log('lock success');
+  }).catch((err) => {
+    console.log('lock fail', err);
+  });
   if (window.self === window.top) {
     if (!("keyboard" in navigator)) {
       alert("Your browser does not support the Keyboard Lock API.");
@@ -90,11 +94,8 @@
   }
 
   const mousetrap = new Mousetrap(window);
-  mousetrap.bind('command+t', (e) => {
-    console.log('command+t');
-  });
-  mousetrap.bind('command+w', (e) => {
-    console.log('command+w');
+  mousetrap.bind(['command+t', 'command+shift+left', 'command+w'], (e) => {
+    console.log(e);
   });
   const fullscreenButton = document.querySelector("#fullscreen");
   const keyboardButton = document.querySelector("#keyboard");
