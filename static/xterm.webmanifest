@@ -5,7 +5,7 @@
   "id": "/?from=pwa",
   "start_url": "/?from=pwa",
   "background_color": "#ffffff",
-  "display": "fullscreen",
+  "display": "standalone",
   "scope": "/",
   "theme_color": "#0066ff",
   "icons": [
