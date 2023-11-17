@@ -13,6 +13,8 @@
     Mousetrap.record(function(sequence) {
       // sequence is an array like ['ctrl+k', 'c']
       alert('You pressed: ' + sequence.join(' '));
+      recordSequence();
+      return false;
     });
   }
 </script>

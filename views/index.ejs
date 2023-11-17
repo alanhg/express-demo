@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.1/base64.min.js"></script>
     <script src="/js/download.js"></script>
     <script src="/js/ua-parser-js/dist/ua-parser.min.js"></script>
+    <script src="/js/mousetrap/mousetrap.min.js"></script>
     <link rel="manifest" href="/xterm.webmanifest">
     <meta name="theme-color" content="#0066ff"/>
 
@@ -21,7 +22,6 @@
         navigator.serviceWorker.register('/sw.js', {
           scope: "/",
         }).then(function (reg) {
-          console.log('Successfully registered service worker', reg);
         }).catch(function (err) {
           console.warn('Error whilst registering service worker', err);
         });
@@ -35,7 +35,6 @@
 
       let parser = new UAParser();
       let parserResults = parser.getResult();
-      console.log(parserResults);
     </script>
 
     <script src="/js/streamsaver/StreamSaver.js"></script>
@@ -99,7 +98,6 @@
   if (displayMode.matches) {
     console.log('PWA is running in standalone mode.');
   } else {
-    console.log('PWA is running in browser tab.');
   }
 
 
@@ -160,6 +158,20 @@ window.downBtn.onclick = () => {
       pump()
     })
   }
+
+  navigator.keyboard.lock().then(()=>{
+    console.log('keyboard locked');
+  }).catch(()=>{
+    console.log('keyboard lock failed');
+  });
+
+  const mousetrap=new Mousetrap(window);
+
+  mousetrap.bind(['command+t','command+p','command+w','command+k'], function (e, combo) {
+    console.log(combo);
+    e.preventDefault();
+  });
+
 </script>
 </body>
 </html>
