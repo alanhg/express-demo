@@ -7,7 +7,11 @@ import fetch from 'node-fetch';
 async function getToken() {
   const API_KEY = '';
   const SECRET_KEY = '';
-  return fetch(`https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=${API_KEY}&client_secret=${SECRET_KEY}`).then(res => res.json()).then(res=>res.access_token);
+  return fetch(`https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=${API_KEY}&client_secret=${SECRET_KEY}`).then(res => res.json())
+    .then(res=>{
+      console.log(res);
+      return res.access_token;
+    });
 }
 
 fetch(`https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=${await getToken()}`, {
