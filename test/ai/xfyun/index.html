@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>通义千问
+    </title>
+</head>
+<body>
+<script>
+  const ws = new WebSocket('wss://spark-api.xf-yun.com/v1.1/chat');
+  ws.onopen = ()=>{
+    console.log('ws opened');
+    ws.send('123');
+  }
+</script>
+</body>
+</html>
