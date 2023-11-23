@@ -5,14 +5,49 @@
     <title>剪贴板操作</title>
 </head>
 <body>
+<!--写一首诗歌吧-->
+<div id="poem">
+    <p>我是一首诗歌</p>
+    <p>我是一首诗歌</p>
+    <p>我是一首诗歌</p>
+    <p>我是一首诗歌</p>
+    <p>我是一首诗歌</p>
+</div>
 <script>
-   async function readFromClipboard() {
+  async function readFromClipboard() {
     if (navigator.clipboard) {
-      return navigator.clipboard.readText().catch(() => doSystemPaste()).catch(()=>alert('剪贴板读取失败'));
+      return navigator.clipboard.readText().catch(() => doSystemPaste()).catch(() => alert('剪贴板读取失败'));
     }
     return alert('剪贴板读取失败');
   }
-readFromClipboard().then(console.log);
+
+  async function copyToClipboard(text) {
+    const doSystemCopy = () => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'absolute';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      const result = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      console.log('doSystemCopy', result);
+      return result;
+    }
+    if (navigator.clipboard) {
+      return navigator.clipboard.writeText(text).catch((e) => {
+        console.error(e);
+        return doSystemCopy(text);
+      }).catch(() => alert('剪贴板写入失败'));
+    }
+    return alert('剪贴板写入失败');
+  }
+
+  setTimeout(() => {
+    copyToClipboard('我是一首诗歌').then(console.log);
+  }, 2000);
+  // readFromClipboard().then(console.log);
 </script>
 </body>
 </html>
