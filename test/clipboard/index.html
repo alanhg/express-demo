@@ -7,27 +7,10 @@
 <body>
 <script>
    async function readFromClipboard() {
-    const doSystemPaste = () => {
-      const textarea = document.createElement('textarea');
-      document.body.appendChild(textarea);
-      // 隐藏此输入框
-      textarea.style.position = 'fixed';
-      textarea.style.visibility = 'hidden';
-      textarea.style.top = '10px';
-      // 选中
-      textarea.focus();
-      const res = document.execCommand('paste', null, null);
-      const paste = textarea.value;
-      document.body.removeChild(textarea);
-      if (res) {
-        return paste;
-      }
-      throw new Error();
-    };
     if (navigator.clipboard) {
-      return navigator.clipboard.readText().catch(() => doSystemPaste());
+      return navigator.clipboard.readText().catch(() => doSystemPaste()).catch(()=>alert('剪贴板读取失败'));
     }
-    return doSystemPaste();
+    return alert('剪贴板读取失败');
   }
 readFromClipboard().then(console.log);
 </script>
