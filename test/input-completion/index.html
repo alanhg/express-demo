@@ -44,7 +44,7 @@
 <script>
   const can_completion_value = 'hello';
   const completionRef = document.querySelector('.autoCompletion');
-  document.querySelector('#commandInput').addEventListener('keyup',
+  document.querySelector('#commandInput').addEventListener('change',
     function (e) {
       if (can_completion_value.match(new RegExp('^' + e.target.value + '[^$]'))) {
         if (completionRef.textContent !== can_completion_value) {
