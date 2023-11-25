@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        body {
+            position: relative;
+            font-size: 18px;
+            font-weight: 300;
+            font-family: Roboto,San Francisco,Helvetica Neue,Helvetica,Arial,PingFangSC-Light,Hiragina Sans GB,WenQuanYi Micro Hei,microsoft yahei ui,microsoft yahei,sans-serif;
+        }
+        .main{
+            position: relative;
+        }
+
+        input {
+            background-color: rgb(56, 56, 56);
+            padding: 0;
+            color: rgba(255, 255, 255, 0.9);
+            height: 50px;
+            border: 1px;
+            font-size: inherit;
+            font-family: inherit;
+        }
+
+        .autoCompletion {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            color: rgba(255, 255, 255, 0.35);
+            height: 50px;
+            font-size: inherit;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="autoCompletion"></div>
+    <input id="commandInput"/>
+</div>
+<script>
+  const can_completion_value = 'hello';
+  const completionRef = document.querySelector('.autoCompletion');
+  document.querySelector('#commandInput').addEventListener('keyup',
+    function (e) {
+      if (can_completion_value.match(new RegExp('^' + e.target.value + '[^$]'))) {
+        if (completionRef.textContent !== can_completion_value) {
+          completionRef.textContent = can_completion_value;
+        }
+      } else {
+        completionRef.textContent = '';
+      }
+    });
+</script>
+</body>
+</html>
