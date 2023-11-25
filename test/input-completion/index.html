@@ -13,16 +13,19 @@
         }
         .main{
             position: relative;
+            width: 200px;
+            background-color: rgb(56, 56, 56);
         }
 
         input {
-            background-color: rgb(56, 56, 56);
-            padding: 0;
+            padding: 0 2px 0;
             color: rgba(255, 255, 255, 0.9);
             height: 50px;
             border: 1px;
             font-size: inherit;
             font-family: inherit;
+            z-index: 4;
+            background-color: transparent;
         }
 
         .autoCompletion {
@@ -30,21 +33,28 @@
             align-items: center;
             position: absolute;
             color: rgba(255, 255, 255, 0.35);
-            height: 50px;
+            height: 18px;
             font-size: inherit;
             font-weight: 400;
+            top: 16px;
+            padding-left: 2px;
+        }
+        .inputWrapper{
+            position: relative;
         }
     </style>
 </head>
 <body>
 <div class="main">
     <div class="autoCompletion"></div>
-    <input id="commandInput"/>
+    <div class="inputWrapper">
+        <input type="text" id="commandInput"/>
+    </div>
 </div>
 <script>
   const can_completion_value = 'hello';
   const completionRef = document.querySelector('.autoCompletion');
-  document.querySelector('#commandInput').addEventListener('change',
+  document.querySelector('#commandInput').addEventListener('keydown',
     function (e) {
       if (can_completion_value.match(new RegExp('^' + e.target.value + '[^$]'))) {
         if (completionRef.textContent !== can_completion_value) {
