@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>css test</title>
+    <style>
+        #hoverBtn+button {
+            background-color: green;
+            visibility: hidden;
+        }
+        #hoverBtn:hover + button {
+            background-color: red;
+            visibility: inherit;
+        }
+
+    </style>
+</head>
+<body>
+
+<button id="hoverBtn">
+    hover me
+</button>
+<button>
+    I am back
+</button>
+</body>
+</html>
