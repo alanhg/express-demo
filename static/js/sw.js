@@ -5,8 +5,8 @@ const CACHE_NAME = 'static_assets_v1';
 self.addEventListener('install', function (event) {
 });
 
-self.addEventListener('fetch', () => {
-
+self.addEventListener('fetch', (event) => {
+    console.log('[ServiceWorker] Fetch', event.request.url);
 });
 
 self.addEventListener('activate', function (e) {
