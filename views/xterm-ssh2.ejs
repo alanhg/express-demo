@@ -3,6 +3,7 @@
 <head xmlns="http://www.w3.org/1999/html">
     <title>xterm.js-ssh2测试</title>
 
+    <!--  加载样式  -->
     <link href="/js/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/js/xterm/css/xterm.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
@@ -12,6 +13,8 @@
     <link href="/js/contextMenu.css" rel="stylesheet">
     <link href="/css/xterm-ssh2.css" rel="stylesheet">
 
+
+    <!-- 加载插件   -->
     <script src="/js/xterm/lib/xterm.js"></script>
     <script src="/js/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
     <script src="/js/xterm-addon-search/lib/xterm-addon-search.js"></script>
@@ -27,6 +30,7 @@
     <script src="/js/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/zTree.v3/3.5.42/js/jquery.ztree.all.min.js"></script>
     <script src="/js/contextMenu.js"></script>
+
 </head>
 <body>
 <div>
@@ -47,27 +51,27 @@
     </div>
 </div>
 <input id="zm_files" type="file" multiple style="display: none">
-<button type="button" class="btn btn-info" data-start="false" onclick="recordLogStart(event)">log record start</button>
-<button type="button" class="btn btn-info" data-start="false" onclick="clientRecordLogStart(event)">client log record
+<button type="button" id="recordLogStart" class="btn btn-info" data-start="false">log record start</button>
+<button type="button" id="clientRecordLogStart" class="btn btn-info" data-start="false" >client log record
     start
 </button>
 <label for="record-timestamp">
     record timestamp
     <input id="record-timestamp" type="checkbox" checked>
 </label>
-<button class="btn btn-info" data-start="false" onclick="serializeTerminal(event)">serialize terminal</button>
-<button class="btn btn-info" data-start="false" onclick="runCodeServer(event)">Run Code Server</button>
-<button class="btn btn-info" data-start="false" onclick="runWebSocketProxy(event)">Run WebSocket Proxy</button>
-<button class="btn btn-info" onclick="stopCodeServer(event)">Stop Code Server</button>
+<button class="btn btn-info" data-start="false" id="serializeTerminal">serialize terminal</button>
+<button class="btn btn-info" data-start="false" id="runCodeServer">Run Code Server</button>
+<button class="btn btn-info" data-start="false" id="runWebSocketProxy">Run WebSocket Proxy</button>
+<button class="btn btn-info" id="stopCodeServer">Stop Code Server</button>
 
 
 <label for="backgroundOn">
-    <input id="backgroundOn" type="checkbox" onclick="toggleBackgroundOn(event)"/>Image Background
+    <input id="backgroundOn" type="checkbox"/>Image Background
 </label>
 
 
 <label for="toggleNewTabOn">
-    <input id="toggleNewTabOn" type="checkbox" onclick="toggleNewTabOn(event)"/>链接打开新标签页
+    <input id="toggleNewTabOn" type="checkbox"/>链接打开新标签页
 </label>
 
 <label for="proxyProtocol">
@@ -80,7 +84,7 @@
 </label>
 
 <label for="visitIDEDirectly">
-    <input id="visitIDEDirectly" type="checkbox" onclick="toggleBackgroundOn(event)">直接访问/tty
+    <input id="visitIDEDirectly" type="checkbox">直接访问/tty
 </label>
 <div>
     <label for="proxyHost">Code Server代理地址</label>
@@ -102,7 +106,7 @@
 </iframe>
 <div id="file-editor">
     <div style="width: 280px">
-        <input type="text" placeholder="内容全文检索" onkeydown="handleSearch(event)"/>
+        <input type="text" placeholder="内容全文检索" id="handleSearch"/>
         <div id="file-tree" class="ztree">
         </div>
         <div>
@@ -125,8 +129,8 @@
 
 </footer>
 <script>
-  const connectOpts =<%- JSON.stringify(connectOpts) %>;//连接参数
-  const autocompleteSpecArr = JSON.parse('<%- JSON.stringify(autocompleteSpecs) %>');
+  window.connectOpts =<%- JSON.stringify(connectOpts) %>;//连接参数
+  window.autocompleteSpecArr = JSON.parse('<%- JSON.stringify(autocompleteSpecs) %>');
 </script>
 <script src="/js/xterm-ssh2-utils.js"></script>
 <script type="module" src="/js/xterm-ssh2.js"></script>
