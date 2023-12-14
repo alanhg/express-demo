@@ -49,9 +49,9 @@
     </style>
 </head>
 <body>
-<iframe src="https://cs-res-1258344699.file.myqcloud.com/cloudstudio/vscode/3e54a6f80cbf72e76cc91bb32178e6b3ede84e3f/release-standalone/out/vs/code/browser/workbench/loading.html"
-        class="loading-iframe"></iframe>
-<iframe id="workspace" class="workspace hide"></iframe>
+<!--<iframe src="https://cs-res-1258344699.file.myqcloud.com/cloudstudio/vscode/3e54a6f80cbf72e76cc91bb32178e6b3ede84e3f/release-standalone/out/vs/code/browser/workbench/loading.html"-->
+<!--        class="loading-iframe"></iframe>-->
+<iframe id="workspace" class="workspace"></iframe>
 <script>
   function sleep(timeout) {
     return new Promise((resolve) => {
@@ -81,41 +81,41 @@
         if (!startingOutput.match('init success')) {
           alert('启动失败');
         } else {
-          const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
+          // const loadingEl = document.body.getElementsByClassName('loading-iframe')[0];
           await sleep(3000);
           agentFrameEl = document.getElementById('workspace');
           agentFrameEl.src = "/tty/<%= proxyKey %>/?folder=<%= folder %>";
           agentFrameEl.host = "<%= host %>";
           agentFrameEl.username = "<%= username %>/";
           agentFrameEl.classList = 'workspace hide';
-          agentFrameEl.onload = () => {
-            const afterIdeLoaded = () => {
-              const interval = setInterval(() => {
-                let editorEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]'); //编辑器
-                if (editorEl) {
-                  clearInterval(interval);
-                  loadingEl.classList.add('hide');
-                  agentFrameEl.classList.remove('hide');
-                }
-              }, 1000)
-            }
-            if (agentFrameEl.contentWindow.document.body.innerText.startsWith('error')) {
-              alert(agentFrameEl.contentWindow.document.body.innerText);
-              return;
-            }
-
-            let loginEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="login-form"]');
-            if (loginEl) {
-              loginEl.querySelector("[name='password']").value = tempPassword;
-              // 自定登录
-              // loginEl.submit();
-              loadingEl.classList.add('hide');
-              agentFrameEl.classList.remove('hide');
-            } else {
-              afterIdeLoaded();
-            }
-          };
-          loadingEl.parentNode.insertBefore(agentFrameEl, loadingEl);
+          // agentFrameEl.onload = () => {
+          //   const afterIdeLoaded = () => {
+          //     const interval = setInterval(() => {
+          //       let editorEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="monaco-workbench"]'); //编辑器
+          //       if (editorEl) {
+          //         clearInterval(interval);
+          //         // loadingEl.classList.add('hide');
+          //         agentFrameEl.classList.remove('hide');
+          //       }
+          //     }, 1000)
+          //   }
+          //   if (agentFrameEl.contentWindow.document.body.innerText.startsWith('error')) {
+          //     alert(agentFrameEl.contentWindow.document.body.innerText);
+          //     return;
+          //   }
+          //
+          //   let loginEl = agentFrameEl.contentWindow.document.body.querySelector('[class*="login-form"]');
+          //   if (loginEl) {
+          //     loginEl.querySelector("[name='password']").value = tempPassword;
+          //     // 自定登录
+          //     // loginEl.submit();
+          //     loadingEl.classList.add('hide');
+          //     agentFrameEl.classList.remove('hide');
+          //   } else {
+          //     afterIdeLoaded();
+          //   }
+          // };
+          // loadingEl.parentNode.insertBefore(agentFrameEl, loadingEl);
         }
       }
     }
