@@ -762,7 +762,7 @@ import SftpClient from '/js/sftp-client.js';
 
 const sftpSocket = new SftpClient(`${webSocketBaseUrl}/ws/sftp`);
 // 树JS文档 https://github.com/daweilv/treejs
-const rootPath = '/home/lighthouse';
+const rootPath = '/root';
 let typeMode;
 
 // 文件树
