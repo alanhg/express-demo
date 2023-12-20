@@ -8,6 +8,7 @@
 <body>
 <button onclick="recordSequence()">Record</button>
 <button onclick="newWindowClick()">new window</button>
+<button onclick="newALinkClick()">new a link</button>
 
 <script>
   function recordSequence() {
@@ -20,6 +21,10 @@
   }
 
   function newWindowClick(){
+    window.open('https://www.baidu.com','_blank');
+  }
+
+  function newALinkClick(){
     let htmlAnchorElement = document.createElement('a');
     htmlAnchorElement.href='https://www.baidu.com';
     htmlAnchorElement.target='_blank';
