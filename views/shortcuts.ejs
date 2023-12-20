@@ -7,6 +7,7 @@
 </head>
 <body>
 <button onclick="recordSequence()">Record</button>
+<button onclick="newWindowClick()">new window</button>
 
 <script>
   function recordSequence() {
@@ -16,6 +17,13 @@
       recordSequence();
       return false;
     });
+  }
+
+  function newWindowClick(){
+    let htmlAnchorElement = document.createElement('a');
+    htmlAnchorElement.href='https://www.baidu.com';
+    htmlAnchorElement.target='_blank';
+    htmlAnchorElement.click();
   }
 </script>
 </body>
