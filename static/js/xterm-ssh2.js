@@ -11,6 +11,7 @@ const CurrentDirRecord = [];
 const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 const isWin = navigator.platform.indexOf('Win') > -1;
 
+import '/js/inshellisense.js';
 
 class WebShell extends EventEmitter {
 

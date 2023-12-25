@@ -93,11 +93,9 @@ router.post('/xterm/:pid/size', function (req, res) {
 
 
 router.get('/xterm-ssh2', (req, res) => {
-  let autocompleteSpecs = fs.readdirSync(path.join(__dirname, '../static/js/fig-autocomplete'));
-  autocompleteSpecs = autocompleteSpecs.filter(item => item.endsWith('.js'));
   res.render('xterm-ssh2', {
     connectOpts,
-    autocompleteSpecs
+    autocompleteSpecs: []
   });
 });
 
