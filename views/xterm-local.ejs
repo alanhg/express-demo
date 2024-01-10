@@ -7,7 +7,7 @@
     <script src="/js/xterm-addon-attach/lib/xterm-addon-attach.js"></script>
     <script src="/js/xterm-addon-webgl/lib/xterm-addon-webgl.js"></script>
     <script src="/js/xterm-addon-webgl/lib/xterm-addon-webgl.js"></script>
-    <script src="/js/@xterm/addon-image/lib/addon-image.js"></script>
+<!--    <script src="/js/@xterm/addon-image/lib/addon-image.js"></script>-->
     <script src="/js/zmodem.js/dist/zmodem.js"></script>
     <script src="/js/mousetrap.min.js"></script>
     <script src="/js/utils.js"></script>
@@ -272,9 +272,9 @@
     iipSupport: true,           // enable iTerm IIP support
     iipSizeLimit: 20000000      // size limit of a single IIP sequence
   }
-  const imageAddon = new ImageAddon.ImageAddon(customSettings);
-
-  term.loadAddon(imageAddon);
+  // const imageAddon = new ImageAddon.ImageAddon(customSettings);
+  //
+  // term.loadAddon(imageAddon);
 
   term.focus();
 
