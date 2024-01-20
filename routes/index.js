@@ -158,4 +158,7 @@ router.get('/download', (req, res) => {
   res.render('download', {});
 });
 
+router.get('/monaco', (req, res) => {
+  res.render('monaco', {});
+});
 module.exports = router;

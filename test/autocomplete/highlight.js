@@ -17,8 +17,8 @@ function highlightStr(target, source) {
   return highlighted;
 }
 
-const source = `airdrop-cli`;
-const target = 'cli';
+const source = `chrome-extension-react-typescript-boilerplate`;
+const target = 'typescript';
 const result = highlightStr(target, source);
 
 console.log(result);

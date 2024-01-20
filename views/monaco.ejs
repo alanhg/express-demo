@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>monaco-editor</title>
+    <base href="/"/>
+    <style>
+
+    </style>
+</head>
+<body>
+<main>
+    <h2>Monaco Editor Sample</h2>
+    <div id="container" style="width: 800px; height: 600px; border: 1px solid grey"></div>
+    <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
+    <script src="/js/monaco-editor/min/vs/loader.js"></script>
+    <script>
+      const specSample = `const completionSpec: Fig.Spec = {
+name: "abc",
+description: "",
+subcommands: [{
+  name: "my_subcommand",
+  description: "Example subcommand",
+  subcommands: [{
+    name: "my_nested_subcommand",
+    description: "Nested subcommand, example usage: 'abc my_subcommand my_nested_subcommand'"
+  }],
+}],
+options: [{
+  name: ["--help", "-h"],
+  description: "Show help for abc",
+}],
+// Only uncomment if abc takes an argument
+// args: {}
+};
+export default completionSpec;`;
+
+      require.config({ paths: { vs: '/js/monaco-editor/min/vs' } });
+      require(['vs/editor/editor.main'], function () {
+        var editor = monaco.editor.create(document.getElementById('container'), {
+          value: [specSample].join('\n'),
+          language: 'typescript'
+        });
+        fetch('/js/@withfig/autocomplete-types/index.d.ts')
+          .then(res => res.text())
+          .then(text => {
+            monaco.languages.typescript.typescriptDefaults.addExtraLib(text);
+          });
+      });
+    </script>
+</main>
+</body>
+</html>
