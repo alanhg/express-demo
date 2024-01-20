@@ -34,11 +34,15 @@ options: [{
 };
 export default completionSpec;`;
 
-      require.config({ paths: { vs: '/js/monaco-editor/min/vs' } });
+      require.config({paths: {vs: '/js/monaco-editor/min/vs'}});
       require(['vs/editor/editor.main'], function () {
         var editor = monaco.editor.create(document.getElementById('container'), {
           value: [specSample].join('\n'),
-          language: 'typescript'
+          language: 'typescript',
+          minimap:
+            {
+              enabled: false
+            }
         });
         fetch('/js/@withfig/autocomplete-types/index.d.ts')
           .then(res => res.text())
