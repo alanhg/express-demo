@@ -42,7 +42,8 @@ export default completionSpec;`;
           minimap:
             {
               enabled: false
-            }
+            },
+          contextmenu: false
         });
         fetch('/js/@withfig/autocomplete-types/index.d.ts')
           .then(res => res.text())
