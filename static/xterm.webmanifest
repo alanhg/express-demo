@@ -34,16 +34,9 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshots/shot1.webp",
-      "sizes": "1024x1024",
-      "type": "image/webp",
-      "form_factor": "narrow",
-      "label": "Homescreen of Awesome App"
-    },
-    {
-      "src": "/screenshots/shot1.webp",
-      "sizes": "1024x1024",
-      "type": "image/webp",
+      "src": "/screenshots/shot1.png",
+      "sizes": "400x822",
+      "type": "image/png",
       "form_factor": "narrow",
       "label": "Homescreen of Awesome App"
     },
@@ -51,8 +44,23 @@
       "src": "/screenshots/shot1.png",
       "sizes": "400x822",
       "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Homescreen of Awesome App"
+    },
+    {
+      "src": "/screenshots/shot2.png",
+      "sizes": "1280x676",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Homescreen of Awesome App"
+    },
+    {
+      "src": "/screenshots/shot2.png",
+      "sizes": "1280x676",
+      "type": "image/png",
       "form_factor": "wide",
       "label": "Homescreen of Awesome App"
     }
+
   ]
 }
