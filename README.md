@@ -5,7 +5,7 @@ node项目下各功能实验
 ## 功能点
 1. WebShell
     - 热键支持-Ctrl F全屏切换、⌘ F终端检索，⌘ K清屏、Ctrl C执行取消
-    - 文件编辑器-`Code-Server`
+    - 文件编辑器-`Code-Server`, 目前采用的GitHub地址，挂载VPS需要网络通常
     - ZModem集成`szrz`
     - SFTP
     - 右键文件下载
@@ -27,3 +27,10 @@ git clone git@github.com:coder/code-server.git  --single-branch main
 - Web代理
 - SSH代理
 - WebSocket协议代理支持
+
+### 操作
+
+```shell
+pkill -f ".term/code-server"
+```
+
