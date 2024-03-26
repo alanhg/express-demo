@@ -44,10 +44,28 @@
     return alert('剪贴板写入失败');
   }
 
-  setTimeout(() => {
-    copyToClipboard('我是一首诗歌').then(console.log);
-  }, 2000);
+  // setTimeout(() => {
+  //   copyToClipboard('我是一首诗歌').then(console.log);
+  // }, 2000);
   // readFromClipboard().then(console.log);
+  async function writeClipImg() {
+    try {
+      const imgURL = "./dashboard.png";
+      const data = await fetch(imgURL);
+      const blob = await data.blob();
+
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob,
+        }),
+      ]);
+      console.log("Fetched image copied.");
+    } catch (err) {
+      console.error(err.name, err.message);
+    }
+  }
+
+  writeClipImg();
 </script>
 </body>
 </html>
