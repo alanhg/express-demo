@@ -127,6 +127,8 @@ term = new Terminal({
   }, rendererType: 'canvas', //  canvas,dom
   minimumContrastRatio: 1, // 开启透明支持-支持CSS实现终端背景图设定
   allowTransparency: true, allowProposedApi: true, overviewRulerWidth: 8,
+  rows: 10,
+  cols: 10
 });
 window.term = term;
 const webshell = new WebShell(term);
@@ -209,6 +211,10 @@ const fitAddon = new FitAddon.FitAddon();
 
 term.loadAddon(fitAddon);
 fitAddon.fit();
+term.onResize((size) => {
+  debugger;
+  console.log(size);
+});
 
 term.unicode.activeVersion = '11';
 
