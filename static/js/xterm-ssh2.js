@@ -71,6 +71,8 @@ class WebShell extends EventEmitter {
           window.open(`${window.location.protocol}//${window.location.host}/tty/cm9vdEA0My4xNTQuMTgyLjE4Nw==/`);
         } else if (options.type === 'exec-command') {
           this.emit('exec-command', options.data);
+        } else if(options.type==='connected'){
+          term.write('my github is https://github.com/alanhg\r\n');
         } else {
           term.write(evt.data);
         }

@@ -17,7 +17,6 @@ let shellLog;
  *  通过WebSocket连接目标机器
  */
 router.ws('/ws/webshell', function (ws, res) {
-  ws.send('logining\r');
   const sshClient = new SshClient(ws);
   sshClient.on('data', (data) => {
     if (logStartFlag) {
