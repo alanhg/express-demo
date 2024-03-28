@@ -71,8 +71,10 @@ class WebShell extends EventEmitter {
           window.open(`${window.location.protocol}//${window.location.host}/tty/cm9vdEA0My4xNTQuMTgyLjE4Nw==/`);
         } else if (options.type === 'exec-command') {
           this.emit('exec-command', options.data);
-        } else if(options.type==='connected'){
-          term.write('my github is https://github.com/alanhg my github is https://github.com/alanhg my github is https://github.com/alanhg my github is https://github.com/alanhg\r\n',()=>{
+        } else if (options.type === 'connected') {
+          term.write("\x1B[34;43mmy github is https://github.com/alanhg my github is https://github.com/alanhg my github is https://github.com/alanhg my github is https://github.com/alanhg\x1B[0m"
+
+              + '\r\n', () => {
             webshell.sendData('resize', {
               rows: term.rows,
               cols: term.cols,
