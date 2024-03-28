@@ -72,7 +72,7 @@ class WebShell extends EventEmitter {
         } else if (options.type === 'exec-command') {
           this.emit('exec-command', options.data);
         } else if(options.type==='connected'){
-          term.write('my github is https://github.com/alanhg my github is https://github.com/alanhg\r\n');
+          // term.write('my github is https://github.com/alanhg my github is https://github.com/alanhg my github is https://github.com/alanhg my github is https://github.com/alanhg\r\n');
         } else {
           term.write(evt.data);
         }
@@ -92,6 +92,9 @@ class WebShell extends EventEmitter {
   }
 
   sendData(type, data = {}) {
+    if (this.socket.readyState !== WebSocket.OPEN) {
+      return;
+    }
     if (typeof type === 'string') {
       this.socket.send(JSON.stringify({
         type, data
@@ -129,12 +132,14 @@ term = new Terminal({
   }, rendererType: 'canvas', //  canvas,dom
   minimumContrastRatio: 1, // 开启透明支持-支持CSS实现终端背景图设定
   allowTransparency: true, allowProposedApi: true, overviewRulerWidth: 8,
-  rows: 10,
-  cols: 10
 });
 window.term = term;
 const webshell = new WebShell(term);
-webshell.connect(window.connectOpts);
+webshell.connect({
+  ...window.connectOpts,
+  cols: term.cols,
+  rows: term.rows
+});
 window.webshell = webshell;
 
 
@@ -178,9 +183,6 @@ term.onSelectionChange(() => {
 
 // 开启终端
 const termRef = document.getElementById('terminal-container');
-term.open(termRef);
-term.focus();
-
 
 // 终端自定义打印内容
 term.loadAddon(new WebLinksAddon.WebLinksAddon((event, uri) => {
@@ -202,9 +204,7 @@ let recordScreenAddon = new RecordScreenAddon();
 window.recordScreenAddon = recordScreenAddon;
 
 term.loadAddon(searchAddon);
-term.loadAddon(searchAddonBar);
 term.loadAddon(serializeAddon);
-term.loadAddon(recordScreenAddon);
 term.loadAddon(canvasAddon);
 term.loadAddon(new Unicode11Addon.Unicode11Addon());
 // term.loadAddon(new AutoCompleteAddon({}, webshell));
@@ -212,11 +212,17 @@ term.loadAddon(new Unicode11Addon.Unicode11Addon());
 const fitAddon = new FitAddon.FitAddon();
 
 term.loadAddon(fitAddon);
-fitAddon.fit();
+
 term.onResize((size) => {
-  debugger;
-  console.log(size);
+  webshell.sendData('resize', size);
 });
+
+term.open(termRef);
+fitAddon.fit();
+term.focus();
+
+term.loadAddon(searchAddonBar);
+term.loadAddon(recordScreenAddon);
 
 term.unicode.activeVersion = '11';
 
